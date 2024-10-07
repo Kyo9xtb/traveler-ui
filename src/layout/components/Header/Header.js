@@ -8,16 +8,17 @@ import $ from "jquery";
 
 import styles from './Header.module.scss';
 import images from '~/assets/images';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 function Header() {
     const MENU = [
         {
-            path: '#',
+            path: config.routes.home,
             title: 'Trang chủ',
         },
         {
-            path: '#',
+            path: config.routes.about,
             title: 'Giới thiệu',
         },
         {
