@@ -1,0 +1,153 @@
+import classNames from 'classnames/bind';
+
+import styles from './Contact.module.scss';
+import { Fragment } from 'react';
+import BannerPage from '~/components/BannerPage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLocationDot, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+
+const cx = classNames.bind(styles);
+
+function Conatact() {
+    return (
+        <Fragment>
+            <BannerPage title="Liên hệ" />
+            <div className={cx('inner-conatct-wrap')}>
+                <div className={cx('container')}>
+                    <div className={cx('row', 'contact-padding')}>
+                        <div className={cx('col-12')}>
+                            <div className={cx('leave-your-message')}>
+                                <h3>Hỗ trợ dịch vụ Tour</h3>
+                                <div className={cx('row')}>
+                                    <div className={cx('col-lg-4 col-md-4 col-12')}>
+                                        <div className={cx('contact-box')}>
+                                            <div className={cx('icon')}>
+                                                <FontAwesomeIcon icon={faLocationDot} />
+                                            </div>
+                                            <div className={cx('content')}>
+                                                <p>Số 143, Đường Trần Thái Tông, TP Thái Bình</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={cx('col-lg-4 col-md-4 col-12')}>
+                                        <div className={cx('contact-box')}>
+                                            <div className={cx('icon')}>
+                                                <FontAwesomeIcon icon={faPhoneVolume} />
+                                            </div>
+                                            <div className={cx('content')}>
+                                                <Link to="">0902.146.186</Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={cx('col-lg-4 col-md-4 col-12')}>
+                                        <div className={cx('contact-box')}>
+                                            <div className={cx('icon')}>
+                                                <FontAwesomeIcon icon={faEnvelope} />
+                                            </div>
+                                            <div className={cx('content')}>
+                                                <Link to="#">dulichsaoviet.tb@gmail.com</Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={cx('col-lg-4 col-md-12')}>
+                            <div className={cx('leave-your-message')}>
+                                <p>
+                                    Evo Tour được các du khách trong nước và quốc tế biết đến là một Công ty tin cậy về
+                                    chất lượng cũng như dịch vụ hoàn hảo. Chúng tôi chuyên tổ chức các tour du lịch quốc
+                                    tế, nội địa, cũng như tổ chức cho các cơ quan đoàn thể đi tham quan, học tập, nghiên
+                                    cứu, khảo sát thị trường, hội nghị, hội thảo trong nước và ngoài nước.
+                                </p>
+                            </div>
+                        </div>
+                        <div className={cx('col-lg-8 col-md-12')}>
+                            <form className={cx('form-contact')}>
+                                <div className={cx('row')}>
+                                    <div className={cx('col-sm-4 col-xs-12')}>
+                                        <fieldset className={cx('form-group')}>
+                                            <label>
+                                                Họ và tên<span class="required">*</span>
+                                            </label>
+                                            <input
+                                                name="contact[name]"
+                                                className={cx('form-control form-control-lg')}
+                                                type="text"
+                                                placeholder="Họ và tên"
+                                                required
+                                            />
+                                        </fieldset>
+                                    </div>
+                                    <div className={cx('col-sm-4 col-xs-12')}>
+                                        <fieldset className={cx('form-group')}>
+                                            <label>
+                                                Email<span class="required">*</span>
+                                            </label>
+                                            <input
+                                                name="contact[email]"
+                                                className={cx('form-control form-control-lg')}
+                                                type="email"
+                                                placeholder="Email của bạn"
+                                                required
+                                            />
+                                        </fieldset>
+                                    </div>
+                                    <div className={cx('col-sm-4 col-xs-12')}>
+                                        <fieldset className={cx('form-group')}>
+                                            <label>
+                                                Số điện thoại<span class="required">*</span>
+                                            </label>
+                                            <input
+                                                name="contact[phone]"
+                                                className={cx('form-control form-control-lg')}
+                                                type="text"
+                                                placeholder="Số điện thoại"
+                                                required
+                                            />
+                                        </fieldset>
+                                    </div>
+                                    <div className={cx('col-sm-12 col-xs-12')}>
+                                        <fieldset className={cx('form-group')}>
+                                            <label>
+                                                Nội dung:<span class="required">*</span>
+                                            </label>
+                                            <textarea
+                                                name="contact[content]"
+                                                className={cx('form-control form-control-lg')}
+                                                placeholder="Nội dung liên hệ"
+                                                required
+                                                rows="5"
+                                            />
+                                        </fieldset>
+                                        <div className={cx('btn-submit')}>
+                                            <button type="submit" className={cx('round-btn')}>
+                                                Gửi tin nhắn
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div className={cx('row')}>
+                        <div className={cx('col-12', 'sv-map')}>
+                            <iframe
+                                title="map"
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14953.481749135864!2d106.334024!3d20.449973!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135e5e76b4ed54b%3A0x654f73e93453a13!2zQ8OUTkcgVFkgRFUgTOG7ikNIIFThuqBJIFRIw4FJIELDjE5IIC0gU0FPVklFVCBUUkFWRUw!5e0!3m2!1svi!2sus!4v1728304739855!5m2!1svi!2sus"
+                                width="600"
+                                height="450"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Fragment>
+    );
+}
+
+export default Conatact;

@@ -1,0 +1,28 @@
+.main-content {
+    padding-bottom: 50px;
+    * {
+        color: #111;
+    }
+    div+div {
+        margin-top: 15px;
+    }
+    h2 {
+        font-size: 26px;
+    }
+    ul {
+        li {
+            margin-left: 25px;
+            margin-bottom: 10px;
+        }
+    }
+    .logo {
+        text-align: center;
+         img {
+            max-width: 350px;
+            object-fit: cover;
+            @media screen and (max-width: 575px) {
+                max-width: 200px;
+            }
+         }
+    }
+}
