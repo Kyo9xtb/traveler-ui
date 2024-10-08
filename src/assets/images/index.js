@@ -19,5 +19,6 @@ const images = {
     featureMenu1: require('~/assets/images/feature_menu_1.jpg'),
     featureMenu2: require('~/assets/images/feature_menu_2.jpg'),
     bannerAbout: require('~/assets/images/banner_about.jpg'),
-}
+    bannerContact: require('~/assets/images/banner_contact.jpg'),
+};
 export default images;

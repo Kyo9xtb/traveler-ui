@@ -1,18 +1,19 @@
 import classNames from 'classnames/bind';
-
-import styles from './Contact.module.scss';
 import { Fragment } from 'react';
-import BannerPage from '~/components/BannerPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLocationDot, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+
+import styles from './Contact.module.scss';
+import BannerPage from '~/components/BannerPage';
+import images from '~/assets/images';
 
 const cx = classNames.bind(styles);
 
 function Conatact() {
     return (
         <Fragment>
-            <BannerPage title="Liên hệ" />
+            <BannerPage image={images.bannerContact} title="Liên hệ" />
             <div className={cx('inner-conatct-wrap')}>
                 <div className={cx('container')}>
                     <div className={cx('row', 'contact-padding')}>

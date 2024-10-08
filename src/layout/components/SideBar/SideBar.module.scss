@@ -1,0 +1,144 @@
+.sidebar-wrap {
+    .aside-item {
+        .title-head {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d2a2a;
+            margin-bottom: 0;
+        }
+        & + .aside-item {
+            margin-top: 20px;
+        }
+    }
+    .collection-category {
+        .aside-title {
+            margin: 0 0 10px;
+            font-size: 18px;
+            position: relative;
+            color: #2d2a2a;
+            text-transform: uppercase;
+        }
+        ul {
+            list-style: none;
+        }
+        .aside-content {
+            .nav-category {
+                .nav-item {
+                    position: relative;
+                    clear: left;
+                    font-size: 14px;
+
+                    &.active {
+                        display: block;
+                        > a > svg {
+                            transform: rotate(180deg);
+                            -webkit-transform: rotate(180deg);
+                            -moz-transform: rotate(180deg);
+                            -ms-transform: rotate(180deg);
+                            -o-transform: rotate(180deg);
+                        }
+                        > ul {
+                            display: block;
+                        }
+                    }
+                    .nav-link {
+                        font-size: 14px;
+                        padding-left: 0px;
+                        padding-right: 25px;
+                        color: #727272;
+                        white-space: normal;
+                        position: relative;
+                        display: table;
+                        width: 100%;
+                        padding-top: 3px;
+                        padding-bottom: 3px;
+                        svg {
+                            font-size: 15px;
+                            text-align: center;
+                            position: absolute;
+                            right: 7px;
+                            top: calc(50% - (20px / 2));
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+
+                    .dropdown-menu {
+                        position: static;
+                        width: 100%;
+                        border: 0;
+                        box-shadow: none;
+                        padding: 0;
+                        margin: 0;
+                        transition: all 0.3s;
+                        -webkit-transition: all 0.3s;
+                        -moz-transition: all 0.3s;
+                        -ms-transition: all 0.3s;
+                        -o-transition: all 0.3s;
+                        display: none;
+                        &.level1 {
+                            > li > a {
+                                padding: 5px 10px;
+                                padding-right: 25px;
+                            }
+                        }
+                        &.level2 {
+                            > li > a {
+                                padding: 5px 20px;
+                            }
+                        }
+                        &.level3 {
+                            > li > a {
+                                padding: 5px 30px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .top-news {
+        .aside-title {
+            margin: 0 0 10px;
+            font-size: 18px;
+            position: relative;
+            color: #2d2a2a;
+            text-transform: uppercase;
+        }
+        ul {
+            list-style: none;
+        }
+        .item {
+            display: flex;
+            margin-bottom: 20px;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .thumb {
+                overflow: hidden;
+                position: relative;
+                width: 35%;
+                display: inline-block;
+                img {
+                    width: 100%;
+                }
+            }
+            .info {
+                width: 65%;
+                padding-left: 15px;
+                .title {
+                    margin-bottom: 0;
+                    line-height: 1.5;
+                    font-size: 14px;
+                    font-weight: 400;
+                    a {
+                        color: #727272;
+                    }
+                }
+            }
+        }
+    }
+    .blog-banner {
+        margin-top: 30px;
+    }
+}

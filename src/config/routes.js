@@ -2,7 +2,7 @@ const routes = {
     home: '/',
     about: '/about',
     contact: '/contact',
-    // Add more routes here
+    news:'/news'
 };
 
 export default routes;
