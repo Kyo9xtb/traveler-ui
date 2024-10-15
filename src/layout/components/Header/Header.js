@@ -272,19 +272,18 @@ function Header() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+    useEffect(() => {
+        const listElementPath = document.querySelectorAll('path');
+        listElementPath.forEach((path) => {
+            path.style.pointerEvents = 'none';
+        });
+    }, []);
     const handleMenuMobile = (e) => {
         const parentElement = e.target.parentNode.parentNode;
         parentElement.classList.toggle(`${cx('active')}`);
     };
     const handleMenuChildrenMobile = (e) => {
-        let parentElement = '';
-        switch (e.target.nodeName) {
-            case 'path':
-                parentElement = e.target.parentNode.parentNode.parentNode;
-                break;
-            default:
-                parentElement = e.target.parentNode.parentNode;
-        }
+        let parentElement = e.target.parentNode.parentNode;
         parentElement.classList.toggle(`${cx('active')}`);
     };
     return (

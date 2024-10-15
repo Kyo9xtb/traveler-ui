@@ -1,9 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import Slider from 'react-slick';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import getYear from 'date-fns/getYear';
@@ -15,37 +12,9 @@ import images from '~/assets/images';
 import ItemTour from '~/components/ItemTour';
 import ItemDestination from '~/components/ItemDestination';
 import ItemNews from '~/components/ItemNews';
+import SimpleSliderBanner from '~/components/Slider';
 const cx = classNames.bind(styles);
 
-const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
-    <button
-        {...props}
-        className={'slick-prev slick-arrow' + (currentSlide === 0 ? ' slick-disabled' : '')}
-        aria-disabled={currentSlide === 0 ? true : false}
-        type="button"
-    >
-        <FontAwesomeIcon icon={faAngleLeft} />
-    </button>
-);
-const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
-    <button
-        {...props}
-        className={'slick-next slick-arrow' + (currentSlide === slideCount - 1 ? ' slick-disabled' : '')}
-        aria-disabled={currentSlide === slideCount - 1 ? true : false}
-        type="button"
-    >
-        <FontAwesomeIcon icon={faAngleRight} />
-    </button>
-);
-const settingsBanner = {
-    dots: true,
-    autoplay: true,
-    arrows: false,
-    autoplaySpeed: 10000,
-    className: 'wapper-slide',
-    prevArrow: <SlickArrowLeft />,
-    nextArrow: <SlickArrowRight />,
-};
 const listSlides = [
     {
         image_url: '',
@@ -172,7 +141,7 @@ function Home() {
         <Fragment>
             {/* home-banner-section */}
             <section className={cx('home-banner-section')}>
-                <Slider {...settingsBanner}>
+                <SimpleSliderBanner>
                     {listSlides.map((data, index) => {
                         return (
                             <div key={index}>
@@ -201,7 +170,7 @@ function Home() {
                             </div>
                         );
                     })}
-                </Slider>
+                </SimpleSliderBanner>
             </section>
             {/* home-trip-search */}
             <section className={cx('home-trip-search', 'primary-bg')}>

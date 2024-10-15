@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLocationDot, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
+// import 'ckeditor5/ckeditor5.css';
+// import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
+
 import styles from './Contact.module.scss';
 import BannerPage from '~/components/BannerPage';
 import images from '~/assets/images';
@@ -70,7 +73,7 @@ function Conatact() {
                                     <div className={cx('col-sm-4 col-xs-12')}>
                                         <fieldset className={cx('form-group')}>
                                             <label>
-                                                Họ và tên<span class="required">*</span>
+                                                Họ và tên<span className="required">*</span>
                                             </label>
                                             <input
                                                 name="contact[name]"
@@ -84,7 +87,7 @@ function Conatact() {
                                     <div className={cx('col-sm-4 col-xs-12')}>
                                         <fieldset className={cx('form-group')}>
                                             <label>
-                                                Email<span class="required">*</span>
+                                                Email<span className="required">*</span>
                                             </label>
                                             <input
                                                 name="contact[email]"
@@ -98,7 +101,7 @@ function Conatact() {
                                     <div className={cx('col-sm-4 col-xs-12')}>
                                         <fieldset className={cx('form-group')}>
                                             <label>
-                                                Số điện thoại<span class="required">*</span>
+                                                Số điện thoại<span className="required">*</span>
                                             </label>
                                             <input
                                                 name="contact[phone]"
@@ -112,7 +115,7 @@ function Conatact() {
                                     <div className={cx('col-sm-12 col-xs-12')}>
                                         <fieldset className={cx('form-group')}>
                                             <label>
-                                                Nội dung:<span class="required">*</span>
+                                                Nội dung:<span className="required">*</span>
                                             </label>
                                             <textarea
                                                 name="contact[content]"
@@ -123,15 +126,14 @@ function Conatact() {
                                             />
                                         </fieldset>
                                         <div className={cx('btn-submit')}>
-                                            <button type="submit" className={cx('round-btn')}>
-                                                Gửi tin nhắn
-                                            </button>
+                                            <button className={cx('round-btn')}>Gửi tin nhắn</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
+                    {/* Map */}
                     <div className={cx('row')}>
                         <div className={cx('col-12', 'sv-map')}>
                             <iframe
@@ -139,9 +141,9 @@ function Conatact() {
                                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14953.481749135864!2d106.334024!3d20.449973!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135e5e76b4ed54b%3A0x654f73e93453a13!2zQ8OUTkcgVFkgRFUgTOG7ikNIIFThuqBJIFRIw4FJIELDjE5IIC0gU0FPVklFVCBUUkFWRUw!5e0!3m2!1svi!2sus!4v1728304739855!5m2!1svi!2sus"
                                 width="600"
                                 height="450"
-                                allowfullscreen=""
+                                allowFullScreen=""
                                 loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"
+                                referrerPolicy="no-referrer-when-downgrade"
                             ></iframe>
                         </div>
                     </div>

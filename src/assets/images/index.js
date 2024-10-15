@@ -20,5 +20,8 @@ const images = {
     featureMenu2: require('~/assets/images/feature_menu_2.jpg'),
     bannerAbout: require('~/assets/images/banner_about.jpg'),
     bannerContact: require('~/assets/images/banner_contact.jpg'),
+    policy: require('~/assets/images/policy.svg').default,
+    termsConditions: require('~/assets/images/terms_conditions.svg').default,
+    tourProgram: require('~/assets/images/tour-program.svg').default,
 };
 export default images;

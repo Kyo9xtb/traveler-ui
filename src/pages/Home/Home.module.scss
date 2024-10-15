@@ -1,6 +1,6 @@
 .home-banner-section {
     position: relative;
-
+    overflow: hidden;
     .home-banner {
         min-height: 800px;
         position: relative;
@@ -28,7 +28,6 @@
                 margin-bottom: 20px;
             }
         }
-
     }
 }
 
@@ -94,7 +93,7 @@
             border-radius: 4px;
             cursor: pointer;
             background: #fff;
-            transition: all .3s linear;
+            transition: all 0.3s linear;
             user-select: none;
             color: #494b55;
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -117,7 +116,6 @@
                 border: none;
                 font-size: 17px;
                 color: #494b55;
-
             }
         }
 
@@ -129,7 +127,7 @@
             border-radius: 4px;
             cursor: pointer;
             background: #fff;
-            transition: all .3s linear;
+            transition: all 0.3s linear;
             user-select: none;
             color: #494b55;
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -202,7 +200,7 @@
         border-bottom: 1px solid #dee2e6;
 
         .policy-item {
-            &+.policy-item {
+            & + .policy-item {
                 border-left: 0.5px solid #dee2e6;
             }
 
@@ -267,7 +265,6 @@
 .banner-section {
     padding-bottom: 15px;
 
-
     .banner-wrap {
         overflow: hidden;
         transition: all 0.3s;
@@ -321,11 +318,14 @@
     }
 }
 
-.domestic-tour {}
+.domestic-tour {
+}
 
-.overseas-tour {}
+.overseas-tour {
+}
 
-.home-destination {}
+.home-destination {
+}
 
 .travel-inspiration {
     .more-btn {
