@@ -304,7 +304,7 @@ function Header() {
                         </div>
                         <div className={cx('site-logo', 'text-center')}>
                             <h1 className={cx('site-title')}>
-                                <Link to="#">
+                                <Link to="/">
                                     <img src={images.logo} alt="Traveler" />
                                 </Link>
                             </h1>

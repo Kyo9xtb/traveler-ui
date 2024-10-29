@@ -22,7 +22,7 @@ function App() {
                                 key={index}
                                 path={route.path}
                                 element={
-                                    <Layout title = 'sssss'>
+                                    <Layout title = 'Tin tức'>
                                         <Page />
                                     </Layout>
                                 }

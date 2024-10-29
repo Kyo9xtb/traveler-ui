@@ -1,0 +1,69 @@
+.list-blog-wapper {
+    margin-top: 15px;
+    .list-blogs {
+        .news-list {
+            .later-news-big {
+                .tempvideo {
+                    height: 367px;
+                    img {
+                        width: 100%;
+                        max-height: 100%;
+                    }
+                }
+                h3 {
+                    margin: 0;
+                    font-size: 18px;
+                    margin-top: 10px;
+                    font-weight: 500;
+                    a {
+                        color: #333;
+                        &:hover {
+                            color: #1ba0e2;
+                        }
+                    }
+                }
+            }
+            .col-later-news {
+                .list-small {
+                    list-style: none;
+                    & + .list-small {
+                        border-top: 1px dashed #e5e5e5;
+                        margin-top: 10px;
+                        padding-top: 10px;
+                    }
+                    .tempvideo {
+                        display: none;
+                        height: 177px;
+                        img {
+                            width: 100%;
+                            max-height: 100%;
+                        }
+                    }
+                    h3 {
+                        margin: 0;
+                        font-size: 14px;
+                        margin-top: 10px;
+                        font-weight: normal;
+                        a {
+                            color: #333;
+                            &:hover {
+                                color: #1ba0e2;
+                            }
+                        }
+                    }
+                    &:first-child {
+                        .tempvideo {
+                            display: block;
+                        }
+                        h3 {
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+        }
+        .fix-blog-col-small {
+            margin-bottom: 15px;
+        }
+    }
+}
