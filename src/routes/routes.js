@@ -1,6 +1,7 @@
 import config from '~/config';
 import SideBarRightLayout from '~/layout/SideBarRightLayout';
 import About from '~/pages/About';
+import { Login, Register } from '~/pages/Account';
 import Contact from '~/pages/Contact';
 import Home from '~/pages/Home';
 import News from '~/pages/News';
@@ -12,8 +13,8 @@ const publicRoutes = [
     { path: config.routes.contact, component: Contact },
     { path: config.routes.news, component: News, layout: SideBarRightLayout },
     { path: config.routes.tourDeatil, component: TourDeatil },
-    { path: '#', component: '' },
-    { path: '#', component: '' },
+    { path: config.routes.login, component: Login },
+    { path: config.routes.register, component: Register },
     { path: '#', component: '' },
     { path: '#', component: '' },
     { path: '#', component: '' },

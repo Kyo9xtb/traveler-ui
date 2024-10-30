@@ -8,10 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 
 const cx = classNames.bind(styles);
-function Login() {
+function Register() {
     return (
         <>
-            <BannerPage title="Đăng nhập" />
+            <BannerPage title="Đăng ký" />
             <div className={cx('container', 'margin-bottom-20')}>
                 <div className={cx('row justify-content-md-center')}>
                     <div className={cx('col-lg-8 col-md-12')}>
@@ -37,12 +37,12 @@ function Login() {
                                     )}
                                 >
                                     <ul className={cx('auth-block__menu-list')}>
-                                        <li className={cx('active')}>
+                                        <li>
                                             <Link to={config.routes.login} title="Đăng nhập">
                                                 Đăng nhập
                                             </Link>
                                         </li>
-                                        <li>
+                                        <li className={cx('active')}>
                                             <Link to={config.routes.register} title="Đăng ký">
                                                 Đăng ký
                                             </Link>
@@ -51,6 +51,40 @@ function Login() {
                                     <div className={cx('sv-login')}>
                                         <form id={cx('customer-login')}>
                                             <div className={cx('form-signup')}>
+                                                <fieldset className={cx('form-group')}>
+                                                    <label>
+                                                        Họ
+                                                        <span className={cx('required')}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Nhập họ"
+                                                        autoComplete="off"
+                                                    />
+                                                </fieldset>
+                                                <fieldset className={cx('form-group')}>
+                                                    <label>
+                                                        Tên
+                                                        <span className={cx('required')}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Nhập tên"
+                                                        autoComplete="off"
+                                                    />
+                                                </fieldset>
+                                                <fieldset className={cx('form-group')}>
+                                                    <label>
+                                                        Số điện thoại
+                                                        <span className={cx('required')}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Nhập số điện thoại"
+                                                        autoComplete="off"
+                                                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                                                    />
+                                                </fieldset>
                                                 <fieldset className={cx('form-group')}>
                                                     <label>
                                                         Email
@@ -75,16 +109,9 @@ function Login() {
                                                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                                     />
                                                 </fieldset>
-                                                <p className={cx('text-end')}>
-                                                    <Link title="Quên mật khẩu">Quên mật khẩu</Link>
-                                                </p>
                                                 <div className={cx('btn-submit', 'text-center')}>
-                                                    <button className={cx('round-btn')}>Đăng nhập</button>
+                                                    <button className={cx('round-btn')}>Tạo tài khoản</button>
                                                 </div>
-                                                <p className={cx('login--notes')}>
-                                                    SaoViet Travler cam kết bảo mật và sẽ không bao giờ đăng hay chia sẻ
-                                                    thông tin mà chưa có được sự đồng ý của bạn.
-                                                </p>
                                             </div>
                                         </form>
                                         <div className={cx('line-break')}>
@@ -105,34 +132,6 @@ function Login() {
                                             </Link>
                                         </div>
                                     </div>
-                                    <div id={cx('recover-password')} style={{display:"none"}}>
-                                        <p className={cx('fix-sblock')}>
-                                            Bạn quên mật khẩu? Nhập địa chỉ email để lấy lại mật khẩu qua email.
-                                        </p>
-                                        <form id={cx('recover-customer-password')}>
-                                            <div className={cx('form-signup')}>
-                                                <fieldset className={cx('form-group')}>
-                                                    <label>
-                                                        Email
-                                                        <span className={cx('required')}>*</span>
-                                                    </label>
-                                                    <input
-                                                        type="email"
-                                                        placeholder="Nhập email"
-                                                        autoComplete="off"
-                                                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-                                                    />
-                                                </fieldset>
-
-                                                <p className={cx('text-end')}>
-                                                    <Link title="Quên mật khẩu">Quên mật khẩu</Link>
-                                                </p>
-                                                <div className={cx('btn-submit', 'text-center')}>
-                                                    <button className={cx('round-btn')}>Lấy lại mật khẩu</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -143,4 +142,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Register;

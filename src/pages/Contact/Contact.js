@@ -16,7 +16,7 @@ const cx = classNames.bind(styles);
 function Conatact() {
     return (
         <Fragment>
-            <BannerPage image={images.bannerContact} title="Liên hệ" />
+            <BannerPage image={images.contactBanner} title="Liên hệ" />
             <div className={cx('inner-conatct-wrap')}>
                 <div className={cx('container')}>
                     <div className={cx('row', 'contact-padding')}>

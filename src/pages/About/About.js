@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 function About() {
     return (
         <Fragment>
-            <BannerPage image={images.bannerAbout} title="Giới thiệu" />
+            <BannerPage image={images.aboutBanner} title="Giới thiệu" />
             <div className={cx('main-content')}>
                 <div className={cx('container')}>
                     <div className={cx('logo')}>
