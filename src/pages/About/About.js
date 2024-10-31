@@ -63,13 +63,13 @@ function About() {
                             vụ du lịch, được kết hợp thông minh và tối ưu:
                         </p>
                         <ul>
-                            <li class="icon-service-bpt">
+                            <li className="icon-service-bpt">
                                 <strong>Combo du lịch nghỉ dưỡng tại resort kết di chuyển bằng xe Limousine</strong> :
                                 Là một trong những Công ty du lịch tại Việt Nam cung cấp dịch vụ combo du lịch nghỉ
                                 dưỡng tại Resort kết hợp di chuyển bằng xe Limousine đến các điễm du lịch như Thái Bình
                                 – Hà Nội – Ninh Bình – Vịnh Hạ Long bằng dòng xe Limousine
                             </li>
-                            <li class="icon-service-bpt">
+                            <li className="icon-service-bpt">
                                 <b>
                                     <strong>Combo du lịch nghỉ dưỡng tại resort kết di chuyển bằng máy bay</strong>
                                     &nbsp;:&nbsp;
@@ -77,23 +77,23 @@ function About() {
                                 Cung cấp đa dạng các tour du dịch ghép khách lẻ theo nhóm hoặc thiết kế theo yêu cầu cho
                                 khách đoàn trên các tuyến điểm tại Việt Nam.
                             </li>
-                            <li class="icon-service-bpt">
+                            <li className="icon-service-bpt">
                                 <b>
                                     <strong>Combo du lịch nghỉ dưỡng trên du thuyền kết hợp xe Limousine</strong>:&nbsp;
                                 </b>
                                 Hài lòng khách hàng với dịch vụ đặt phòng trực tuyến tại tất cả các điểm đến ở Việt Nam,
                                 Lào, Campuchia,Thái Lan và Myanmar với lựa chọn đa dạng và chất lượng đảm bảo.
                             </li>
-                            <li class="icon-service-bpt">
+                            <li className="icon-service-bpt">
                                 <strong>Du lịch du thuyền :&nbsp;</strong>Cung cấp các dịch vụ đặt tour du thuyền giá
                                 tốt nhất từ ngắn ngày đi tham quan tại Việt Nam, Lào, Campuchia, Thái Lan và Myanmar.
                             </li>
-                            <li class="icon-service-bpt">
+                            <li className="icon-service-bpt">
                                 <strong>Visa, vé tàu, xe du lịch :</strong>Đáp ứng các dịch vụ Visa, vé tàu và thuê xe
                                 du lịch nhanh chóng và tin cậy.&nbsp;<strong>dulichsaoviet.com.vn </strong>cam kết hỗ
                                 trợ khách hàng trong mọi thời điểm.
                             </li>
-                            <li class="icon-service-bpt">
+                            <li className="icon-service-bpt">
                                 <b>Đặt vé máy bay :</b>Tiện ích với dịch vụ đặt chỗ &amp; thanh toán trực tuyến cho vé
                                 máy bay của các hãng hàng không nội địa (Vietnam Airlines, Jetstar Pacific, Vietjet Air)
                                 và quốc tế (Thai Airways, Air Asia, Singapore Airline, Qatar Airways, Emirates..), những

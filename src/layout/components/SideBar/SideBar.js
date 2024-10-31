@@ -279,7 +279,7 @@ function SideBar() {
                     <ul className={cx('nav-category')}>
                         {MENU.map((menu, index) => {
                             return menu.children !== undefined && menu.children.length > 0 ? (
-                                <li className={cx('nav-item')}>
+                                <li key={index} className={cx('nav-item')}>
                                     <Link to="#" className={cx('nav-link')}>
                                         {menu.title}
                                         <FontAwesomeIcon
@@ -291,7 +291,7 @@ function SideBar() {
                                     <ul className={cx('dropdown-menu', 'level1')}>
                                         {menu.children.map((menuItem, index) => {
                                             return menuItem.children !== undefined && menuItem.children.length > 0 ? (
-                                                <li className={cx('nav-item')}>
+                                                <li key={index} className={cx('nav-item')}>
                                                     <Link to="#" className={cx('nav-link')}>
                                                         {menuItem.title}
                                                         <FontAwesomeIcon
@@ -304,7 +304,7 @@ function SideBar() {
                                                         {menuItem.children.map((child, index) => {
                                                             return child.children !== undefined &&
                                                                 child.children.length > 0 ? (
-                                                                <li className={cx('nav-item', 'drop-submenu')}>
+                                                                <li key={index} className={cx('nav-item', 'drop-submenu')}>
                                                                     <Link to="#" className={cx('nav-link')}>
                                                                         {child.title}
                                                                         <FontAwesomeIcon

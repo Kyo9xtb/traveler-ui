@@ -5,6 +5,7 @@ import { Login, Register } from '~/pages/Account';
 import Contact from '~/pages/Contact';
 import Home from '~/pages/Home';
 import News from '~/pages/News';
+import Tour from '~/pages/Tour';
 import TourDeatil from '~/pages/TourDeatil';
 
 const publicRoutes = [
@@ -15,7 +16,7 @@ const publicRoutes = [
     { path: config.routes.tourDeatil, component: TourDeatil },
     { path: config.routes.login, component: Login },
     { path: config.routes.register, component: Register },
-    { path: '#', component: '' },
+    { path: config.routes.tour, component: Tour },
     { path: '#', component: '' },
     { path: '#', component: '' },
     { path: '#', component: '' },

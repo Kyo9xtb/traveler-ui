@@ -21,7 +21,7 @@ function Header() {
             title: 'Giới thiệu',
         },
         {
-            path: '/',
+            path: config.routes.tour,
             title: 'Tour du lịch',
             children: [
                 {
@@ -224,11 +224,11 @@ function Header() {
             ],
         },
         {
-            path: '#',
+            path: config.routes.promotionalTours,
             title: 'Tour khuyến mãi',
         },
         {
-            path: '#',
+            path: config.routes.news,
             title: 'Tin tức',
         },
         {
