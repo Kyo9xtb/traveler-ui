@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import getYear from 'date-fns/getYear';
@@ -12,6 +12,7 @@ import BannerPage from '~/components/BannerPage';
 import images from '~/assets/images';
 import SortCate from '~/components/SortCate/SortCate';
 import ItemTour from '~/components/ItemTour';
+import PaginatedItems from '../../components/Paginate';
 
 const cx = classNames.bind(styles);
 
@@ -52,7 +53,9 @@ const listProducts = [
     {},
     {},
     {},
+    {},
 ];
+
 function Tour() {
     const [startDate, setStartDate] = useState(new Date());
 
@@ -187,7 +190,7 @@ function Tour() {
                 </section>
                 <div className={cx('product-view')}>
                     <SortCate />
-                    <div className={cx('row')}>
+                    {/* <div className={cx('row')}>
                         {listProducts.map((product, index) => {
                             return (
                                 <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
@@ -195,7 +198,14 @@ function Tour() {
                                 </div>
                             );
                         })}
-                    </div>
+                    </div> */}
+                    <PaginatedItems data={listProducts} itemsPerPage={12}>
+                        {(item, index) => (
+                            <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
+                                <ItemTour data={item} />
+                            </div>
+                        )}
+                    </PaginatedItems>
                 </div>
             </div>
         </Fragment>

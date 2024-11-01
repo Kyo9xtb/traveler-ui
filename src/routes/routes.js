@@ -3,6 +3,7 @@ import SideBarRightLayout from '~/layout/SideBarRightLayout';
 import About from '~/pages/About';
 import { Login, Register } from '~/pages/Account';
 import Contact from '~/pages/Contact';
+import Destination from '~/pages/Destination';
 import Home from '~/pages/Home';
 import News from '~/pages/News';
 import Tour from '~/pages/Tour';
@@ -17,7 +18,8 @@ const publicRoutes = [
     { path: config.routes.login, component: Login },
     { path: config.routes.register, component: Register },
     { path: config.routes.tour, component: Tour },
-    { path: '#', component: '' },
+    { path: config.routes.promotionalTours, component: Tour },
+    { path: config.routes.destination, component: Destination },
     { path: '#', component: '' },
     { path: '#', component: '' },
     { path: '#', component: '' },

@@ -8,6 +8,7 @@ const routes = {
     tourDeatil:'/tour-deatil',
     login: '/tai-khoan/dang-nhap',
     register: '/tai-khoan/dang-ky',
+    destination:'/dia-diem-du-lich'
 };
 
 export default routes;

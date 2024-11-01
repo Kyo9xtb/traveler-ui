@@ -3,8 +3,49 @@ import { Link } from 'react-router-dom';
 
 import styles from './News.module.scss';
 import ItemNews from '~/components/ItemNews';
+import PaginatedItems from '../../components/Paginate';
 
 const cx = classNames.bind(styles);
+
+const listProducts = [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+];
 function News() {
     return (
         <div className={cx('list-blog-wapper')}>
@@ -52,26 +93,18 @@ function News() {
                         </ul>
                     </div>
                 </div>
-                <div className={cx('row')}>
+                {/* <div className={cx('row')}>
                     <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
                         <ItemNews />
                     </div>
-                    <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
-                        <ItemNews />
-                    </div>
-                    <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
-                        <ItemNews />
-                    </div>
-                    <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
-                        <ItemNews />
-                    </div>
-                    <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
-                        <ItemNews />
-                    </div>
-                    <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
-                        <ItemNews />
-                    </div>
-                </div>
+                </div> */}
+                <PaginatedItems data={listProducts} itemsPerPage={9}>
+                    {(item, index) => (
+                        <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
+                            <ItemNews data={item} />
+                        </div>
+                    )}
+                </PaginatedItems>
             </section>
         </div>
     );
