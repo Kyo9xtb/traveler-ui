@@ -4,6 +4,11 @@
         // tour-image-block
         .tour-image-block {
             overflow: hidden;
+            .single-image {
+                img {
+                    width: 100%;
+                }
+            }
         }
         // tour-main-content
         .tour-main-content {
@@ -11,8 +16,12 @@
                 color: #141414;
             }
             .tour-block {
+                padding: 10px;
+
                 .tour-schedule-title {
                     padding: 10px;
+                    margin-left: -10px;
+                    margin-right: -10px;
                     background-color: rgba(27, 160, 226, 0.15);
                     text-transform: uppercase;
                     font-weight: 500;
@@ -24,8 +33,12 @@
         }
         // tour-booking
         .tour-booking {
+            padding: 10px;
+
             .tour-schedule-title {
                 padding: 10px;
+                margin-left: -10px;
+                margin-right: -10px;
                 background-color: rgba(27, 160, 226, 0.15);
                 text-transform: uppercase;
                 font-weight: 500;
@@ -294,6 +307,7 @@
                     }
                 }
                 .call-me-back {
+                    margin-top: 15px;
                     a {
                         height: 45px;
                         line-height: 43px;

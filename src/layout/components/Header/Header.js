@@ -232,11 +232,11 @@ function Header() {
             title: 'Tin tức',
         },
         {
-            path: '#',
+            path: config.routes.travelExperience,
             title: 'Kinh nghiệm du lịch',
         },
         {
-            path: '#',
+            path: config.routes.faq,
             title: 'FAQ',
         },
         {

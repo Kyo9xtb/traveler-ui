@@ -1,13 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faPrint } from '@fortawesome/free-solid-svg-icons';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import getYear from 'date-fns/getYear';
-import getMonth from 'date-fns/getYear';
-import range from 'lodash/range';
 
 import styles from './TourDeatil.module.scss';
 import BannerPage from '~/components/BannerPage';
@@ -15,6 +10,10 @@ import images from '~/assets/images';
 import ItemTour from '~/components/ItemTour';
 import { MultipleItems } from '~/components/Slider';
 import SimpleSliderBanner from '~/components/Slider/Slider';
+import CustomDatePicker from '~/components/CustomDatePicker';
+import * as tourServices from '~/services/tourService';
+import AlterDismissible from '~/components/CustomAlert';
+import ErrorPage from '../Error';
 
 const cx = classNames.bind(styles);
 
@@ -24,80 +23,158 @@ function FormatPrice(price) {
 
 const listTest = [
     {
-        path: '',
+        tour_id: 3,
+        tour_name:
+            ' Du lịch Nam Phi [Johannesburg - Pretoria - Soweto - Cape Town]Du lịch Nam Phi [Johannesburg - Pretoria - Soweto - Cape Town]',
+        slug: 'du-lich-nam-phi-johannesburg-pretoria-soweto-cape-town',
+        tour_group: null,
+        area: null,
+        price: 1000000,
+        sale: 10,
+        promotion_price: 900000,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: [
+            'tour/3/1730012736535.jpg',
+            'tour/3/1730012736536.png',
+            'tour/3/1730012736541.png',
+            'tour/3/1730012736544.png',
+            'tour/3/1730012736552.png',
+            'tour/3/1730012736555.png',
+        ],
+        thumbnail: 'tour/3/1730012736558.jpg',
+        create_at: '2024-10-24T04:14:26.000Z',
+        update_at: '2024-10-31T02:51:34.000Z',
+        thumbnail_url: 'http://localhost:4090/images/tour/3/1730012736558.jpg',
+        image_url: [
+            'http://localhost:4090/images/tour/3/1730012736535.jpg',
+            'http://localhost:4090/images/tour/3/1730012736536.png',
+            'http://localhost:4090/images/tour/3/1730012736541.png',
+            'http://localhost:4090/images/tour/3/1730012736544.png',
+            'http://localhost:4090/images/tour/3/1730012736552.png',
+            'http://localhost:4090/images/tour/3/1730012736555.png',
+        ],
     },
     {
-        path: '',
+        tour_id: 4,
+        tour_name: 'asdasdasd',
+        slug: 'asdasdasd',
+        tour_group: null,
+        area: null,
+        price: 1000000,
+        sale: null,
+        promotion_price: 1000000,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: 'default_thumbnail.png',
+        thumbnail: 'default_thumbnail.png',
+        create_at: '2024-10-24T04:20:09.000Z',
+        update_at: '2024-10-27T09:24:38.000Z',
+        thumbnail_url: 'http://localhost:4090/images/default_thumbnail.png',
+        image_url: 'http://localhost:4090/images/default_thumbnail.png',
     },
     {
-        path: '',
+        tour_id: 5,
+        tour_name: 'asdasdasd',
+        slug: 'asdasdasd',
+        tour_group: null,
+        area: null,
+        price: null,
+        sale: null,
+        promotion_price: null,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: [
+            'tour/5/1730016909767.jpg',
+            'tour/5/1730016909768.png',
+            'tour/5/1730016909772.png',
+            'tour/5/1730016909782.png',
+            'tour/5/1730016909787.png',
+            'tour/5/1730016909792.png',
+        ],
+        thumbnail: 'tour/5/1730016909797.jpg',
+        create_at: '2024-10-24T04:20:13.000Z',
+        update_at: '2024-10-27T08:15:09.000Z',
+        thumbnail_url: 'http://localhost:4090/images/tour/5/1730016909797.jpg',
+        image_url: [
+            'http://localhost:4090/images/tour/5/1730016909767.jpg',
+            'http://localhost:4090/images/tour/5/1730016909768.png',
+            'http://localhost:4090/images/tour/5/1730016909772.png',
+            'http://localhost:4090/images/tour/5/1730016909782.png',
+            'http://localhost:4090/images/tour/5/1730016909787.png',
+            'http://localhost:4090/images/tour/5/1730016909792.png',
+        ],
     },
     {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
+        tour_id: 7,
+        tour_name: 'asdasdasd',
+        slug: 'asdasdasd',
+        tour_group: null,
+        area: null,
+        price: null,
+        sale: null,
+        promotion_price: null,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: [
+            'tour/7/1729913604351.jpg',
+            'tour/7/1729913604352.png',
+            'tour/7/1729913604357.png',
+            'tour/7/1729913604358.png',
+            'tour/7/1729913604360.png',
+            'tour/7/1729913604364.png',
+        ],
+        thumbnail: 'tour/7/1729913604366.jpg',
+        create_at: '2024-10-26T03:33:24.000Z',
+        update_at: '2024-10-26T03:33:24.000Z',
+        thumbnail_url: 'http://localhost:4090/images/tour/7/1729913604366.jpg',
+        image_url: [
+            'http://localhost:4090/images/tour/7/1729913604351.jpg',
+            'http://localhost:4090/images/tour/7/1729913604352.png',
+            'http://localhost:4090/images/tour/7/1729913604357.png',
+            'http://localhost:4090/images/tour/7/1729913604358.png',
+            'http://localhost:4090/images/tour/7/1729913604360.png',
+            'http://localhost:4090/images/tour/7/1729913604364.png',
+        ],
     },
 ];
 function TourDeatil() {
-    const [startDate, setStartDate] = useState(new Date());
-    const years = range(getYear(new Date()), getYear(new Date()) + 20, 1);
-    const months = [
-        'Tháng 1',
-        'Tháng 2',
-        'Tháng 3',
-        'Tháng 4',
-        'Tháng 5',
-        'Tháng 6',
-        'Tháng 7',
-        'Tháng 8',
-        'Tháng 9',
-        'Tháng 10',
-        'Tháng 11',
-        'Tháng 12',
-    ];
+    const [tour, setTour] = useState();
+    let { slug } = useParams();
+    useEffect(() => {
+        tourServices
+            .getTour(slug)
+            .then((res) => {
+                setTour(res);
+            })
+            .catch((err) => {
+                console.error('Error fetching tour:', err);
+            });
+    }, [slug]);
 
     useEffect(() => {
         const listElementSVG = document.querySelectorAll('svg');
@@ -105,14 +182,21 @@ function TourDeatil() {
             svg.style.pointerEvents = 'none';
         });
     }, []);
+
     const [changeQuantity, setChangeQuantity] = useState(true);
     const [padult, setAdult] = useState(1);
     const [child, setChild] = useState(0);
     const [baby, setBaby] = useState(0);
-    const [total, setTotal] = useState(padult * 10000000 + child * 10000000 + baby * 10000000);
+    const [total, setTotal] = useState(0);
+
     useEffect(() => {
-        setTotal(padult * 10000000 + child * 10000000 + baby * 10000000);
-    }, [changeQuantity]);
+        if (tour) {
+            setTotal(padult * tour.promotion_price + child * tour.promotion_price + baby * tour.promotion_price);
+        }
+    }, [padult, child, baby, tour]);
+    if (!tour) {
+        return <ErrorPage />;
+    }
     return (
         <Fragment>
             <BannerPage title="TourDeatil" />
@@ -121,25 +205,76 @@ function TourDeatil() {
                     <div className={cx('row', 'deatils-tour')}>
                         <div className={cx('col-12 col-lg-8')}>
                             <div className={cx('tour-image-block')}>
-                                <SimpleSliderBanner>
-                                    {listTest.map((item, index) => {
-                                        return (
-                                            <Link to="" key={index}>
-                                                <img src={images.bannerAbout} alt="imagees" />
-                                            </Link>
-                                        );
-                                    })}
-                                </SimpleSliderBanner>
+                                {tour.image_url ? (
+                                    <Fragment>
+                                        {Array.isArray(tour.image_url) ? (
+                                            <SimpleSliderBanner>
+                                                {tour.image_url.map((item, index) => {
+                                                    return (
+                                                        <Link key={index}>
+                                                            <img src={item} alt={tour.tour_name} />
+                                                        </Link>
+                                                    );
+                                                })}
+                                            </SimpleSliderBanner>
+                                        ) : (
+                                            <div className={cx('single-image')}>
+                                                <Link>
+                                                    <img src={tour.image_url} alt={tour.tour_name} />
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </Fragment>
+                                ) : (
+                                    <div className={cx('single-image')}>
+                                        <Link>
+                                            <img src={images.bannerAbout} alt={tour.tour_name} />
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                             <div className={cx('white-bg', 'tour-main-content')}>
                                 <div id="tour-schedule" className={cx('tour-block')}>
                                     <div className={cx('tour-schedule-title')}>Chương trình Tour</div>
+                                    <div className={cx('rte')}>
+                                        {tour.tour_progarm ? (
+                                            tour.tour_progarm
+                                        ) : (
+                                            <Fragment>
+                                                <AlterDismissible className={'alert-success'}>
+                                                    Chương trình Tour đang cập nhật
+                                                </AlterDismissible>
+                                            </Fragment>
+                                        )}
+                                    </div>
                                 </div>
                                 <div id="tour-departure" className={cx('tour-block')}>
                                     <div className={cx('tour-schedule-title')}>Chính sách Tour</div>
+                                    <div className={cx('rte')}>
+                                        {tour.tour_policy ? (
+                                            tour.tour_policy
+                                        ) : (
+                                            <Fragment>
+                                                <AlterDismissible className={'alert-success'}>
+                                                    Chính sách Tour đang cập nhật
+                                                </AlterDismissible>
+                                            </Fragment>
+                                        )}
+                                    </div>
                                 </div>
                                 <div id="tour-term-regulations" className={cx('tour-block')}>
                                     <div className={cx('tour-schedule-title')}>Điều khoản & Quy định</div>
+                                    <div className={cx('rte')}>
+                                        {tour.terms_conditions ? (
+                                            tour.terms_conditions
+                                        ) : (
+                                            <Fragment>
+                                                <AlterDismissible className={'alert-success'}>
+                                                    Điều khoản & Quy định đang cập nhật
+                                                </AlterDismissible>
+                                            </Fragment>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                             <div id="book-tour-now" className={cx('tour-booking')}>
@@ -154,7 +289,7 @@ function TourDeatil() {
                                         </ul>
                                         <div className={cx('pd_variants_content')}>
                                             <ul className={cx('variant_list', 'row')} id="2345">
-                                                <li className={cx('col-sm-4 col-4')}>Loại khách</li>
+                                                <li className={cx('col-sm-4 col-4')}>Người lớn</li>
                                                 <li className={cx('col-sm-2 col-4')}>
                                                     <div className={cx('quanlity')}>
                                                         <button
@@ -162,7 +297,6 @@ function TourDeatil() {
                                                             className={cx('plus')}
                                                             onClick={(e) => {
                                                                 setAdult(padult + 1);
-                                                                setChangeQuantity(!changeQuantity);
                                                             }}
                                                         >
                                                             <FontAwesomeIcon icon={faAngleUp} />
@@ -182,7 +316,6 @@ function TourDeatil() {
                                                                 if (padult > 0) {
                                                                     setAdult(padult - 1);
                                                                 }
-                                                                setChangeQuantity(!changeQuantity);
                                                             }}
                                                         >
                                                             <FontAwesomeIcon icon={faAngleDown} />
@@ -190,15 +323,19 @@ function TourDeatil() {
                                                     </div>
                                                 </li>
                                                 <li className={cx('col-sm-3 col-4 text-end', 'variant_price')}>
-                                                    {FormatPrice(10000000)}
-                                                    <input type="hidden" value={10000000} name="variant_price" />
+                                                    {FormatPrice(tour.promotion_price)}
+                                                    <input
+                                                        type="hidden"
+                                                        value={tour.promotion_price}
+                                                        name="variant_price"
+                                                    />
                                                 </li>
                                                 <li className={cx('col-sm-3 text-end', 'subtotal')}>
-                                                    {FormatPrice(10000000 * padult)}
+                                                    {FormatPrice(tour.promotion_price * padult)}
                                                 </li>
                                             </ul>
                                             <ul className={cx('variant_list', 'row')}>
-                                                <li className={cx('col-sm-4 col-4')}>Loại khách</li>
+                                                <li className={cx('col-sm-4 col-4')}>Trẻ em</li>
                                                 <li className={cx('col-sm-2 col-4')}>
                                                     <div className={cx('quanlity')}>
                                                         <button
@@ -206,7 +343,6 @@ function TourDeatil() {
                                                             className={cx('plus')}
                                                             onClick={(e) => {
                                                                 setChild(child + 1);
-                                                                setChangeQuantity(!changeQuantity);
                                                             }}
                                                         >
                                                             <FontAwesomeIcon icon={faAngleUp} />
@@ -233,15 +369,19 @@ function TourDeatil() {
                                                     </div>
                                                 </li>
                                                 <li className={cx('col-sm-3 col-4 text-end', 'variant_price')}>
-                                                    {FormatPrice(10000000)}
-                                                    <input type="hidden" value={10000000} name="variant_price" />
+                                                    {FormatPrice(tour.promotion_price)}
+                                                    <input
+                                                        type="hidden"
+                                                        value={tour.promotion_price}
+                                                        name="variant_price"
+                                                    />
                                                 </li>
                                                 <li className={cx('col-sm-3 text-end', 'subtotal')}>
-                                                    {FormatPrice(10000000 * child)}
+                                                    {FormatPrice(tour.promotion_price * child)}
                                                 </li>
                                             </ul>
                                             <ul className={cx('variant_list', 'row')}>
-                                                <li className={cx('col-sm-4 col-4')}>Loại khách</li>
+                                                <li className={cx('col-sm-4 col-4')}>Em bé</li>
                                                 <li className={cx('col-sm-2 col-4')}>
                                                     <div className={cx('quanlity')}>
                                                         <button
@@ -275,11 +415,15 @@ function TourDeatil() {
                                                     </div>
                                                 </li>
                                                 <li className={cx('col-sm-3 col-4 text-end', 'variant_price')}>
-                                                    {FormatPrice(10000000)}
-                                                    <input type="hidden" value={10000000} name="variant_price" />
+                                                    {FormatPrice(tour.promotion_price)}
+                                                    <input
+                                                        type="hidden"
+                                                        value={tour.promotion_price}
+                                                        name="variant_price"
+                                                    />
                                                 </li>
                                                 <li className={cx('col-sm-3 text-end', 'subtotal')}>
-                                                    {FormatPrice(10000000 * baby)}
+                                                    {FormatPrice(tour.promotion_price * baby)}
                                                 </li>
                                             </ul>
                                             <div className={cx('total-price', 'text-end row')}>
@@ -297,68 +441,7 @@ function TourDeatil() {
                                                     <div className={cx('input-group-text')}>
                                                         <img src={images.tagDate} alt="" />
                                                     </div>
-                                                    <DatePicker
-                                                        renderCustomHeader={({
-                                                            date,
-                                                            changeYear,
-                                                            changeMonth,
-                                                            decreaseMonth,
-                                                            increaseMonth,
-                                                            prevMonthButtonDisabled,
-                                                            nextMonthButtonDisabled,
-                                                        }) => (
-                                                            <div
-                                                                style={{
-                                                                    margin: 10,
-                                                                    display: 'flex',
-                                                                    justifyContent: 'center',
-                                                                }}
-                                                            >
-                                                                <button
-                                                                    onClick={decreaseMonth}
-                                                                    disabled={prevMonthButtonDisabled}
-                                                                >
-                                                                    {'<'}
-                                                                </button>
-
-                                                                <select
-                                                                    value={months[getMonth(date)]}
-                                                                    onChange={({ target: { value } }) =>
-                                                                        changeMonth(months.indexOf(value))
-                                                                    }
-                                                                >
-                                                                    {months.map((option) => (
-                                                                        <option key={option} value={option}>
-                                                                            {option}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-
-                                                                <select
-                                                                    value={getYear(date)}
-                                                                    onChange={({ target: { value } }) =>
-                                                                        changeYear(value)
-                                                                    }
-                                                                >
-                                                                    {years.map((option) => (
-                                                                        <option key={option} value={option}>
-                                                                            {option}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-
-                                                                <button
-                                                                    onClick={increaseMonth}
-                                                                    disabled={nextMonthButtonDisabled}
-                                                                >
-                                                                    {'>'}
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                        selected={startDate}
-                                                        onChange={(date) => setStartDate(date)}
-                                                        dateFormat="dd/MM/YYYY"
-                                                    />
+                                                    <CustomDatePicker />
                                                 </div>
                                             </div>
                                         </div>
@@ -375,28 +458,36 @@ function TourDeatil() {
                             <div className={cx('sticky-top')}>
                                 <div className={cx('white-bg')}>
                                     <div className={cx('title-deatil')}>
-                                        <h1 className={cx('title-head')}>
-                                            Du lịch Malaysia - Singapore [Thủy cung S.E.A AQUARIUM]
-                                        </h1>
+                                        <h1 className={cx('title-head')}>{tour.tour_name}</h1>
                                     </div>
                                     <div className={cx('price-box')}>
-                                        <span className={cx('old-price')}>
-                                            <del className={cx('product-price-old')}>{FormatPrice(1000000000)}</del>
-                                        </span>
-                                        <span className={cx('special-price')}>
-                                            Giá mới:&nbsp;{FormatPrice(1000000000)}
-                                        </span>
-                                        <span className={cx('save-price')}>
-                                            Tiết kiệm
-                                            <span className={cx('save-price-value')}>5%</span>
-                                        </span>
+                                        {tour.sale ? (
+                                            <Fragment>
+                                                <span className={cx('old-price')}>
+                                                    <del className={cx('product-price-old')}>
+                                                        {FormatPrice(tour.price)}
+                                                    </del>
+                                                </span>
+                                                <span className={cx('special-price')}>
+                                                    Giá mới:&nbsp;{FormatPrice(tour.promotion_price)}
+                                                </span>
+                                                <span className={cx('save-price')}>
+                                                    Tiết kiệm
+                                                    <span className={cx('save-price-value')}>{tour.sale}%</span>
+                                                </span>
+                                            </Fragment>
+                                        ) : (
+                                            <span className={cx('special-price')}>
+                                                Giá mới:&nbsp;{FormatPrice(tour.promotion_price)}
+                                            </span>
+                                        )}
                                     </div>
-                                    <Link to="" title="" className={cx('btn-print', 'round-btn')}>
+                                    <Link to={`/in-tour/${tour.slug}`} title="" className={cx('btn-print', 'round-btn')}>
                                         <FontAwesomeIcon icon={faPrint} />
                                         In chương trình tour
                                     </Link>
                                     <div className={cx('journey')}>
-                                        <span>Hành trình:</span>&nbsp; Hồ Chí Minh - Huế
+                                        <span>Hành trình:</span>&nbsp; {tour.trip}
                                     </div>
                                     <ul className={cx('ct_course_list')}>
                                         <li>
@@ -407,20 +498,23 @@ function TourDeatil() {
                                         <li>
                                             <img src={images.tagDateTime} alt="" />
                                             Lịch khởi hành:&nbsp;
-                                            <span className={cx('tag-color')}>Thứ 7 hằng tuần</span>
+                                            <span className={cx('tag-color')}>{tour.departure_schedule}</span>
                                         </li>
                                         <li>
                                             <img src={images.tagDate} alt="" />
                                             Thời gian:&nbsp;
-                                            <span className={cx('tag-color')}>4 ngày 3 đêm</span>
+                                            <span className={cx('tag-color')}>{tour.time}</span>
                                         </li>
                                     </ul>
                                     <div className={cx('product-summary')}>
                                         <div className={cx('content-summary')}>
-                                            <p>- Viếng chùa Thiên Mụ - ngôi chùa cổ và nổi tiếng nhất ở đất Cố đô</p>
-                                            <p>- Viếng chùa Thiên Mụ - ngôi chùa cổ và nổi tiếng nhất ở đất Cố đô</p>
-                                            <p>- Viếng chùa Thiên Mụ - ngôi chùa cổ và nổi tiếng nhất ở đất Cố đô</p>
-                                            <p>- Viếng chùa Thiên Mụ - ngôi chùa cổ và nổi tiếng nhất ở đất Cố đô</p>
+                                            {tour.description ? (
+                                                tour.description
+                                            ) : (
+                                                <AlterDismissible className="alert-success">
+                                                    Nội dung đang được cập nhật
+                                                </AlterDismissible>
+                                            )}
                                         </div>
                                     </div>
                                     <div className={cx('call-me-back')}>
@@ -490,7 +584,7 @@ function TourDeatil() {
                                 {listTest.map((item, index) => {
                                     return (
                                         <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                            <ItemTour />
+                                            <ItemTour data={item} />
                                         </div>
                                     );
                                 })}
@@ -513,7 +607,7 @@ function TourDeatil() {
                                     {listTest.map((item, index) => {
                                         return (
                                             <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                                <ItemTour />
+                                                <ItemTour data={item} />
                                             </div>
                                         );
                                     })}

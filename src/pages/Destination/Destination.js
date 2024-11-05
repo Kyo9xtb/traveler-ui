@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import styles from './Destination.module.scss';
 import BannerPage from '~/components/BannerPage';
 import ItemDestination from '~/components/ItemDestination';
-import PaginatedItems from '../../components/Paginate';
+import PaginatedItems from '~/components/Paginate';
 
 const cx = classNames.bind(styles);
 

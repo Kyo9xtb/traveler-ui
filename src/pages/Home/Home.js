@@ -1,11 +1,6 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import getYear from 'date-fns/getYear';
-import getMonth from 'date-fns/getYear';
-import range from 'lodash/range';
 
 import styles from './Home.module.scss';
 import images from '~/assets/images';
@@ -13,8 +8,10 @@ import ItemTour from '~/components/ItemTour';
 import ItemDestination from '~/components/ItemDestination';
 import ItemNews from '~/components/ItemNews';
 import SimpleSliderBanner from '~/components/Slider';
-const cx = classNames.bind(styles);
+import CustomDatePicker from '~/components/CustomDatePicker';
+import * as tourServices from '~/services/tourService';
 
+const cx = classNames.bind(styles);
 const listSlides = [
     {
         image_url: '',
@@ -60,83 +57,158 @@ const policys = [
 
 const listTest = [
     {
-        path: '',
+        tour_id: 3,
+        tour_name:
+            ' Du lịch Nam Phi [Johannesburg - Pretoria - Soweto - Cape Town]Du lịch Nam Phi [Johannesburg - Pretoria - Soweto - Cape Town]',
+        slug: 'du-lich-nam-phi-johannesburg-pretoria-soweto-cape-town',
+        tour_group: null,
+        area: null,
+        price: 1000000,
+        sale: 10,
+        promotion_price: 900000,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: [
+            'tour/3/1730012736535.jpg',
+            'tour/3/1730012736536.png',
+            'tour/3/1730012736541.png',
+            'tour/3/1730012736544.png',
+            'tour/3/1730012736552.png',
+            'tour/3/1730012736555.png',
+        ],
+        thumbnail: 'tour/3/1730012736558.jpg',
+        create_at: '2024-10-24T04:14:26.000Z',
+        update_at: '2024-10-31T02:51:34.000Z',
+        thumbnail_url: 'http://192.168.1.35:4090/images/tour/3/1730012736558.jpg',
+        image_url: [
+            'http://192.168.1.35:4090/images/tour/3/1730012736535.jpg',
+            'http://192.168.1.35:4090/images/tour/3/1730012736536.png',
+            'http://192.168.1.35:4090/images/tour/3/1730012736541.png',
+            'http://192.168.1.35:4090/images/tour/3/1730012736544.png',
+            'http://192.168.1.35:4090/images/tour/3/1730012736552.png',
+            'http://192.168.1.35:4090/images/tour/3/1730012736555.png',
+        ],
     },
     {
-        path: '',
+        tour_id: 4,
+        tour_name: 'asdasdasd',
+        slug: 'asdasdasd',
+        tour_group: null,
+        area: null,
+        price: 1000000,
+        sale: null,
+        promotion_price: 1000000,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: 'default_thumbnail.png',
+        thumbnail: 'default_thumbnail.png',
+        create_at: '2024-10-24T04:20:09.000Z',
+        update_at: '2024-10-27T09:24:38.000Z',
+        thumbnail_url: 'http://192.168.1.35:4090/images/default_thumbnail.png',
+        image_url: 'http://192.168.1.35:4090/images/default_thumbnail.png',
     },
     {
-        path: '',
+        tour_id: 5,
+        tour_name: 'asdasdasd',
+        slug: 'asdasdasd',
+        tour_group: null,
+        area: null,
+        price: null,
+        sale: null,
+        promotion_price: null,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: [
+            'tour/5/1730016909767.jpg',
+            'tour/5/1730016909768.png',
+            'tour/5/1730016909772.png',
+            'tour/5/1730016909782.png',
+            'tour/5/1730016909787.png',
+            'tour/5/1730016909792.png',
+        ],
+        thumbnail: 'tour/5/1730016909797.jpg',
+        create_at: '2024-10-24T04:20:13.000Z',
+        update_at: '2024-10-27T08:15:09.000Z',
+        thumbnail_url: 'http://192.168.1.35:4090/images/tour/5/1730016909797.jpg',
+        image_url: [
+            'http://192.168.1.35:4090/images/tour/5/1730016909767.jpg',
+            'http://192.168.1.35:4090/images/tour/5/1730016909768.png',
+            'http://192.168.1.35:4090/images/tour/5/1730016909772.png',
+            'http://192.168.1.35:4090/images/tour/5/1730016909782.png',
+            'http://192.168.1.35:4090/images/tour/5/1730016909787.png',
+            'http://192.168.1.35:4090/images/tour/5/1730016909792.png',
+        ],
     },
     {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
-    },
-    {
-        path: '',
+        tour_id: 7,
+        tour_name: 'asdasdasd',
+        slug: 'asdasdasd',
+        tour_group: null,
+        area: null,
+        price: null,
+        sale: null,
+        promotion_price: null,
+        departure_schedule: null,
+        vehicle: null,
+        time: null,
+        tour_progarm: null,
+        tour_policy: null,
+        terms_conditions: null,
+        trip: null,
+        guest_type: null,
+        image: [
+            'tour/7/1729913604351.jpg',
+            'tour/7/1729913604352.png',
+            'tour/7/1729913604357.png',
+            'tour/7/1729913604358.png',
+            'tour/7/1729913604360.png',
+            'tour/7/1729913604364.png',
+        ],
+        thumbnail: 'tour/7/1729913604366.jpg',
+        create_at: '2024-10-26T03:33:24.000Z',
+        update_at: '2024-10-26T03:33:24.000Z',
+        thumbnail_url: 'http://192.168.1.35:4090/images/tour/7/1729913604366.jpg',
+        image_url: [
+            'http://192.168.1.35:4090/images/tour/7/1729913604351.jpg',
+            'http://192.168.1.35:4090/images/tour/7/1729913604352.png',
+            'http://192.168.1.35:4090/images/tour/7/1729913604357.png',
+            'http://192.168.1.35:4090/images/tour/7/1729913604358.png',
+            'http://192.168.1.35:4090/images/tour/7/1729913604360.png',
+            'http://192.168.1.35:4090/images/tour/7/1729913604364.png',
+        ],
     },
 ];
 function Home() {
-    const [startDate, setStartDate] = useState(new Date());
-
-    // eslint-disable-next-line no-undef
-    const years = range(getYear(new Date()), getYear(new Date()) + 20, 1);
-    const months = [
-        'Tháng 1',
-        'Tháng 2',
-        'Tháng 3',
-        'Tháng 4',
-        'Tháng 5',
-        'Tháng 6',
-        'Tháng 7',
-        'Tháng 8',
-        'Tháng 9',
-        'Tháng 10',
-        'Tháng 11',
-        'Tháng 12',
-    ];
-
+    const [listTours, setListTours] = useState([]);
+    useEffect(() => {
+        tourServices
+            .get()
+            .then((res) => {
+                // console.log(res)
+                setListTours(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
     return (
         <Fragment>
             {/* home-banner-section */}
@@ -203,66 +275,7 @@ function Home() {
                                             </div>
                                             <div className={cx('group-search-content')}>
                                                 <p>Ngày khởi hành</p>
-                                                <DatePicker
-                                                    renderCustomHeader={({
-                                                        date,
-                                                        changeYear,
-                                                        changeMonth,
-                                                        decreaseMonth,
-                                                        increaseMonth,
-                                                        prevMonthButtonDisabled,
-                                                        nextMonthButtonDisabled,
-                                                    }) => (
-                                                        <div
-                                                            style={{
-                                                                margin: 10,
-                                                                display: 'flex',
-                                                                justifyContent: 'center',
-                                                            }}
-                                                        >
-                                                            <button
-                                                                onClick={decreaseMonth}
-                                                                disabled={prevMonthButtonDisabled}
-                                                            >
-                                                                {'<'}
-                                                            </button>
-
-                                                            <select
-                                                                value={months[getMonth(date)]}
-                                                                onChange={({ target: { value } }) =>
-                                                                    changeMonth(months.indexOf(value))
-                                                                }
-                                                            >
-                                                                {months.map((option) => (
-                                                                    <option key={option} value={option}>
-                                                                        {option}
-                                                                    </option>
-                                                                ))}
-                                                            </select>
-
-                                                            <select
-                                                                value={getYear(date)}
-                                                                onChange={({ target: { value } }) => changeYear(value)}
-                                                            >
-                                                                {years.map((option) => (
-                                                                    <option key={option} value={option}>
-                                                                        {option}
-                                                                    </option>
-                                                                ))}
-                                                            </select>
-
-                                                            <button
-                                                                onClick={increaseMonth}
-                                                                disabled={nextMonthButtonDisabled}
-                                                            >
-                                                                {'>'}
-                                                            </button>
-                                                        </div>
-                                                    )}
-                                                    selected={startDate}
-                                                    onChange={(date) => setStartDate(date)}
-                                                    dateFormat="dd/MM/YYYY"
-                                                />
+                                                <CustomDatePicker />
                                             </div>
                                         </div>
                                     </div>
@@ -277,7 +290,7 @@ function Home() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={cx('col-12 col-sm-2')}>
+                                    <div className={cx('col-12 col-sm-2', 'btn-sreach')}>
                                         <button className={cx('round-btn')}>Tìm</button>
                                     </div>
                                 </div>
@@ -322,16 +335,13 @@ function Home() {
                                 &nbsp; giá tốt
                             </Link>
                         </h2>
-                        <p>Cùng Evo Tour điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        <div className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                            <ItemTour />
-                        </div>
-                        {listTest.map((item, index) => {
+                        {listTours.slice(0, 4).map((item, index) => {
                             return (
                                 <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                    <ItemTour />
+                                    <ItemTour data={item} />
                                 </div>
                             );
                         })}
@@ -362,12 +372,16 @@ function Home() {
                         <h2 className={cx('section-title')}>
                             <Link to="#">Tour trong nước</Link>
                         </h2>
-                        <p>Cùng Evo Tour điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        <div className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                            <ItemTour />
-                        </div>
+                        {listTours.slice(0, 4).map((item, index) => {
+                            return (
+                                <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
+                                    <ItemTour data={item} />
+                                </div>
+                            );
+                        })}
                     </div>
                     <div className={cx('text-center')}>
                         <Link to="#" className={cx('round-btn')}>
@@ -383,12 +397,16 @@ function Home() {
                         <h2 className={cx('section-title')}>
                             <Link to="#">Tour nước ngoài</Link>
                         </h2>
-                        <p>Cùng Evo Tour điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        <div className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                            <ItemTour />
-                        </div>
+                        {listTours.slice(0, 4).map((item, index) => {
+                            return (
+                                <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
+                                    <ItemTour data={item} />
+                                </div>
+                            );
+                        })}
                     </div>
                     <div className={cx('text-center')}>
                         <Link to="#" className={cx('round-btn')}>
@@ -404,7 +422,7 @@ function Home() {
                         <h2 className={cx('section-title')}>
                             <Link to="#">Điểm đến yêu thích</Link>
                         </h2>
-                        <p>Cùng Evo Tour điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
                         <div className={cx('col-12 col-sm-6 col-md-6 col-lg-4')}>
@@ -420,7 +438,7 @@ function Home() {
                         <h2 className={cx('section-title')}>
                             <Link to="#">Cảm hứng du lịch</Link>
                         </h2>
-                        <p>Cùng Evo Tour điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
                         <div className={cx('col-12 col-sm-6 col-md-4 col-lg-4')}>

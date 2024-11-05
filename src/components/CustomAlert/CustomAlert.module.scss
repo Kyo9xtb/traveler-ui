@@ -1,0 +1,7 @@
+.custom-alter {
+    button {
+        &:focus {
+            box-shadow: none !important;
+        }
+    }
+}

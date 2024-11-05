@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import styles from './News.module.scss';
 import ItemNews from '~/components/ItemNews';
-import PaginatedItems from '../../components/Paginate';
+import PaginatedItems from '~/components/Paginate';
 
 const cx = classNames.bind(styles);
 
@@ -90,17 +90,57 @@ function News() {
                                     </Link>
                                 </h3>
                             </li>
+                            <li className={cx('list-small')}>
+                                <div className={cx('tempvideo')}>
+                                    <Link to="#" title="#">
+                                        <img
+                                            src="https://bizweb.dktcdn.net/100/372/532/articles/da-nang-su-thay-doi-ngoan-muc-cua-lang-chai-nam-xua-2.jpg?v=1575897433350"
+                                            alt=""
+                                        />
+                                    </Link>
+                                </div>
+                                <h3>
+                                    <Link to="#" title="#">
+                                        Cẩm nang du lịch Đà N��ng một ngày cho hội bạn vui chơi “sập” Đà thành
+                                    </Link>
+                                </h3>
+                            </li>
+                            <li className={cx('list-small')}>
+                                <div className={cx('tempvideo')}>
+                                    <Link to="#" title="#">
+                                        <img
+                                            src="https://bizweb.dktcdn.net/100/372/532/articles/da-nang-su-thay-doi-ngoan-muc-cua-lang-chai-nam-xua-2.jpg?v=1575897433350"
+                                            alt=""
+                                        />
+                                    </Link>
+                                </div>
+                                <h3>
+                                    <Link to="#" title="#">
+                                        Cẩm nang du lịch Đà N��ng một ngày cho hội bạn vui chơi “sập” Đà thành
+                                    </Link>
+                                </h3>
+                            </li>
+                            <li className={cx('list-small')}>
+                                <div className={cx('tempvideo')}>
+                                    <Link to="#" title="#">
+                                        <img
+                                            src="https://bizweb.dktcdn.net/100/372/532/articles/da-nang-su-thay-doi-ngoan-muc-cua-lang-chai-nam-xua-2.jpg?v=1575897433350"
+                                            alt=""
+                                        />
+                                    </Link>
+                                </div>
+                                <h3>
+                                    <Link to="#" title="#">
+                                        Cẩm nang du lịch Đà N��ng một ngày cho hội bạn vui chơi “sập” Đà thành
+                                    </Link>
+                                </h3>
+                            </li>
                         </ul>
                     </div>
                 </div>
-                {/* <div className={cx('row')}>
-                    <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
-                        <ItemNews />
-                    </div>
-                </div> */}
                 <PaginatedItems data={listProducts} itemsPerPage={9}>
                     {(item, index) => (
-                        <div className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
+                        <div key={index} className={cx('col-md-4 col-sm-6 col-12', 'fix-blog-col-small')}>
                             <ItemNews data={item} />
                         </div>
                     )}

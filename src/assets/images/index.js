@@ -21,8 +21,9 @@ const images = {
     policy: require('~/assets/images/policy.svg').default,
     termsConditions: require('~/assets/images/terms_conditions.svg').default,
     tourProgram: require('~/assets/images/tour-program.svg').default,
-    defaultBanner:require('~/assets/images/default-banner.jpg'),
+    defaultBanner: require('~/assets/images/default-banner.jpg'),
     aboutBanner: require('~/assets/images/about-banner.jpg'),
     contactBanner: require('~/assets/images/contact-banner.jpg'),
+    errorPage: require('~/assets/images/404.png'),
 };
 export default images;

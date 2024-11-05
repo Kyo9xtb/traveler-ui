@@ -172,23 +172,24 @@
                 }
             }
         }
+        .btn-sreach {
+            button {
+                height: 60px;
+                width: 100%;
+                margin-top: 15px;
+                border-radius: 0;
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                -ms-border-radius: 0;
+                -o-border-radius: 0;
 
-        button {
-            height: 60px;
-            width: 100%;
-            margin-top: 15px;
-            border-radius: 0;
-            -webkit-border-radius: 0;
-            -moz-border-radius: 0;
-            -ms-border-radius: 0;
-            -o-border-radius: 0;
-
-            @media screen and (max-width: 991px) {
-                height: 50px;
-                margin-top: 10px;
-                font-size: 15px;
-                padding-left: 7px;
-                padding-right: 7px;
+                @media screen and (max-width: 991px) {
+                    height: 50px;
+                    margin-top: 10px;
+                    font-size: 15px;
+                    padding-left: 7px;
+                    padding-right: 7px;
+                }
             }
         }
     }
@@ -255,11 +256,11 @@
 }
 
 .home-index-tour {
-    padding: 115px 0;
+    // padding: 115px 0;
 }
 
 .home-promotional-tour-section {
-    padding-bottom: 30px;
+    padding: 20px 0 30px;
 }
 
 .banner-section {
@@ -319,15 +320,19 @@
 }
 
 .domestic-tour {
+    padding: 30px 0;
 }
 
 .overseas-tour {
+    padding: 30px 0;
 }
 
 .home-destination {
+    padding: 30px 0;
 }
 
 .travel-inspiration {
+    padding: 30px 0;
     .more-btn {
         a {
             border-color: #3a78c9;

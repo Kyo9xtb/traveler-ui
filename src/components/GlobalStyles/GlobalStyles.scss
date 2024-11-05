@@ -21,10 +21,7 @@ body {
     line-height: 1.6;
     word-wrap: break-word;
     -webkit-font-smoothing: antialiased;
-}
-
-@media screen and (max-width: 575px) {
-    body {
+    @media screen and (max-width: 575px) {
         font-size: 14px;
     }
 }
@@ -32,7 +29,12 @@ body {
 /*----------------------------------------------------------------
  # Heading
  ----------------------------------------------------------------*/
-h1 h2 h3 h4 h5 h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: #223645;
     font-family: 'Montserrat', system-ui;
     margin: 0 0 15px;
@@ -117,11 +119,7 @@ h6 {
     -ms-border-radius: 25px;
     -o-border-radius: 25px;
     text-transform: uppercase;
-}
-
-@media screen and (max-width: 575px) {
-    .outline-btn,
-    .round-btn {
+    @media screen and (max-width: 575px) {
         font-size: 14px;
         padding: 12px 20px;
     }
@@ -250,6 +248,14 @@ h6 {
         }
         span {
             color: #3a78c9;
+        }
+        a {
+            &:hover {
+                color: #3a78c9 !important;
+                span{
+                    color: inherit;
+                }
+            }
         }
     }
 
