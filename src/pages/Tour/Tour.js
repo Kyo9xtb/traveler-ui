@@ -112,23 +112,27 @@ function Tour() {
                     </div>
                 </section>
                 <div className={cx('product-view')}>
-                    <SortCate />
-                    {/* <div className={cx('row')}>
-                        {listProducts.map((product, index) => {
-                            return (
-                                <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                    <ItemTour data={product} />
-                                </div>
-                            );
-                        })}
-                    </div> */}
-                    <PaginatedItems data={listTours} itemsPerPage={12}>
-                        {(item, index) => (
-                            <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                <ItemTour data={item} />
-                            </div>
-                        )}
-                    </PaginatedItems>
+                    <SortCate data={listTours}>
+                        {(data) =>
+                            data.length ? (
+                                <PaginatedItems data={data} itemsPerPage={12}>
+                                    {(item, index) => (
+                                        <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
+                                            <ItemTour data={item} />
+                                        </div>
+                                    )}
+                                </PaginatedItems>
+                            ) : (
+                                <PaginatedItems data={listTours} itemsPerPage={12}>
+                                    {(item, index) => (
+                                        <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
+                                            <ItemTour data={item} />
+                                        </div>
+                                    )}
+                                </PaginatedItems>
+                            )
+                        }
+                    </SortCate>
                 </div>
             </div>
         </Fragment>

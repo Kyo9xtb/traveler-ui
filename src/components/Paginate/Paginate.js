@@ -7,11 +7,6 @@ import styles from './Paginate.module.scss';
 const cx = classNames.bind(styles);
 function PaginatedItems({ data, itemsPerPage, children }) {
     const [itemOffset, setItemOffset] = useState(0);
-    console.log(data);
-    
-    // Simulate fetching items from another resources.
-    // (This could be items from props; or items loaded in a local state
-    // from an API endpoint with useEffect and useState)
     const endOffset = itemOffset + Number(itemsPerPage);
     const currentItems = data.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(data.length / itemsPerPage);
