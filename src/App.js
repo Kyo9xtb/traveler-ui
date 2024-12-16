@@ -2,6 +2,7 @@ import { Fragment, useLayoutEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 import { publicRoutes } from './routes';
+// import DefaultLayout from './layout';
 import { DefaultLayout } from './layout';
 
 const Wrapper = ({ children }) => {
@@ -30,7 +31,7 @@ function App() {
                                     key={index}
                                     path={route.path}
                                     element={
-                                        <Layout title="Tin tức">
+                                        <Layout title={route.title}>
                                             <Page />
                                         </Layout>
                                     }

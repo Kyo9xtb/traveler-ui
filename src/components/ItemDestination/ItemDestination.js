@@ -1,35 +1,35 @@
-import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 
-import styles from './ItemDestination.module.scss'
+import styles from './ItemDestination.module.scss';
+import config from '~/config';
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
-function ItemDestination() {
+function ItemDestination({ data }) {
+    const { location_name, slug, description, area, thumbnail_url } = data;
     return (
-        <article className={cx('destination-item')}
-            style={{backgroundImage:'url(https://bizweb.dktcdn.net/thumb/large/100/372/532/products/vistas-canal-venecia.jpg?v=1575555979307)'}}
+        <article
+            className={cx('destination-item')}
+            style={{
+                backgroundImage: `url(${thumbnail_url})`,
+            }}
         >
             <div className={cx('destination-content')}>
                 <div className={cx('rating-start-wrap')}>
                     <div className={cx('rating-start')}>
-                        <span style={{ width: '20%' }}>
-                        </span>
+                        <span style={{ width: '100%' }}></span>
                     </div>
-                </div>
-                <span className={cx('cat-link')}>
-                    <Link to="">
-                        Dubai
-                    </Link>
-                </span>
+                </div> 
+                {area && (
+                    <span className={cx('cat-link')}>
+                        <Link to="#">{area}</Link>
+                    </span>
+                )}
                 <h3>
-                    <Link to="">
-                        BURJ KHALIFA
-                    </Link>
+                    <Link to={`${config.routes.destination}/${slug}`}>{location_name}</Link>
                 </h3>
-                <p>
-                    Fusce hic augue velit wisi ips quibusdam pariatur, iusto.
-                </p>
+                {description && <p className={cx('description')}>{description}</p>}
             </div>
         </article>
     );

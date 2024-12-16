@@ -5,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 import styles from './Paginate.module.scss';
 
 const cx = classNames.bind(styles);
-function PaginatedItems({ data, itemsPerPage, children }) {
+function Paginate({ data, itemsPerPage, children }) {
     const [itemOffset, setItemOffset] = useState(0);
     const endOffset = itemOffset + Number(itemsPerPage);
     const currentItems = data.slice(itemOffset, endOffset);
@@ -16,7 +16,7 @@ function PaginatedItems({ data, itemsPerPage, children }) {
     };
     return (
         <Fragment>
-            <div className={cx('row')}>{currentItems.map((item, index) => children(item, index))}</div>
+            {children(currentItems)}
             <nav className={cx('text-center')}>
                 <ReactPaginate
                     breakLabel="..."
@@ -43,4 +43,4 @@ function PaginatedItems({ data, itemsPerPage, children }) {
     );
 }
 
-export default PaginatedItems;
+export default Paginate;

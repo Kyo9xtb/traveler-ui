@@ -1,0 +1,26 @@
+.title-head {
+    display: block;
+    line-height: 1.3em;
+    font-size: 24px;
+    color: #000;
+    font-weight: bold;
+    margin: 0;
+}
+.article-summary {
+    font-size: 15px;
+    margin: 20px auto;
+    font-style: italic;
+    color: #333;
+    text-align: justify;
+}
+.article-details {
+    margin-top: 30px;
+    h2{
+        font-size: 20px;
+        font-weight: 500;
+        margin-top: 5px;
+    }
+    figure {
+        text-align: center;
+    }
+}

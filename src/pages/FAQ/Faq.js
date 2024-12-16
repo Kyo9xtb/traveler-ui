@@ -19,7 +19,7 @@ function FAQ() {
                 <div className={cx('content-page')}>
                     <h3 className={cx('faq-title')}>CÁC ĐIỀU KIỆN & ĐIỀU KHOẢN</h3>
                     <div className={cx('panel-wrapper')}>
-                        <div className={cx('panel-item')}>
+                        <div className={cx('panel-item', 'mb-4')}>
                             <div className={cx('panel-heading')}>
                                 <h4 className={cx('panel-title')}>
                                     <Link onClick={handlerActive}>Khi nào thì đơn hàng của tôi được chuyển đi?</Link>
@@ -37,7 +37,7 @@ function FAQ() {
                                 </div>
                             </div>
                         </div>
-                        <div className={cx('panel-item')}>
+                        <div className={cx('panel-item', 'mb-4')}>
                             <div className={cx('panel-heading')}>
                                 <h4 className={cx('panel-title')}>
                                     <Link onClick={handlerActive}>Khi nào thì đơn hàng của tôi được chuyển đi?</Link>
@@ -55,7 +55,7 @@ function FAQ() {
                                 </div>
                             </div>
                         </div>
-                        <div className={cx('panel-item')}>
+                        <div className={cx('panel-item', 'mb-4')}>
                             <div className={cx('panel-heading')}>
                                 <h4 className={cx('panel-title')}>
                                     <Link onClick={handlerActive}>Khi nào thì đơn hàng của tôi được chuyển đi?</Link>
@@ -77,7 +77,7 @@ function FAQ() {
                 </div>
             </div>
         </Fragment>
-    ); 
+    );
 }
 
 export default FAQ;

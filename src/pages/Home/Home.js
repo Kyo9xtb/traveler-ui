@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import lodash from 'lodash';
 
 import styles from './Home.module.scss';
 import images from '~/assets/images';
@@ -9,32 +10,13 @@ import ItemDestination from '~/components/ItemDestination';
 import ItemNews from '~/components/ItemNews';
 import SimpleSliderBanner from '~/components/Slider';
 import CustomDatePicker from '~/components/CustomDatePicker';
-import * as tourServices from '~/services/tourService';
+// Service
+import config from '~/config';
+import { NewsService, TouristPlaceService, TourService } from '~/services';
 
 const cx = classNames.bind(styles);
-const listSlides = [
-    {
-        image_url: '',
-        title: 'slider_1',
-    },
-    {
-        image_url: '',
-        title: 'slider_2',
-    },
-    {
-        image_url: '',
-        title: 'slider_3',
-    },
-    {
-        image_url: '',
-        title: 'slider_4',
-    },
-    {
-        image_url: '',
-        title: 'slider_5',
-    },
-];
-const policys = [
+
+const policy = [
     {
         icon: images.feature1,
         title: 'Đảm bảo giá tốt nhất',
@@ -55,173 +37,108 @@ const policys = [
     },
 ];
 
-const listTest = [
-    {
-        tour_id: 3,
-        tour_name:
-            ' Du lịch Nam Phi [Johannesburg - Pretoria - Soweto - Cape Town]Du lịch Nam Phi [Johannesburg - Pretoria - Soweto - Cape Town]',
-        slug: 'du-lich-nam-phi-johannesburg-pretoria-soweto-cape-town',
-        tour_group: null,
-        area: null,
-        price: 1000000,
-        sale: 10,
-        promotion_price: 900000,
-        departure_schedule: null,
-        vehicle: null,
-        time: null,
-        tour_progarm: null,
-        tour_policy: null,
-        terms_conditions: null,
-        trip: null,
-        guest_type: null,
-        image: [
-            'tour/3/1730012736535.jpg',
-            'tour/3/1730012736536.png',
-            'tour/3/1730012736541.png',
-            'tour/3/1730012736544.png',
-            'tour/3/1730012736552.png',
-            'tour/3/1730012736555.png',
-        ],
-        thumbnail: 'tour/3/1730012736558.jpg',
-        create_at: '2024-10-24T04:14:26.000Z',
-        update_at: '2024-10-31T02:51:34.000Z',
-        thumbnail_url: 'http://192.168.1.35:4090/images/tour/3/1730012736558.jpg',
-        image_url: [
-            'http://192.168.1.35:4090/images/tour/3/1730012736535.jpg',
-            'http://192.168.1.35:4090/images/tour/3/1730012736536.png',
-            'http://192.168.1.35:4090/images/tour/3/1730012736541.png',
-            'http://192.168.1.35:4090/images/tour/3/1730012736544.png',
-            'http://192.168.1.35:4090/images/tour/3/1730012736552.png',
-            'http://192.168.1.35:4090/images/tour/3/1730012736555.png',
-        ],
-    },
-    {
-        tour_id: 4,
-        tour_name: 'asdasdasd',
-        slug: 'asdasdasd',
-        tour_group: null,
-        area: null,
-        price: 1000000,
-        sale: null,
-        promotion_price: 1000000,
-        departure_schedule: null,
-        vehicle: null,
-        time: null,
-        tour_progarm: null,
-        tour_policy: null,
-        terms_conditions: null,
-        trip: null,
-        guest_type: null,
-        image: 'default_thumbnail.png',
-        thumbnail: 'default_thumbnail.png',
-        create_at: '2024-10-24T04:20:09.000Z',
-        update_at: '2024-10-27T09:24:38.000Z',
-        thumbnail_url: 'http://192.168.1.35:4090/images/default_thumbnail.png',
-        image_url: 'http://192.168.1.35:4090/images/default_thumbnail.png',
-    },
-    {
-        tour_id: 5,
-        tour_name: 'asdasdasd',
-        slug: 'asdasdasd',
-        tour_group: null,
-        area: null,
-        price: null,
-        sale: null,
-        promotion_price: null,
-        departure_schedule: null,
-        vehicle: null,
-        time: null,
-        tour_progarm: null,
-        tour_policy: null,
-        terms_conditions: null,
-        trip: null,
-        guest_type: null,
-        image: [
-            'tour/5/1730016909767.jpg',
-            'tour/5/1730016909768.png',
-            'tour/5/1730016909772.png',
-            'tour/5/1730016909782.png',
-            'tour/5/1730016909787.png',
-            'tour/5/1730016909792.png',
-        ],
-        thumbnail: 'tour/5/1730016909797.jpg',
-        create_at: '2024-10-24T04:20:13.000Z',
-        update_at: '2024-10-27T08:15:09.000Z',
-        thumbnail_url: 'http://192.168.1.35:4090/images/tour/5/1730016909797.jpg',
-        image_url: [
-            'http://192.168.1.35:4090/images/tour/5/1730016909767.jpg',
-            'http://192.168.1.35:4090/images/tour/5/1730016909768.png',
-            'http://192.168.1.35:4090/images/tour/5/1730016909772.png',
-            'http://192.168.1.35:4090/images/tour/5/1730016909782.png',
-            'http://192.168.1.35:4090/images/tour/5/1730016909787.png',
-            'http://192.168.1.35:4090/images/tour/5/1730016909792.png',
-        ],
-    },
-    {
-        tour_id: 7,
-        tour_name: 'asdasdasd',
-        slug: 'asdasdasd',
-        tour_group: null,
-        area: null,
-        price: null,
-        sale: null,
-        promotion_price: null,
-        departure_schedule: null,
-        vehicle: null,
-        time: null,
-        tour_progarm: null,
-        tour_policy: null,
-        terms_conditions: null,
-        trip: null,
-        guest_type: null,
-        image: [
-            'tour/7/1729913604351.jpg',
-            'tour/7/1729913604352.png',
-            'tour/7/1729913604357.png',
-            'tour/7/1729913604358.png',
-            'tour/7/1729913604360.png',
-            'tour/7/1729913604364.png',
-        ],
-        thumbnail: 'tour/7/1729913604366.jpg',
-        create_at: '2024-10-26T03:33:24.000Z',
-        update_at: '2024-10-26T03:33:24.000Z',
-        thumbnail_url: 'http://192.168.1.35:4090/images/tour/7/1729913604366.jpg',
-        image_url: [
-            'http://192.168.1.35:4090/images/tour/7/1729913604351.jpg',
-            'http://192.168.1.35:4090/images/tour/7/1729913604352.png',
-            'http://192.168.1.35:4090/images/tour/7/1729913604357.png',
-            'http://192.168.1.35:4090/images/tour/7/1729913604358.png',
-            'http://192.168.1.35:4090/images/tour/7/1729913604360.png',
-            'http://192.168.1.35:4090/images/tour/7/1729913604364.png',
-        ],
-    },
-];
 function Home() {
+    const navigate = useNavigate();
     const [listTours, setListTours] = useState([]);
+    const [listNews, setListNews] = useState([]);
+    const [listDestinations, setListDestinations] = useState([]);
+    const [listTourClassification, setListTourClassification] = useState({
+        TourDomestic: [],
+        TourInternational: [],
+        TourPromotional: [],
+        MostPromotionalTour: [],
+    });
+    const [departureDate, setDepartureDate] = useState('');
+    const [fields, setFields] = useState({
+        Destination: '',
+        departureDate,
+        DeparturePoint: '',
+    });
+
+    const setFieldValue = ({ target: { name, value } }) => {
+        setFields((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+    // [GET data]
     useEffect(() => {
-        tourServices
-            .get()
+        //Tour
+        TourService.getTour()
             .then((res) => {
-                // console.log(res)
                 setListTours(res);
             })
             .catch((err) => {
-                console.log(err);
+                setListTours([]);
+            });
+        //News
+        NewsService.getNews()
+            .then((res) => {
+                setListNews(res);
+            })
+            .catch((err) => {
+                setListNews([]);
+            });
+
+        //Place
+        TouristPlaceService.getTouristPlace()
+            .then((res) => {
+                setListDestinations(res);
+            })
+            .catch((err) => {
+                setListDestinations([]);
             });
     }, []);
+
+    useEffect(() => {
+        setFields((prev) => ({
+            ...prev,
+            departureDate,
+        }));
+    }, [departureDate]);
+    // [Classify data tour]
+    useEffect(() => {
+        const tourDomestic = listTours.filter((tour) => tour.tour_group === 'Domestic');
+        setListTourClassification((prev) => {
+            return { ...prev, TourDomestic: tourDomestic };
+        });
+        const tourInternational = listTours.filter((tour) => tour.tour_group === 'International');
+        setListTourClassification((prev) => {
+            return { ...prev, TourInternational: tourInternational };
+        });
+        const tourPromotional = listTours.filter((tour) => tour.sale > 0);
+        setListTourClassification((prev) => {
+            return { ...prev, TourPromotional: tourPromotional };
+        });
+        let mostPromotionalTour = lodash.sortBy(tourPromotional, (item) => {
+            if (item.sale) {
+                return item.sale;
+            }
+        });
+        mostPromotionalTour = lodash.reverse(mostPromotionalTour);
+        setListTourClassification((prev) => {
+            return { ...prev, MostPromotionalTour: mostPromotionalTour };
+        });
+    }, [listTours]);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        navigate(
+            `${config.routes.search}?destination=${fields.Destination}&departuredate=${fields.departureDate}&departurepoint=${fields.DeparturePoint}`,
+        );
+    };
     return (
         <Fragment>
             {/* home-banner-section */}
             <section className={cx('home-banner-section')}>
                 <SimpleSliderBanner>
-                    {listSlides.map((data, index) => {
+                    {listTourClassification.MostPromotionalTour.slice(0, 6).map((tour, index) => {
                         return (
                             <div key={index}>
                                 <div
                                     className={cx('home-banner', 'd-flex align-items-center')}
                                     style={{
-                                        backgroundImage:
-                                            'url(https://demo.stairthemes.com/html/traveler/assets/images/banner-img1.jpg)',
+                                        backgroundImage: `url(${tour.thumbnail_url})`,
                                     }}
                                 >
                                     <div className="overlay"></div>
@@ -229,9 +146,12 @@ function Home() {
                                         <div className={cx('banner-content', 'text-center')}>
                                             <div className={cx('row')}>
                                                 <div className={cx('col-lg-8 offset-lg-2')}>
-                                                    <h4 className={cx('banner-sub-title')}>Du Lịch Dubai</h4>
-                                                    <h2 className={cx('banner-title')}>Burj Khalifa - Café Băng</h2>
-                                                    <Link to="#" className={cx('round-btn')}>
+                                                    {/* <h4 className={cx('banner-sub-title')}>Du Lịch Dubai</h4> */}
+                                                    <h2 className={cx('banner-title')}>{tour.tour_name}</h2>
+                                                    <Link
+                                                        to={`${config.routes.tour}/${tour.slug}`}
+                                                        className={cx('round-btn')}
+                                                    >
                                                         Xem thêm
                                                     </Link>
                                                 </div>
@@ -265,6 +185,8 @@ function Home() {
                                                 type="text"
                                                 placeholder="Bạn muốn đi đâu?"
                                                 autoComplete="off"
+                                                name="Destination"
+                                                onChange={setFieldValue}
                                             />
                                         </div>
                                     </div>
@@ -275,7 +197,7 @@ function Home() {
                                             </div>
                                             <div className={cx('group-search-content')}>
                                                 <p>Ngày khởi hành</p>
-                                                <CustomDatePicker />
+                                                <CustomDatePicker setDate={setDepartureDate} />
                                             </div>
                                         </div>
                                     </div>
@@ -286,12 +208,20 @@ function Home() {
                                             </div>
                                             <div className={cx('group-search-content')}>
                                                 <p>Khởi hành từ</p>
-                                                <input type="text" placeholder="Địa điểm khởi hành" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Địa điểm khởi hành"
+                                                    name="DeparturePoint"
+                                                    autoComplete="off"
+                                                    onChange={setFieldValue}
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                     <div className={cx('col-12 col-sm-2', 'btn-sreach')}>
-                                        <button className={cx('round-btn')}>Tìm</button>
+                                        <button onClick={handleSearch} className={cx('round-btn')}>
+                                            Tìm
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -304,7 +234,7 @@ function Home() {
                 <div className={cx('home-policy-wrap')}>
                     <div className={cx('container')}>
                         <div className={cx('row')}>
-                            {policys.map((policy, index) => {
+                            {policy.map((policy, index) => {
                                 return (
                                     <div key={index} className={cx('col-lg-4 col-md-4 col-12', 'policy-item')}>
                                         <div className={cx('policy-wrap')}>
@@ -330,15 +260,17 @@ function Home() {
                 <div className={cx('container')}>
                     <div className={cx('section-heading', 'text-center')}>
                         <h2 className={cx('section-title')}>
-                            <Link to="#">
+                            <Link to={config.routes.promotionalTours}>
                                 <span>Tour giờ chót</span>
                                 &nbsp; giá tốt
                             </Link>
                         </h2>
-                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>
+                            Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!
+                        </p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        {listTours.slice(0, 4).map((item, index) => {
+                        {listTourClassification.TourPromotional.slice(0, 4).map((item, index) => {
                             return (
                                 <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
                                     <ItemTour data={item} />
@@ -353,12 +285,12 @@ function Home() {
                 <div className={cx('container')}>
                     <div className={cx('row')}>
                         <div className={cx('col-lg-6 col-md-6 col-sm-6 col-12', 'banner-wrap')}>
-                            <Link to="">
+                            <Link to="#">
                                 <img src={images.featureMenu1} alt="home_banner_left" />
                             </Link>
                         </div>
                         <div className={cx('col-lg-6 col-md-6 col-sm-6 col-12', 'banner-wrap')}>
-                            <Link to="">
+                            <Link to="#">
                                 <img src={images.featureMenu2} alt="home_banner_left" />
                             </Link>
                         </div>
@@ -370,12 +302,14 @@ function Home() {
                 <div className={cx('container')}>
                     <div className={cx('section-heading', 'text-center')}>
                         <h2 className={cx('section-title')}>
-                            <Link to="#">Tour trong nước</Link>
+                            <Link to={config.routes.domesticTour}>Tour trong nước</Link>
                         </h2>
-                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>
+                            Tour du lịch Trong nước tại SaoViet Travler. Hành hương đầu xuân - Tận hưởng bản sắc Việt.
+                        </p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        {listTours.slice(0, 4).map((item, index) => {
+                        {listTourClassification.TourDomestic.slice(0, 4).map((item, index) => {
                             return (
                                 <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
                                     <ItemTour data={item} />
@@ -384,7 +318,7 @@ function Home() {
                         })}
                     </div>
                     <div className={cx('text-center')}>
-                        <Link to="#" className={cx('round-btn')}>
+                        <Link to={config.routes.domesticTour} className={cx('round-btn')}>
                             Xem thêm tour
                         </Link>
                     </div>
@@ -395,12 +329,14 @@ function Home() {
                 <div className={cx('container')}>
                     <div className={cx('section-heading', 'text-center')}>
                         <h2 className={cx('section-title')}>
-                            <Link to="#">Tour nước ngoài</Link>
+                            <Link to={config.routes.internationalTour}>Tour nước ngoài</Link>
                         </h2>
-                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>
+                            Tour du lịch Nước ngoài tại SaoViet Travler. Du lịch 5 châu - Trải nghiệm sắc xuân thế giới
+                        </p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        {listTours.slice(0, 4).map((item, index) => {
+                        {listTourClassification.TourInternational.slice(0, 4).map((item, index) => {
                             return (
                                 <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
                                     <ItemTour data={item} />
@@ -409,7 +345,7 @@ function Home() {
                         })}
                     </div>
                     <div className={cx('text-center')}>
-                        <Link to="#" className={cx('round-btn')}>
+                        <Link to={config.routes.internationalTour} className={cx('round-btn')}>
                             Xem thêm tour
                         </Link>
                     </div>
@@ -420,14 +356,16 @@ function Home() {
                 <div className={cx('container')}>
                     <div className={cx('section-heading', 'text-center')}>
                         <h2 className={cx('section-title')}>
-                            <Link to="#">Điểm đến yêu thích</Link>
+                            <Link to={config.routes.destination}>Điểm đến yêu thích</Link>
                         </h2>
-                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>Các điểm đến du lịch trong nước và nước ngoài</p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        <div className={cx('col-12 col-sm-6 col-md-6 col-lg-4')}>
-                            <ItemDestination />
-                        </div>
+                        {listDestinations.slice(0, 4).map((destination) => (
+                            <div key={destination.location_id} className={cx('col-12 col-sm-6 col-md-6 col-lg-3')}>
+                                <ItemDestination data={destination} />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -436,17 +374,24 @@ function Home() {
                 <div className={cx('container')}>
                     <div className={cx('section-heading', 'text-center')}>
                         <h2 className={cx('section-title')}>
-                            <Link to="#">Cảm hứng du lịch</Link>
+                            <Link to={config.routes.news}>Cảm hứng du lịch</Link>
                         </h2>
-                        <p>Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!</p>
+                        <p>
+                            Thông tin về du lịch, văn hóa, ẩm thực, các sự kiện và lễ hội tại các điểm đến Việt nam,
+                            Đông Nam Á và Thế Giới
+                        </p>
                     </div>
                     <div className={cx('row', 'sv-scroll')}>
-                        <div className={cx('col-12 col-sm-6 col-md-4 col-lg-4')}>
-                            <ItemNews />
-                        </div>
+                        {listNews.slice(0, 6).map((news) => {
+                            return (
+                                <div key={news.news_id} className={cx('col-12 col-sm-6 col-md-4 col-lg-4')}>
+                                    <ItemNews data={news} />
+                                </div>
+                            );
+                        })}
                     </div>
                     <div className={cx('text-center', 'more-btn')}>
-                        <Link to="#" className={cx('outline-btn outline-btn-white')}>
+                        <Link to={config.routes.news} className={cx('outline-btn outline-btn-white')}>
                             Xem tất cả tin tức
                         </Link>
                     </div>

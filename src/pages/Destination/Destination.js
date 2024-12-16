@@ -1,66 +1,46 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './Destination.module.scss';
 import BannerPage from '~/components/BannerPage';
 import ItemDestination from '~/components/ItemDestination';
-import PaginatedItems from '~/components/Paginate';
+import Paginate from '~/components/Paginate';
+import { TouristPlaceService } from '~/services';
 
 const cx = classNames.bind(styles);
 
-const listProducts = [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-];
-
 function Destination() {
+    const [listTouristPlaces, setListTouristPlaces] = useState([]);
+    useEffect(() => {
+        TouristPlaceService
+            .getTouristPlace()
+            .then((res) => {
+                setListTouristPlaces(res);
+            })
+            .catch((err) => {
+                throw new Error(err);
+            });
+    }, []);
+    console.log(listTouristPlaces);
+
     return (
         <Fragment>
             <BannerPage title="Điểm đến yêu thích" />
             <div className={cx('container')}>
                 <div className={cx('destination-warp')}>
-                    <PaginatedItems data={listProducts} itemsPerPage={9}>
-                        {(item, index) => (
-                            <div key={index} className={cx('col-lg-4 col-md-6')}>
-                                <ItemDestination data={item} />
+                    <Paginate data={listTouristPlaces} itemsPerPage={9}>
+                        {(resData) => (
+                            <div className={cx('row')}>
+                                {resData.map((item, index) => {
+                                    return (
+                                        <div key={index} className={cx('col-lg-4 col-md-6')}>
+                                            <ItemDestination data={item} />
+                                        </div>
+                                    );
+                                })}
                             </div>
                         )}
-                    </PaginatedItems>
+                    </Paginate>
                 </div>
             </div>
         </Fragment>

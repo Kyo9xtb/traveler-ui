@@ -1,6 +1,8 @@
 const images = {
     logo: require('~/assets/images/site-logo.png'),
+    logoColor: require('~/assets/images/logo-color.png'),
     domestic: require('~/assets/images/domestic-tour.jpg'),
+    international: require('~/assets/images/international-tour.jpg'),
     logoFooter: require('~/assets/images/logo.png'),
     feature1: require('~/assets/images/feature_search_image_1.png'),
     feature2: require('~/assets/images/feature_search_image_2.png'),
@@ -16,6 +18,8 @@ const images = {
     tagDate: require('~/assets/images/tag_date.svg').default,
     tagDateTime: require('~/assets/images/tag_datetime.svg').default,
     tagPlane: require('~/assets/images/tag_plane.svg').default,
+    tagShip: require('~/assets/images/tag_ship.svg').default,
+    tagTrain: require('~/assets/images/train.png'),
     featureMenu1: require('~/assets/images/feature_menu_1.jpg'),
     featureMenu2: require('~/assets/images/feature_menu_2.jpg'),
     policy: require('~/assets/images/policy.svg').default,
@@ -25,5 +29,6 @@ const images = {
     aboutBanner: require('~/assets/images/about-banner.jpg'),
     contactBanner: require('~/assets/images/contact-banner.jpg'),
     errorPage: require('~/assets/images/404.png'),
+    avatarDefault: require('~/assets/images/avatar-default.jpg'),
 };
 export default images;

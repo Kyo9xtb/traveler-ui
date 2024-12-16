@@ -1,249 +1,333 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp, faMagnifyingGlass, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
+import { faAlignRight, faChevronUp, faMagnifyingGlass, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import $ from 'jquery';
 
 import styles from './Header.module.scss';
 import images from '~/assets/images';
 import config from '~/config';
+import { actions, useStore } from '~/store';
 
 const cx = classNames.bind(styles);
+
+const MENU = [
+    {
+        path: config.routes.home,
+        title: 'Trang chủ',
+    },
+    {
+        path: config.routes.about,
+        title: 'Giới thiệu',
+    },
+    {
+        path: config.routes.tour,
+        title: 'Tour du lịch',
+        children: [
+            {
+                path: config.routes.domesticTour,
+                title: 'Tour trong nước',
+                banner: images.domestic,
+                children: [
+                    {
+                        path: config.routes.domesticTour,
+                        title: 'Miền Bắc',
+                        children: [
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Sapa',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Hà Giang',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Cao Bằng - Bắc Kạn',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Mai Châu - Mộc Châu',
+                            },
+
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Yên Bái',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Ninh Bình',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Hạ Long',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Cát Bà',
+                            },
+                        ],
+                    },
+                    {
+                        path: config.routes.domesticTour,
+                        title: 'Miền Trung',
+                        children: [
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Cửa Lò',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Sầm Sơn',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Nghệ An',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Thiên Cầm',
+                            },
+
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Quảng Bình',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Huế',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Đà Nẵng',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Hội An',
+                            },
+
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Nha Trang',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Phú Yên',
+                            },
+
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Quy Nhơn',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Đà Lạt',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Tây Nguyên',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Phan Thiết - Mũi Né',
+                            },
+                        ],
+                    },
+                    {
+                        path: config.routes.domesticTour,
+                        title: 'Miền Nam',
+                        children: [
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Phú Quốc',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Côn Đảo',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Bến Tre',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Cần Thơ',
+                            },
+
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Cà Mau',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Hà Tiên',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Kiên Giang',
+                            },
+                            {
+                                path: config.routes.domesticTour,
+                                title: 'Nam Du',
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                path: config.routes.internationalTour,
+                title: 'Tour quốc tế',
+                banner: images.international,
+                children: [
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Đông Nam Á',
+                        children: [
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Singapore',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Malaysia',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Thái Lan',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Campuchia',
+                            },
+
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Lào',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Indonesia',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Philipines',
+                            },
+                        ],
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Đông Bắc Á',
+                        children: [
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Hàn Quốc',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Đài Loan',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Hông Kông',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Nhật Bản',
+                            },
+
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Trung Quốc',
+                            },
+                        ],
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Ấn Độ - Nam Á',
+                        children: [
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Ấn Độ',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Maldives',
+                            },
+                            {
+                                path: config.routes.internationalTour,
+                                title: 'Tây Tạng',
+                            },
+                        ],
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Âu',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Úc',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Phi',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Mỹ',
+                    },
+                ],
+            },
+            {
+                path: '#',
+                title: 'Team Building',
+                banner: images.domestic,
+            },
+            {
+                path: '#',
+                title: 'Tour Free and Easy',
+                banner: images.domestic,
+            },
+            {
+                path: '#',
+                title: 'Điểm đến hàng đầu',
+                banner: images.domestic,
+            },
+        ],
+    },
+    {
+        path: config.routes.promotionalTours,
+        title: 'Tour khuyến mãi',
+    },
+    {
+        path: config.routes.news,
+        title: 'Tin tức',
+    },
+    {
+        path: config.routes.travelExperience,
+        title: 'Kinh nghiệm du lịch',
+    },
+    {
+        path: config.routes.faq,
+        title: 'FAQ',
+    },
+    {
+        path: config.routes.contact,
+        title: 'Liên hệ',
+    },
+];
 function Header() {
-    const MENU = [
-        {
-            path: config.routes.home,
-            title: 'Trang chủ',
-        },
-        {
-            path: config.routes.about,
-            title: 'Giới thiệu',
-        },
-        {
-            path: config.routes.tour,
-            title: 'Tour du lịch',
-            children: [
-                {
-                    path: '#',
-                    title: 'Tour trong nước',
-                    banner: images.domestic,
-                    children: [
-                        {
-                            path: '#',
-                            title: 'Miền Bắc',
-                            children: [
-                                {
-                                    path: '#',
-                                    title: 'Sapa',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Hà Giang',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Cao Bằng - Bắc Kạn',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Mai Châu - Mộc Châu',
-                                    children: [],
-                                },
+    const [, dispatch] = useStore();
+    let location = useLocation();
 
-                                {
-                                    path: '#',
-                                    title: 'Yên Bái',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Ninh Bình',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Hạ Long',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Cát Bà',
-                                    children: [],
-                                },
-                            ],
-                        },
-                        {
-                            path: '#',
-                            title: 'Miền Trung',
-                            children: [
-                                {
-                                    path: '#',
-                                    title: 'Cửa Lò',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Sầm Sơn',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Nghệ An',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Thiên Cầm',
-                                    children: [],
-                                },
-
-                                {
-                                    path: '#',
-                                    title: 'Quảng Bình',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Huế',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Đà Nẵng',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Hội An',
-                                    children: [],
-                                },
-
-                                {
-                                    path: '#',
-                                    title: 'Nha Trang',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Phú Yên',
-                                    children: [],
-                                },
-
-                                {
-                                    path: '#',
-                                    title: 'Quy Nhơn',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Đà Lạt',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Tây Nguyên',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Phan Thiết - Mũi Né',
-                                    children: [],
-                                },
-                            ],
-                        },
-                        {
-                            path: '#',
-                            title: 'Miền Nam',
-                            children: [
-                                {
-                                    path: '#',
-                                    title: 'Phú Quốc',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Côn Đảo',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Bến Tre',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Cần Thơ',
-                                    children: [],
-                                },
-
-                                {
-                                    path: '#',
-                                    title: 'Cà Mau',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Hà Tiên',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Kiên Giang',
-                                    children: [],
-                                },
-                                {
-                                    path: '#',
-                                    title: 'Nam Du',
-                                    children: [],
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    path: '#',
-                    title: 'Tour quốc tế',
-                    children: [],
-                },
-                {
-                    path: '#',
-                    title: 'Team Building',
-                },
-                {
-                    path: '#',
-                    title: 'Tour Free and Easy',
-                },
-                {
-                    path: '#',
-                    title: 'Điểm đến hàng đầu',
-                },
-            ],
-        },
-        {
-            path: config.routes.promotionalTours,
-            title: 'Tour khuyến mãi',
-        },
-        {
-            path: config.routes.news,
-            title: 'Tin tức',
-        },
-        {
-            path: config.routes.travelExperience,
-            title: 'Kinh nghiệm du lịch',
-        },
-        {
-            path: config.routes.faq,
-            title: 'FAQ',
-        },
-        {
-            path: config.routes.contact,
-            title: 'Liên hệ',
-        },
-    ];
+    const [changePath, setChangePath] = useState();
+    if (location.pathname !== changePath) {
+        setChangePath(location.pathname);
+    }
+    useEffect(() => {
+        setShowMenuMobile(false);
+    }, [changePath]);
+    const [showMenuMobile, setShowMenuMobile] = useState(false);
     useEffect(() => {
         const navElement = document.querySelector(`.${cx('nav-level1')}`);
         $(`.${cx('menu-item-has-children')}`).hover(function () {
@@ -258,6 +342,7 @@ function Header() {
             },
         );
     }, []);
+
     useEffect(() => {
         const handleScroll = () => {
             const headerElement = document.querySelector(`.${cx('header')}`);
@@ -272,20 +357,35 @@ function Header() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
-    useEffect(() => {
-        const listElementPath = document.querySelectorAll('path');
-        listElementPath.forEach((path) => {
-            path.style.pointerEvents = 'none';
-        });
-    }, []);
+
     const handleMenuMobile = (e) => {
-        const parentElement = e.target.parentNode.parentNode;
-        parentElement.classList.toggle(`${cx('active')}`);
+        e.preventDefault();
+        setShowMenuMobile(!showMenuMobile);
     };
+
     const handleMenuChildrenMobile = (e) => {
-        let parentElement = e.target.parentNode.parentNode;
+        e.stopPropagation();
+        let parentElement = e.target.closest('li');
         parentElement.classList.toggle(`${cx('active')}`);
     };
+
+    const handleOffcanvasMenu = (e) => {
+        e.preventDefault();
+        dispatch(actions.setOffCanvasMenu(true));
+    };
+
+    const handleShowSearch = (e) => {
+        e.preventDefault();
+        dispatch(actions.setShowSearch(true));
+    };
+
+    const activeMenu = (path) => {
+        if (location.pathname === path) {
+            return true;
+        }
+        return false;
+    };
+
     return (
         <header className={cx('header')}>
             <div className={cx('top-header')}>
@@ -304,16 +404,23 @@ function Header() {
                         </div>
                         <div className={cx('site-logo', 'text-center')}>
                             <h1 className={cx('site-title')}>
-                                <Link to="/">
+                                <Link to={config.routes.home}>
                                     <img src={images.logo} alt="Traveler" />
                                 </Link>
                             </h1>
                         </div>
                         <div className={cx('header-icon', 'text-end')}>
                             <div className={cx('header-search-icon', 'd-inline-block')}>
-                                <Link to="#">
+                                <Link onClick={handleShowSearch}>
                                     <i>
                                         <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                    </i>
+                                </Link>
+                            </div>
+                            <div className={cx('offcanvas-menu', 'd-inline-block')}>
+                                <Link onClick={handleOffcanvasMenu}>
+                                    <i>
+                                        <FontAwesomeIcon icon={faAlignRight} />
                                     </i>
                                 </Link>
                             </div>
@@ -327,7 +434,14 @@ function Header() {
                         <ul className={cx('nav')}>
                             {MENU.map((menu, index) => {
                                 return menu.children !== undefined && menu.children.length > 0 ? (
-                                    <li key={index} className={cx('menu-item-has-children')}>
+                                    <li
+                                        key={index}
+                                        className={
+                                            activeMenu(menu.path)
+                                                ? cx('menu-item-has-children', 'menu-active')
+                                                : cx('menu-item-has-children')
+                                        }
+                                    >
                                         <Link to={menu.path} title={menu.title}>
                                             {menu.title}
                                         </Link>
@@ -452,7 +566,7 @@ function Header() {
                                         </div>
                                     </li>
                                 ) : (
-                                    <li key={index}>
+                                    <li key={index} className={activeMenu(menu.path) ? cx('menu-active') : cx('')}>
                                         <Link to={menu.path} title={menu.title}>
                                             {menu.title}
                                         </Link>
@@ -463,7 +577,7 @@ function Header() {
                     </div>
                 </div>
             </div>
-            <div className={cx('mobile-menu-container')}>
+            <div className={showMenuMobile ? cx('mobile-menu-container', 'active') : cx('mobile-menu-container')}>
                 <div className={cx('slicknav_menu')}>
                     <Link className={cx('slicknav_btn')} onClick={handleMenuMobile}>
                         Menu

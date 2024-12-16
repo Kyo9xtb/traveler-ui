@@ -1,16 +1,88 @@
-import { Link } from 'react-router-dom';
+import { Fragment, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 
 import styles from './Account.module.scss';
 import BannerPage from '~/components/BannerPage';
 import config from '~/config';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
+import { AuthorService } from '~/services';
+import { actions, useStore } from '~/store';
 
 const cx = classNames.bind(styles);
 function Register() {
+    const navigate = useNavigate();
+    const [, dispatch] = useStore();
+    const [isEmail, setIsEmail] = useState(false);
+    const [fields, setFields] = useState({
+        FullName: '',
+        PhoneNumber: '',
+        Email: '',
+        Password: '',
+    });
+
+    useEffect(() => {
+        AuthorService.getLogin()
+            .then((res) => {
+                dispatch(actions.setInfoUser(res));
+                navigate(config.routes.home);
+            })
+            .catch((err) => {
+                // console.log("error", err);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const setFieldValue = ({ target: { name, value } }) => {
+        setFields((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const data = {
+            full_name: fields.FullName,
+            phone_number: fields.PhoneNumber,
+            email: fields.Email,
+            password: fields.Password,
+        };
+        AuthorService.postAuthor(data)
+            .then((res) => {
+                if (res.status) {
+                    setFields({
+                        FullName: '',
+                        PhoneNumber: '',
+                        Email: '',
+                        Password: '',
+                    });
+                    navigate(config.routes.login);
+                }
+                else {
+                    alert('Đăng ký thành viên thất bại');
+                }
+            })
+            .catch((err) => {
+                alert(err);
+            });
+    };
+
+    const handleCheckEmail = (e) => {
+        const { value } = e.target;
+        const data = { email: value };
+        AuthorService.postCheckEmail(data)
+            .then((res) => {
+                setIsEmail(res);
+            })
+            .catch((err) => {
+                console.error('Error checking email:', err);
+                setIsEmail(false);
+            });
+    };
     return (
-        <>
+        <Fragment>
             <BannerPage title="Đăng ký" />
             <div className={cx('container', 'margin-bottom-20')}>
                 <div className={cx('row justify-content-md-center')}>
@@ -49,28 +121,21 @@ function Register() {
                                         </li>
                                     </ul>
                                     <div className={cx('sv-login')}>
-                                        <form id={cx('customer-login')}>
+                                        <form id={cx('customer-login')} onSubmit={handleSubmit}>
                                             <div className={cx('form-signup')}>
                                                 <fieldset className={cx('form-group')}>
                                                     <label>
-                                                        Họ
+                                                        Họ và tên
                                                         <span className={cx('required')}>*</span>
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        placeholder="Nhập họ"
+                                                        placeholder="Nhập họ và tên"
                                                         autoComplete="off"
-                                                    />
-                                                </fieldset>
-                                                <fieldset className={cx('form-group')}>
-                                                    <label>
-                                                        Tên
-                                                        <span className={cx('required')}>*</span>
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Nhập tên"
-                                                        autoComplete="off"
+                                                        name="FullName"
+                                                        value={fields.FullName}
+                                                        required
+                                                        onChange={setFieldValue}
                                                     />
                                                 </fieldset>
                                                 <fieldset className={cx('form-group')}>
@@ -82,7 +147,11 @@ function Register() {
                                                         type="text"
                                                         placeholder="Nhập số điện thoại"
                                                         autoComplete="off"
-                                                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                                                        pattern="/(84|0[3|5|7|8|9])+([0-9]{8})\b/g"
+                                                        name="PhoneNumber"
+                                                        value={fields.PhoneNumber}
+                                                        required
+                                                        onChange={setFieldValue}
                                                     />
                                                 </fieldset>
                                                 <fieldset className={cx('form-group')}>
@@ -95,7 +164,18 @@ function Register() {
                                                         placeholder="Nhập email"
                                                         autoComplete="off"
                                                         pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                                                        name="Email"
+                                                        value={fields.Email}
+                                                        required
+                                                        onChange={setFieldValue}
+                                                        onBlur={handleCheckEmail}
                                                     />
+                                                    {isEmail && (
+                                                        <p className={cx('text-danger', 'mb-0')}>
+                                                            Email đã tồn tại. Vui lòng đăng nhập hoặc đăng ký với email
+                                                            khác.
+                                                        </p>
+                                                    )}
                                                 </fieldset>
                                                 <fieldset className={cx('form-group')}>
                                                     <label>
@@ -107,10 +187,16 @@ function Register() {
                                                         placeholder="Nhập mật khẩu"
                                                         autoComplete="off"
                                                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                                        name="Password"
+                                                        value={fields.Password}
+                                                        required
+                                                        onChange={setFieldValue}
                                                     />
                                                 </fieldset>
                                                 <div className={cx('btn-submit', 'text-center')}>
-                                                    <button className={cx('round-btn')}>Tạo tài khoản</button>
+                                                    <button type="submit" className={cx('round-btn')}>
+                                                        Tạo tài khoản
+                                                    </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -138,7 +224,7 @@ function Register() {
                     </div>
                 </div>
             </div>
-        </>
+        </Fragment>
     );
 }
 

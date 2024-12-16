@@ -3,27 +3,38 @@ import { Link } from 'react-router-dom';
 import lodash from 'lodash';
 
 import styles from './SortCate.module.scss';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 function SortCate({ data, children }) {
-    // console.log(data.data);
     const [resData, setResData] = useState([]);
+
+    useEffect(() => {
+        const listItems = document.querySelectorAll(`.${cx('sort-cate-left')} li`);
+        listItems.forEach((item) => {
+            item.classList.remove(`${cx('active')}`);
+        });
+        setResData(data);
+    }, [data]);
+
     const handlerSortNameIncrease = (e) => {
+        e.preventDefault();
         const res = lodash.sortBy(data, (item) => {
-            return item.tour_name.toLowerCase();
+            return item.slug.toLowerCase();
         });
         setResData(res);
         handelActive(e);
     };
     const handlerSortNameDecrease = (e) => {
+        e.preventDefault();
         const res = lodash.sortBy(data, (item) => {
-            return item.tour_name.toLowerCase();
+            return item.slug.toLowerCase();
         });
         setResData(lodash.reverse(res));
         handelActive(e);
     };
     const handlerSortPriceIncrease = (e) => {
+        e.preventDefault();
         const res = lodash.sortBy(data, (item) => {
             return item.promotion_price;
         });
@@ -31,8 +42,18 @@ function SortCate({ data, children }) {
         handelActive(e);
     };
     const handlerSortPriceDecrease = (e) => {
+        e.preventDefault();
         const res = lodash.sortBy(data, (item) => {
             return item.promotion_price;
+        });
+        setResData(lodash.reverse(res));
+        handelActive(e);
+    };
+
+    const handlerTourLatest = (e) => {
+        e.preventDefault();
+        const res = lodash.sortBy(data, (item) => {
+            return item.create_at;
         });
         setResData(lodash.reverse(res));
         handelActive(e);
@@ -76,6 +97,12 @@ function SortCate({ data, children }) {
                             <Link onClick={handlerSortPriceDecrease}>
                                 <i></i>
                                 Giá giảm dần
+                            </Link>
+                        </li>
+                        <li>
+                            <Link onClick={handlerTourLatest}>
+                                <i></i>
+                                Mới nhất
                             </Link>
                         </li>
                     </ul>

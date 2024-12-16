@@ -1,9 +1,21 @@
-.deatils-tour-wrap {
-    // deatils-tour
-    .deatils-tour {
+.details-tour-wrap {
+    padding-top: 30px;
+    // details-tour
+    .details-tour {
         // tour-image-block
         .tour-image-block {
             overflow: hidden;
+            .image-wrapper {
+                height: 500px;
+                overflow: hidden;
+                text-align: center;
+                img {
+                    height: 100%;
+                    display: inline-block;
+                    object-fit: cover;
+                    // vertical-align: middle;
+                }
+            }
             .single-image {
                 img {
                     width: 100%;
@@ -66,7 +78,7 @@
                             clear: both;
                             margin-bottom: 10px;
                             overflow: hidden;
-                            .quanlity {
+                            .quantity {
                                 width: 80px;
                                 position: relative;
                                 float: left;
@@ -142,6 +154,11 @@
                             display: flex;
                             flex-wrap: wrap;
                             align-items: stretch;
+                            > div {
+                                &:nth-child(2) {
+                                    flex-grow: 2;
+                                }
+                            }
                             .input-group-text {
                                 display: flex;
                                 -ms-flex-align: center;
@@ -176,6 +193,11 @@
                             }
                         }
                     }
+                    .add-to-card {
+                        @media screen and (max-width: 575px) {
+                            margin-top: 15px;
+                        }
+                    }
                     #submit-table {
                         width: 100%;
                         background-color: #1ba0e2;
@@ -194,12 +216,18 @@
                             border-color: #1ba0e2;
                             background-color: #fff;
                         }
+                        &:disabled {
+                            background-color: #ddd;
+                            border-color: #ddd;
+                            color: #999;
+                            cursor: not-allowed;
+                        }
                     }
                 }
             }
         }
-        // deatils-wrap
-        .deatils-wrap {
+        // details-wrap
+        .details-wrap {
             .sticky-top {
                 position: sticky;
                 top: 0;
@@ -208,7 +236,7 @@
                     box-shadow: 0 0 4px 0 rgba(152, 165, 185, 0.2);
                     padding: 10px;
                 }
-                .title-deatil {
+                .title-detail {
                     display: flex;
                     align-items: flex-start;
                     .title-head {
@@ -292,7 +320,7 @@
                         img {
                             max-width: 18px;
                             flex: 1;
-                            margin-right: 2px;
+                            margin-right: 10px;
                         }
                         span {
                             font-weight: 500;
@@ -365,19 +393,22 @@
     }
 }
 .similar-tour-wrap {
-    padding: 50px 0;
-    .similar-tour-title {
-        margin-bottom: 20px;
-        margin-top: 10px;
-        h2 {
-            font-size: 26px;
-            line-height: 28px;
-            margin: 0;
-            font-weight: 600;
-            text-transform: uppercase;
-            a {
-                font-family: inherit;
-                color: #000;
+    padding: 10px 0;
+    .similar-tour {
+        padding: 10px 0;
+        .similar-tour-title {
+            margin-bottom: 20px;
+            margin-top: 10px;
+            h2 {
+                font-size: 26px;
+                line-height: 28px;
+                margin: 0;
+                font-weight: 600;
+                text-transform: uppercase;
+                a {
+                    font-family: inherit;
+                    color: #000;
+                }
             }
         }
     }

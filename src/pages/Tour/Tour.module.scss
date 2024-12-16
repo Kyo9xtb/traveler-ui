@@ -1,6 +1,9 @@
+.page-content {
+    position: relative;
+}
 .home-trip-search {
     // padding: 55px 0 60px;
-
+    margin-bottom: 20px;
     .home-search-title {
         text-shadow: 0 1px 1px #333;
 
@@ -148,7 +151,7 @@
                 -moz-border-radius: 0;
                 -ms-border-radius: 0;
                 -o-border-radius: 0;
-    
+
                 @media screen and (max-width: 991px) {
                     height: 50px;
                     margin-top: 10px;
@@ -161,5 +164,5 @@
     }
 }
 .product-view {
-    margin-bottom: 25px;
+    padding-bottom: 25px;
 }

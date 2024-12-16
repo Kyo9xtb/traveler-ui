@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLocationDot, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
@@ -10,14 +10,44 @@ import { Link } from 'react-router-dom';
 import styles from './Contact.module.scss';
 import BannerPage from '~/components/BannerPage';
 import images from '~/assets/images';
+import { ContactService } from '~/services';
+import { SnakeCaseVariable } from '~/store';
 
 const cx = classNames.bind(styles);
 
-function Conatact() {
+function Contact() {
+    const [fields, setFields] = useState({
+        full_name: '',
+        phone_number: '',
+        email: '',
+        content: '',
+    });
+    const setFieldValue = ({ target: { name, value } }) => {
+        setFields((prev) => ({
+            ...prev,
+            [`${SnakeCaseVariable(name)}`]: value,
+        }));
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        ContactService.postContact(fields)
+            .then((res) => {
+                alert('Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi sớm nhất có thể.');
+                setFields({
+                    FullName: '',
+                    PhoneNumber: '',
+                    Email: '',
+                    Content: '',
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <Fragment>
             <BannerPage image={images.contactBanner} title="Liên hệ" />
-            <div className={cx('inner-conatct-wrap')}>
+            <div className={cx('inner-contact-wrap', 'mt-5')}>
                 <div className={cx('container')}>
                     <div className={cx('row', 'contact-padding')}>
                         <div className={cx('col-12')}>
@@ -68,7 +98,7 @@ function Conatact() {
                             </div>
                         </div>
                         <div className={cx('col-lg-8 col-md-12')}>
-                            <form className={cx('form-contact')}>
+                            <form className={cx('form-contact')} onSubmit={handleSubmit}>
                                 <div className={cx('row')}>
                                     <div className={cx('col-sm-4 col-xs-12')}>
                                         <fieldset className={cx('form-group')}>
@@ -76,11 +106,13 @@ function Conatact() {
                                                 Họ và tên<span className="required">*</span>
                                             </label>
                                             <input
-                                                name="contact[name]"
+                                                name="FullName"
                                                 className={cx('form-control form-control-lg')}
                                                 type="text"
                                                 placeholder="Họ và tên"
                                                 required
+                                                value={fields.FullName}
+                                                onChange={setFieldValue}
                                             />
                                         </fieldset>
                                     </div>
@@ -90,11 +122,13 @@ function Conatact() {
                                                 Email<span className="required">*</span>
                                             </label>
                                             <input
-                                                name="contact[email]"
+                                                name="Email"
                                                 className={cx('form-control form-control-lg')}
                                                 type="email"
                                                 placeholder="Email của bạn"
                                                 required
+                                                value={fields.Email}
+                                                onChange={setFieldValue}
                                             />
                                         </fieldset>
                                     </div>
@@ -104,11 +138,13 @@ function Conatact() {
                                                 Số điện thoại<span className="required">*</span>
                                             </label>
                                             <input
-                                                name="contact[phone]"
+                                                name="PhoneNumber"
                                                 className={cx('form-control form-control-lg')}
                                                 type="text"
                                                 placeholder="Số điện thoại"
                                                 required
+                                                value={fields.PhoneNumber}
+                                                onChange={setFieldValue}
                                             />
                                         </fieldset>
                                     </div>
@@ -118,15 +154,19 @@ function Conatact() {
                                                 Nội dung:<span className="required">*</span>
                                             </label>
                                             <textarea
-                                                name="contact[content]"
+                                                name="Content"
                                                 className={cx('form-control form-control-lg')}
                                                 placeholder="Nội dung liên hệ"
                                                 required
                                                 rows="5"
+                                                value={fields.Content}
+                                                onChange={setFieldValue}
                                             />
                                         </fieldset>
                                         <div className={cx('btn-submit')}>
-                                            <button className={cx('round-btn')}>Gửi tin nhắn</button>
+                                            <button type="submit" className={cx('round-btn')}>
+                                                Gửi tin nhắn
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -153,4 +193,4 @@ function Conatact() {
     );
 }
 
-export default Conatact;
+export default Contact;

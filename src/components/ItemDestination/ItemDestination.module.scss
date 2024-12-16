@@ -28,6 +28,7 @@
     }
 
     .destination-content {
+        width: 100%;
         margin: 20px;
         padding: 22px 20px;
         position: relative;
@@ -48,7 +49,7 @@
             position: absolute;
             right: 24px;
             top: -12px;
-            background-color: #3A78C9;
+            background-color: #3a78c9;
 
             .rating-start {
                 display: table;
@@ -57,10 +58,10 @@
                 letter-spacing: 1.5px;
 
                 &::before {
-                    color: #C3C3C3;
-                    content: "\f005\f005\f005\f005\f005";
+                    color: #c3c3c3;
+                    content: '\f005\f005\f005\f005\f005';
                     display: block;
-                    font-family: "Font Awesome 5 free";
+                    font-family: 'Font Awesome 5 free';
                     font-weight: 900;
                 }
 
@@ -73,31 +74,37 @@
 
                     &::before {
                         color: #fff;
-                        content: "\f005\f005\f005\f005\f005";
+                        content: '\f005\f005\f005\f005\f005';
                         display: inline-block;
-                        font-family: "Font Awesome 5 free";
+                        font-family: 'Font Awesome 5 free';
                         font-weight: 900;
                     }
                 }
             }
+        }
+        .cat-link {
+            color: #3a78c9;
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
 
-            .cat-link {
-                color: #3A78C9;
-                display: block;
-                font-size: 13px;
-                margin-bottom: 8px;
-                text-transform: uppercase;
+        h3 {
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        p {
+            &.description {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                overflow: hidden;
             }
-
-            h3 {
-                text-transform: uppercase;
-                margin-bottom: 6px;
-            }
-
-            p {
-                &:last-child {
-                    margin-bottom: 0;
-                }
+            &:last-child {
+                margin-bottom: 0;
             }
         }
     }

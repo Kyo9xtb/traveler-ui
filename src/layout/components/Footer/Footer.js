@@ -7,6 +7,7 @@ import styles from './Footer.module.scss';
 import images from '~/assets/images';
 import { faCircleArrowUp, faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { Fragment, useEffect, useState } from 'react';
+import config from '~/config';
 
 const cx = classNames.bind(styles);
 
@@ -35,32 +36,32 @@ const listSocial = [
 
 const listMenuFooter = [
     {
-        path: '/',
+        path: config.routes.home,
         title: 'SaoViet Travler',
         children: [
             {
-                path: '#',
+                path: config.routes.home,
                 title: 'Trang chủ',
             },
 
             {
-                path: '#',
+                path: config.routes.about,
                 title: 'Giới thiệu',
             },
             {
-                path: '#',
+                path: config.routes.tour,
                 title: 'Tour du lịch',
             },
             {
-                path: '#',
+                path: config.routes.promotionalTours,
                 title: 'Tour khuyến mại',
             },
             {
-                path: '#',
+                path: config.routes.news,
                 title: 'Tin tức',
             },
             {
-                path: '#',
+                path: config.routes.contact,
                 title: 'Liên hệ',
             },
         ],
@@ -71,42 +72,84 @@ const listMenuFooter = [
         children: [
             {
                 path: '#',
-                title: 'Điều kiện & điều khoản',
+                title: 'Điều khoản chung',
             },
             {
                 path: '#',
-                title: 'Quyền riêng tư',
+                title: 'Hướng dẫn đặt tour online',
             },
             {
                 path: '#',
-                title: 'Chính sách bảo mật và thông tin',
-            },
-
-            {
-                path: '#',
-                title: 'Chính sách bảo mật và thông tin',
+                title: 'Quy định thanh toán',
             },
 
             {
                 path: '#',
-                title: 'Chính sách bảo mật và thông tin',
+                title: 'Chính sách giao nhận',
             },
 
             {
                 path: '#',
-                title: 'Chính sách bảo mật và thông tin',
+                title: 'Chính sách hủy phạt',
+            },
+
+            {
+                path: '#',
+                title: 'Chính sách bảo mật',
+            },
+            {
+                path: '#',
+                title: 'Chính sách chất lượng',
             },
         ],
     },
     {
         path: '/san-pham',
         title: 'Sản phẩm',
-        children: [],
+        children: [
+            {
+                path: config.routes.domesticTour,
+                title: 'Tour trong nước',
+            },
+            {
+                path: config.routes.internationalTour,
+                title: 'Tour quốc tế',
+            },
+            {
+                path: config.routes.tour,
+                title: 'Team building',
+            },
+            {
+                path: config.routes.tour,
+                title: 'Tour Free and Easy',
+            },
+            {
+                path: config.routes.destination,
+                title: 'Điểm đến hàng đầu',
+            },
+        ],
     },
     {
-        path: '/dich-vu',
-        title: 'Dịch vụ',
-        children: [],
+        path: '',
+        title: 'Chăm sóc khách hàng',
+        children: [
+            {
+                path: '#',
+                title: 'Ý kiến khách hàng',
+            },
+            {
+                path: '#',
+                title: 'Bảo hiểm du lịch',
+            },
+            {
+                path: '#',
+                title: 'Travel Voucher',
+            },
+            {
+                path: '#',
+                title: 'Giải quyết khiếu nại',
+            },
+        ],
     },
 ];
 function Footer() {

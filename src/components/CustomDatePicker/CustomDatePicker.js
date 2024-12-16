@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
-import getDay from 'date-fns/getDay';
+// import getDay from 'date-fns/getDay';
 import getMonth from 'date-fns/getMonth';
 import getYear from 'date-fns/getYear';
 import range from 'lodash/range';
@@ -13,7 +13,7 @@ import styles from './CustomDatePicker.module.scss';
 registerLocale('vi', vi);
 
 const cx = classNames.bind(styles);
-function CustomDatePicker({ Depart }) {
+function CustomDatePicker({ Depart, setDate }) {
     const [startDate, setStartDate] = useState(new Date());
     const years = range(getYear(new Date()), getYear(new Date()) + 2, 1);
     const months = [
@@ -31,15 +31,8 @@ function CustomDatePicker({ Depart }) {
         'Tháng 12',
     ];
 
-    const isWeekday = (date) => {
-        const day = getDay(date);
-        return day;
-        // return day === 3 ;
-    };
     return (
         <DatePicker
-            filterDate={Depart ? isWeekday : ''}
-            className="datepicker"
             locale="vi"
             renderCustomHeader={({
                 date,
@@ -96,6 +89,7 @@ function CustomDatePicker({ Depart }) {
             selected={startDate}
             onChange={(date) => {
                 date < new Date() ? setStartDate(new Date()) : setStartDate(date);
+                !!setDate && setDate(date);
             }}
             minDate={new Date()}
         />

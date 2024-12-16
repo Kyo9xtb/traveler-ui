@@ -1,16 +1,65 @@
-import { Link } from 'react-router-dom';
+import { Fragment, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 
 import styles from './Account.module.scss';
 import BannerPage from '~/components/BannerPage';
 import config from '~/config';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
+import { AuthorService } from '~/services';
+import { actions, useStore } from '~/store';
 
 const cx = classNames.bind(styles);
 function Login() {
+    const navigate = useNavigate();
+    const [fields, setFields] = useState({
+        Email: 'phamvanthien307@gmail.com',
+        Password: 'Thien@1234',
+    });
+    const [, dispatch] = useStore();
+    const [errorMessage, setErrorMessage] = useState();
+
+    const setFieldValue = ({ target: { name, value } }) => {
+        setFields((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    useEffect(() => {
+        AuthorService.getLogin()
+            .then((res) => {
+                console.log('res', res);
+                
+                dispatch(actions.setInfoUser(res));
+                navigate(config.routes.home);
+            })
+            .catch((err) => {
+                // console.log("error", err);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        AuthorService.postLogin(fields)
+            .then((res) => {
+                navigate(config.routes.home);
+                dispatch(actions.setInfoUser(res));
+            })
+            .catch((err) => {
+                const { status } = err;
+                if (status === 401) {
+                    setErrorMessage('Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại !');
+                } else {
+                    setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
+                }
+            });
+    };
+
     return (
-        <>
+        <Fragment>
             <BannerPage title="Đăng nhập" />
             <div className={cx('container', 'margin-bottom-20')}>
                 <div className={cx('row justify-content-md-center')}>
@@ -49,7 +98,7 @@ function Login() {
                                         </li>
                                     </ul>
                                     <div className={cx('sv-login')}>
-                                        <form id={cx('customer-login')}>
+                                        <form id={cx('customer-login')} onSubmit={handleSubmit}>
                                             <div className={cx('form-signup')}>
                                                 <fieldset className={cx('form-group')}>
                                                     <label>
@@ -61,6 +110,10 @@ function Login() {
                                                         placeholder="Nhập email"
                                                         autoComplete="off"
                                                         pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                                                        name="Email"
+                                                        value={fields.Email}
+                                                        required
+                                                        onChange={setFieldValue}
                                                     />
                                                 </fieldset>
                                                 <fieldset className={cx('form-group')}>
@@ -72,14 +125,20 @@ function Login() {
                                                         type="password"
                                                         placeholder="Nhập mật khẩu"
                                                         autoComplete="off"
-                                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                                        name="Password"
+                                                        value={fields.Password}
+                                                        required
+                                                        onChange={setFieldValue}
                                                     />
                                                 </fieldset>
+                                                {errorMessage && <p className={cx('text-danger')}>{errorMessage}</p>}
                                                 <p className={cx('text-end')}>
                                                     <Link title="Quên mật khẩu">Quên mật khẩu</Link>
                                                 </p>
                                                 <div className={cx('btn-submit', 'text-center')}>
-                                                    <button className={cx('round-btn')}>Đăng nhập</button>
+                                                    <button type="submit" className={cx('round-btn')}>
+                                                        Đăng nhập
+                                                    </button>
                                                 </div>
                                                 <p className={cx('login--notes')}>
                                                     SaoViet Travler cam kết bảo mật và sẽ không bao giờ đăng hay chia sẻ
@@ -105,7 +164,7 @@ function Login() {
                                             </Link>
                                         </div>
                                     </div>
-                                    <div id={cx('recover-password')} style={{display:"none"}}>
+                                    <div id={cx('recover-password')} style={{ display: 'none' }}>
                                         <p className={cx('fix-sblock')}>
                                             Bạn quên mật khẩu? Nhập địa chỉ email để lấy lại mật khẩu qua email.
                                         </p>
@@ -139,7 +198,7 @@ function Login() {
                     </div>
                 </div>
             </div>
-        </>
+        </Fragment>
     );
 }
 

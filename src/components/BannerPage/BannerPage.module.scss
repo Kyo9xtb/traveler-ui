@@ -1,6 +1,4 @@
 .inner-banner-wrap {
-    padding-bottom: 95px;
-
     .inner-banner-container {
         background-size: cover;
         background-repeat: no-repeat;
@@ -11,7 +9,7 @@
 
         &::before {
             background-color: #151515;
-            content: "";
+            content: '';
             display: block;
             opacity: 0.65;
             width: 100%;

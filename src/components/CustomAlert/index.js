@@ -1,2 +1,2 @@
 export { default } from './CustomAlert';
-export * from './CustomAlert';
+export * as AlertBox from './CustomAlert';

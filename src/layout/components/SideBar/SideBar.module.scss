@@ -131,6 +131,11 @@
                     line-height: 1.5;
                     font-size: 14px;
                     font-weight: 400;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    line-clamp: 2;
                     a {
                         color: #727272;
                     }

@@ -208,6 +208,10 @@ h6 {
     background-color: #ffffff;
 }
 
+.grey-bg {
+    background-color: #f3f5f7;
+}
+
 .bg-light-grey {
     background-color: #f8f8f8;
 }
@@ -252,7 +256,7 @@ h6 {
         a {
             &:hover {
                 color: #3a78c9 !important;
-                span{
+                span {
                     color: inherit;
                 }
             }

@@ -5,6 +5,8 @@ import styles from './SideBar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import config from '~/config';
+import { useEffect, useState } from 'react';
+import { NewsService } from '~/services';
 
 const cx = classNames.bind(styles);
 
@@ -18,192 +20,60 @@ const MENU = [
         title: 'Giới thiệu',
     },
     {
-        path: '/',
+        path: config.routes.tour,
         title: 'Tour du lịch',
         children: [
             {
-                path: '#',
+                path: config.routes.domesticTour,
                 title: 'Tour trong nước',
                 children: [
                     {
-                        path: '#',
+                        path: config.routes.domesticTour,
                         title: 'Miền Bắc',
-                        children: [
-                            {
-                                path: '#',
-                                title: 'Sapa',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Hà Giang',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Cao Bằng - Bắc Kạn',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Mai Châu - Mộc Châu',
-                                children: [],
-                            },
-
-                            {
-                                path: '#',
-                                title: 'Yên Bái',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Ninh Bình',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Hạ Long',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Cát Bà',
-                                children: [],
-                            },
-                        ],
                     },
                     {
-                        path: '#',
+                        path: config.routes.domesticTour,
                         title: 'Miền Trung',
-                        children: [
-                            {
-                                path: '#',
-                                title: 'Cửa Lò',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Sầm Sơn',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Nghệ An',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Thiên Cầm',
-                                children: [],
-                            },
-
-                            {
-                                path: '#',
-                                title: 'Quảng Bình',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Huế',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Đà Nẵng',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Hội An',
-                                children: [],
-                            },
-
-                            {
-                                path: '#',
-                                title: 'Nha Trang',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Phú Yên',
-                                children: [],
-                            },
-
-                            {
-                                path: '#',
-                                title: 'Quy Nhơn',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Đà Lạt',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Tây Nguyên',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Phan Thiết - Mũi Né',
-                                children: [],
-                            },
-                        ],
                     },
                     {
-                        path: '#',
+                        path: config.routes.domesticTour,
                         title: 'Miền Nam',
-                        children: [
-                            {
-                                path: '#',
-                                title: 'Phú Quốc',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Côn Đảo',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Bến Tre',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Cần Thơ',
-                                children: [],
-                            },
-
-                            {
-                                path: '#',
-                                title: 'Cà Mau',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Hà Tiên',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Kiên Giang',
-                                children: [],
-                            },
-                            {
-                                path: '#',
-                                title: 'Nam Du',
-                                children: [],
-                            },
-                        ],
                     },
                 ],
             },
             {
-                path: '#',
+                path: config.routes.internationalTour,
                 title: 'Tour quốc tế',
-                children: [],
+                children: [
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Đông Nam Á',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Đông Bắc Á',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Ấn Độ - Nam Á',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Âu',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Úc',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Phi',
+                    },
+                    {
+                        path: config.routes.internationalTour,
+                        title: 'Châu Mỹ',
+                    },
+                ],
             },
             {
                 path: '#',
@@ -220,19 +90,19 @@ const MENU = [
         ],
     },
     {
-        path: '#',
+        path: config.routes.promotionalTours,
         title: 'Tour khuyến mãi',
     },
     {
-        path: '#',
+        path: config.routes.news,
         title: 'Tin tức',
     },
     {
-        path: '#',
+        path: config.routes.travelExperience,
         title: 'Kinh nghiệm du lịch',
     },
     {
-        path: '#',
+        path: config.routes.faq,
         title: 'FAQ',
     },
     {
@@ -240,25 +110,35 @@ const MENU = [
         title: 'Liên hệ',
     },
 ];
-function ItemBlog() {
+function ItemBlog({ data }) {
+    console.log(data);
+    const { news_id, title, slug, thumbnail_url } = data;
+    const linkAction = `${config.routes.news}/${slug}`;
     return (
-        <article className={cx('item')}>
-            <Link to="#" className={cx('thumb')}>
-                <img
-                    src="https://bizweb.dktcdn.net/thumb/medium/100/372/532/articles/da-nang-su-thay-doi-ngoan-muc-cua-lang-chai-nam-xua-2.jpg?v=1575897433350"
-                    alt=""
-                />
+        <article key={news_id} className={cx('item')}>
+            <Link to={linkAction} className={cx('thumb')}>
+                <img src={thumbnail_url} alt={title} />
             </Link>
             <div className={cx('info')}>
                 <h4 className={cx('title')}>
-                    <Link to="#">Cẩm nang du lịch Đà Nẵng một ngày cho hội bạn vui chơi “sập” Đà thành</Link>
+                    <Link to={linkAction}>{title}</Link>
                 </h4>
             </div>
         </article>
     );
 }
 function SideBar() {
+    const [listNews, setListNews] = useState([]);
+    useEffect(() => {
+        NewsService.getNews().then((res) => {
+            setListNews(res);
+        });
+    }, []);
+    console.log(listNews);
+
     const handleMenuChildren = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         let parentElement = '';
         switch (e.target.nodeName) {
             case 'path':
@@ -280,7 +160,7 @@ function SideBar() {
                         {MENU.map((menu, index) => {
                             return menu.children !== undefined && menu.children.length > 0 ? (
                                 <li key={index} className={cx('nav-item')}>
-                                    <Link to="#" className={cx('nav-link')}>
+                                    <Link to={menu.path} className={cx('nav-link')}>
                                         {menu.title}
                                         <FontAwesomeIcon
                                             icon={faChevronDown}
@@ -304,8 +184,11 @@ function SideBar() {
                                                         {menuItem.children.map((child, index) => {
                                                             return child.children !== undefined &&
                                                                 child.children.length > 0 ? (
-                                                                <li key={index} className={cx('nav-item', 'drop-submenu')}>
-                                                                    <Link to="#" className={cx('nav-link')}>
+                                                                <li
+                                                                    key={index}
+                                                                    className={cx('nav-item', 'drop-submenu')}
+                                                                >
+                                                                    <Link to={child.path} className={cx('nav-link')}>
                                                                         {child.title}
                                                                         <FontAwesomeIcon
                                                                             icon={faChevronDown}
@@ -321,7 +204,7 @@ function SideBar() {
                                                                                     className={cx('nav-item')}
                                                                                 >
                                                                                     <Link
-                                                                                        to="#"
+                                                                                        to={grandChild.path}
                                                                                         className={cx('nav-link')}
                                                                                     >
                                                                                         {grandChild.title}
@@ -353,7 +236,7 @@ function SideBar() {
                                 </li>
                             ) : (
                                 <li key={index} className={cx('nav-item')}>
-                                    <Link to="#" className={cx('nav-link')}>
+                                    <Link to={menu.path} className={cx('nav-link')}>
                                         {menu.title}
                                     </Link>
                                 </li>
@@ -368,7 +251,10 @@ function SideBar() {
                         <Link to="#">Bài viết được yêu thích</Link>
                     </h3>
                 </div>
-                <ItemBlog />
+                {listNews.length &&
+                    listNews.slice(0, 4).map((item) => {
+                        return <ItemBlog data={item} />;
+                    })}
             </aside>
             <aside className={cx('aside-item', 'blog-banner')}>
                 <Link to="#" className={cx('thumb')}>
