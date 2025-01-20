@@ -1,5 +1,5 @@
-import classNames from 'classnames/bind';
 import { Fragment, useState } from 'react';
+import classNames from 'classnames/bind';
 import ReactPaginate from 'react-paginate';
 
 import styles from './Paginate.module.scss';

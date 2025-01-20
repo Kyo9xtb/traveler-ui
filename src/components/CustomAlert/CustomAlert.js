@@ -46,18 +46,6 @@ function BoxError({ title = 'Thất bại', children, onDelete, onClose }) {
                             </button>
                         </div>
                         <div className={cx('box-body')}>{children}</div>
-                        <div className={cx('box-footer')}>
-                            <button type="button" className={cx('btn btn-danger')} onClick={onDelete}>
-                                Xóa
-                            </button>
-                            <button
-                                type="button"
-                                className={cx('btn btn-secondary')}
-                                onClick={onClose ? onClose : handlerRemove}
-                            >
-                                Hủy
-                            </button>
-                        </div>
                     </div>
                 </div>
                 <div className={cx('overplay')} onClick={onClose ? onClose : handlerRemove}></div>

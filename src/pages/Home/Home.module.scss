@@ -318,16 +318,6 @@
     }
 }
 
-.sv-scroll {
-    @media screen and (max-width: 991px) {
-        display: flex;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        flex-wrap: unset !important;
-    }
-}
-
 .domestic-tour {
     padding: 30px 0;
 }

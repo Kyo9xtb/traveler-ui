@@ -1,18 +1,12 @@
-import * as httpRequest from '~/utils/httpRequest';
+import { HttpRequest } from '~/utils';
 
 const postContact = async (data) => {
     try {
-        // const config = {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     withCredentials: true,
-        // };
-        // const body = JSON.stringify(data);
-        const res = await httpRequest.post(`/contact`, data);
-        return res;
+        const res = await HttpRequest.post(`/contact`, data);
+        return res.data;
     } catch (error) {
         console.log(error);
+        throw error;
     }
 };
 

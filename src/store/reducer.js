@@ -7,11 +7,14 @@ import {
     UPDATE_TO_CART,
     DELETE_TO_CART,
     CLEAR_TO_CART,
+    SET_VALUE_CART,
+    ADD_VALUE_CART,
 } from './constants';
 
 const initState = {
     setOffCanvasMenu: false,
     setShowSearch: false,
+    setValueCart: false,
     user: {},
     search: {},
     cart: [],
@@ -41,7 +44,17 @@ function reducer(state, action) {
                 ...state,
                 setShowSearch: action.payload,
             };
-
+        case SET_VALUE_CART:
+            return {
+                ...state,
+                setValueCart: action.payload,
+            };
+        case ADD_VALUE_CART:
+            localStorage.setItem('SaoVietTravler-Carts', JSON.stringify(action.payload));
+            return {
+                ...state,
+                cart: action.payload,
+            };
         case ADD_TO_CART:
             let newCart = [];
             if (state.cart.length > 0) {
@@ -73,14 +86,11 @@ function reducer(state, action) {
             } else {
                 newCart = [...state.cart, ...action.payload];
             }
-
-            console.log('newCart', newCart);
             localStorage.setItem('SaoVietTravler-Carts', JSON.stringify(newCart));
             return {
                 ...state,
                 cart: newCart,
             };
-
         case UPDATE_TO_CART:
             const updateCart = state.cart.map((product) => {
                 if (

@@ -7,9 +7,8 @@ const httpRequest = axios.create({
 export const get = async (path, options = {}, config = {}) => {
     try {
         const response = await httpRequest.get(path, options, config);
-        return response.data;
+        return response;
     } catch (error) {
-        // console.error('Error fetching data:', error);
         throw error;
     }
 };
@@ -24,9 +23,8 @@ export const post = async (
 ) => {
     try {
         const response = await httpRequest.post(path, options, config);
-        return response.data;
+        return response;
     } catch (error) {
-        // console.error('Error fetching data:', error);
         throw error;
     }
 };
@@ -41,9 +39,8 @@ export const put = async (
 ) => {
     try {
         const response = await httpRequest.put(path, options, config);
-        return response.data;
+        return response;
     } catch (error) {
-        // console.error('Error fetching data:', error);
         throw error;
     }
 };

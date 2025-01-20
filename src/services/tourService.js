@@ -1,17 +1,17 @@
-import * as httpRequest from '~/utils/httpRequest';
+import { HttpRequest } from '~/utils';
 
 const getTour = async () => {
     try {
-        const res = await httpRequest.get('/tour', {});
-        return res.result;
+        const res = await HttpRequest.get('/tour', {});
+        return res.data.result;
     } catch (error) {
         throw error;
     }
 };
 const getTourDetail = async (slug) => {
     try {
-        const res = await httpRequest.get(`/tour/${slug}`, {});
-        return res.result;
+        const res = await HttpRequest.get(`/tour/${slug}`, {});
+        return res.data.result;
     } catch (error) {
         throw error;
     }
@@ -24,8 +24,8 @@ const postTourBookings = async (data) => {
                 'Content-Type': 'application/json',
             },
         };
-        const res = await httpRequest.post(`/book-tour`, data, config);
-        return res;
+        const res = await HttpRequest.post(`/book-tour`, data, config);
+        return res.data;
     } catch (error) {
         throw error;
     }

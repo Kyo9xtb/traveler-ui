@@ -8,7 +8,7 @@ import styles from './Account.module.scss';
 import BannerPage from '~/components/BannerPage';
 import config from '~/config';
 import { AuthorService } from '~/services';
-import { actions, useStore } from '~/store';
+import { actions, SnakeCaseVariable, useStore } from '~/store';
 
 const cx = classNames.bind(styles);
 function Register() {
@@ -16,10 +16,10 @@ function Register() {
     const [, dispatch] = useStore();
     const [isEmail, setIsEmail] = useState(false);
     const [fields, setFields] = useState({
-        FullName: '',
-        PhoneNumber: '',
-        Email: '',
-        Password: '',
+        full_name: '',
+        phone_number: '',
+        email: '',
+        password: '',
     });
 
     useEffect(() => {
@@ -37,19 +37,14 @@ function Register() {
     const setFieldValue = ({ target: { name, value } }) => {
         setFields((prev) => ({
             ...prev,
-            [name]: value,
+            [`${SnakeCaseVariable(name)}`]: value,
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = {
-            full_name: fields.FullName,
-            phone_number: fields.PhoneNumber,
-            email: fields.Email,
-            password: fields.Password,
-        };
-        AuthorService.postAuthor(data)
+
+        AuthorService.postAuthor(fields)
             .then((res) => {
                 if (res.status) {
                     setFields({
@@ -59,8 +54,7 @@ function Register() {
                         Password: '',
                     });
                     navigate(config.routes.login);
-                }
-                else {
+                } else {
                     alert('Đăng ký thành viên thất bại');
                 }
             })
@@ -133,7 +127,7 @@ function Register() {
                                                         placeholder="Nhập họ và tên"
                                                         autoComplete="off"
                                                         name="FullName"
-                                                        value={fields.FullName}
+                                                        value={fields.full_name}
                                                         required
                                                         onChange={setFieldValue}
                                                     />
@@ -149,7 +143,7 @@ function Register() {
                                                         autoComplete="off"
                                                         pattern="/(84|0[3|5|7|8|9])+([0-9]{8})\b/g"
                                                         name="PhoneNumber"
-                                                        value={fields.PhoneNumber}
+                                                        value={fields.phone_number}
                                                         required
                                                         onChange={setFieldValue}
                                                     />
@@ -165,7 +159,7 @@ function Register() {
                                                         autoComplete="off"
                                                         pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                                                         name="Email"
-                                                        value={fields.Email}
+                                                        value={fields.email}
                                                         required
                                                         onChange={setFieldValue}
                                                         onBlur={handleCheckEmail}
@@ -188,7 +182,7 @@ function Register() {
                                                         autoComplete="off"
                                                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                                         name="Password"
-                                                        value={fields.Password}
+                                                        value={fields.password}
                                                         required
                                                         onChange={setFieldValue}
                                                     />

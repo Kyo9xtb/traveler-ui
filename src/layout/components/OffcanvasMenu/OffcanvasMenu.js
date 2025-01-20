@@ -47,6 +47,8 @@ function OffcanvasMenu() {
         AuthorService.postLogout()
             .then((res) => {
                 dispatch(actions.setInfoUser({}));
+                dispatch(actions.clearToCart([]));
+                dispatch(actions.setValueCart(false));
             })
             .catch(() => {});
     };

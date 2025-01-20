@@ -81,7 +81,7 @@ function TourDetail() {
         tourServices
             .getTour()
             .then((res) => {
-                const similarTour = res.filter((item) => item.area === tour.area);
+                const similarTour = res.filter((item) => item.tour_group === tour.tour_group);
                 setListTourClassification((prev) => {
                     return { ...prev, SimilarTour: similarTour };
                 });
@@ -274,6 +274,44 @@ function TourDetail() {
         }
     };
 
+    const settingTourSlider = {
+        arrows: false,
+        accessibility: false,
+        draggable: false,
+        autoplaySpeed: 0,
+        responsive: [
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    accessibility: true,
+                    infinite: false,
+                    arrows: true,
+                },
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    accessibility: true,
+                    arrows: true,
+                    infinite: false,
+                },
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 1.5,
+                    slidesToScroll: 1,
+                    accessibility: true,
+                    arrows: true,
+                    infinite: false,
+                },
+            },
+        ],
+    };
     return (
         <Fragment>
             <BannerPage image={tour.thumbnail_url} title={tour.tour_name} />
@@ -615,7 +653,7 @@ function TourDetail() {
                                         );
                                     })
                                 ) : (
-                                    <MultipleItems>
+                                    <MultipleItems setting={settingTourSlider}>
                                         {listTourClassification.SimilarTour.map((item, index) => {
                                             return (
                                                 <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
@@ -653,7 +691,7 @@ function TourDetail() {
                                         );
                                     })
                                 ) : (
-                                    <MultipleItems>
+                                    <MultipleItems setting={settingTourSlider}>
                                         {listTourClassification.TourPromotional.map((item, index) => {
                                             return (
                                                 <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
@@ -663,6 +701,17 @@ function TourDetail() {
                                         })}
                                     </MultipleItems>
                                 )}
+                                {/* {listTourClassification.TourDomestic.length > 0 && (
+                                    <MultipleItems setting={settingTourSlider}>
+                                        {listTourClassification.TourDomestic.slice(0, 4).map((item, index) => {
+                                            return (
+                                                <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
+                                                    <ItemTour data={item} />
+                                                </div>
+                                            );
+                                        })}
+                                    </MultipleItems>
+                                )} */}
                             </div>
                         </div>
                     </div>

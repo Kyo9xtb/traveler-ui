@@ -111,7 +111,6 @@ const MENU = [
     },
 ];
 function ItemBlog({ data }) {
-    console.log(data);
     const { news_id, title, slug, thumbnail_url } = data;
     const linkAction = `${config.routes.news}/${slug}`;
     return (
@@ -134,7 +133,6 @@ function SideBar() {
             setListNews(res);
         });
     }, []);
-    console.log(listNews);
 
     const handleMenuChildren = (e) => {
         e.preventDefault();
@@ -253,7 +251,7 @@ function SideBar() {
                 </div>
                 {listNews.length &&
                     listNews.slice(0, 4).map((item) => {
-                        return <ItemBlog data={item} />;
+                        return <ItemBlog key={item.news_id} data={item} />;
                     })}
             </aside>
             <aside className={cx('aside-item', 'blog-banner')}>

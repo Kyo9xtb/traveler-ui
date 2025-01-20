@@ -1,35 +1,35 @@
-import * as httpRequest from '~/utils/httpRequest';
+import { HttpRequest } from '~/utils';
 
 const getNews = async () => {
     try {
-        const res = await httpRequest.get('/news', {});
-        return res.result;
+        const res = await HttpRequest.get('/news', {});
+        return res.data.result;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 };
 const getNewsDetail = async (slug) => {
     try {
-        const res = await httpRequest.get(`/news/${slug}`, {});
-        return res.result;
+        const res = await HttpRequest.get(`/news/${slug}`, {});
+        return res.data.result;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 };
 const postNews = async (data) => {
     try {
-        const res = await httpRequest.post(`/news`, data);
-        return res;
+        const res = await HttpRequest.post(`/news`, data);
+        return res.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 };
 const putNews = async (id, data) => {
     try {
-        const res = await httpRequest.put(`/news/${id}`, data);
-        return res;
+        const res = await HttpRequest.put(`/news/${id}`, data);
+        return res.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 };
 export { getNews, getNewsDetail, postNews, putNews };

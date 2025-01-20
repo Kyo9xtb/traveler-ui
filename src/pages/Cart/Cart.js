@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import config from '~/config';
 import { actions, FormatPrice, useStore } from '~/store';
 import CartEmpty from './CartEmpty';
+import { CartService } from '~/services';
 
 const cx = classNames.bind(styles);
 
@@ -87,9 +88,42 @@ function ItemProduct({ data }) {
 }
 function Cart() {
     const navigate = useNavigate();
-    const [store] = useStore();
-    const { cart } = store;
+    const [store, dispatch] = useStore();
+    const { user, cart, setValueCart } = store;
     const [totalCart, setTotalCart] = useState(0);
+    const [infoCart, setInfoCart] = useState();
+    useEffect(() => {
+        if (user.user_id) {
+            CartService.getCartAuthor(`${user.user_id}`)
+                .then((res) => {
+                    const { status, result } = res.data;
+                    if (status) {
+                        setInfoCart((prev) => {
+                            return {
+                                ...result,
+                                cart,
+                            };
+                        });
+                        if (result.cart && Array.isArray(result.cart)) {
+                            if (!setValueCart) {
+                                dispatch(actions.setValueCart(true));
+                                dispatch(actions.addValueCart(result.cart));
+                            }
+                        }
+                    } else {
+                        CartService.postCart({
+                            user_id: user.user_id,
+                            cart: [],
+                        }).then((result) => {
+                            console.log(result);
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.error('Error fetching or posting cart:', err);
+                });
+        }
+    }, [user, dispatch, setValueCart, cart]);
 
     useEffect(() => {
         setTotalCart(
@@ -97,7 +131,11 @@ function Cart() {
                 return acc + item.price * item.quantity;
             }, 0),
         );
-    }, [cart]);
+        if (infoCart && user.user_id) {
+            CartService.putCart(infoCart.cart_id, { ...infoCart, cart }).then((result) => {});
+        }
+    }, [cart, infoCart, user]);
+
     const handlePayment = (e) => {
         e.preventDefault();
         // Call API payment

@@ -6,7 +6,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 //File import
-import  './Slider.scss';
+import './Slider.scss';
 // import ItemProduct from '../ItemProduct';
 
 const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (

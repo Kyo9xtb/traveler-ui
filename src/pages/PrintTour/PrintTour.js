@@ -30,7 +30,6 @@ function PrintTour() {
     if (!tour) {
         return <ErrorPage />;
     }
-    console.log(tour);
 
     return (
         <Fragment>

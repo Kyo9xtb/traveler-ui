@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { Fragment, useEffect, useState } from 'react';
-import {  useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import styles from './Search.module.scss';
 import BannerPage from '~/components/BannerPage';
@@ -43,11 +43,7 @@ function Search() {
         }
         if (departuredate) {
             let day = new Date(departuredate).getDay();
-            console.log(day);
-
             day += 1;
-            console.log(day);
-
             // eslint-disable-next-line no-const-assign
             if (day === 1) day = 'Chủ nhật';
             dataFilter = dataFilter.filter((tour) => {

@@ -6,8 +6,53 @@ import config from '~/config';
 
 const cx = classNames.bind(styles);
 
+function renderArea(data) {
+    switch (data) {
+        case 'Southeast Asia':
+            return 'Đông Nam Á';
+
+        case 'Northeast Asia':
+            return 'Đông Bắc Á';
+
+        case 'India - South Asia':
+            return 'Ấn Độ - Nam Á';
+
+        case 'Europe':
+            return 'Châu Âu ';
+
+        case 'Australia':
+            return 'Châu Úc';
+
+        case 'African':
+            return 'Châu Phi';
+
+        case 'Americas':
+            return 'Châu Mỹ';
+
+        case 'North Vietnam':
+            return 'Miền Bắc';
+
+        case 'Central Vietnam':
+            return 'Miền Trung';
+
+        case 'South Vietnam':
+            return 'Miền Nam';
+
+        case 'Team Building North Vietnam':
+            return 'Team Building Miền Bắc';
+
+        case 'Team Building Central Vietnam':
+            return 'Team Building Miền Trung';
+
+        case 'Team Building South Vietnam':
+            return 'Team Building Miền Nam';
+        default:
+            return 'Khác';
+    }
+}
 function ItemDestination({ data }) {
     const { location_name, slug, description, area, thumbnail_url } = data;
+    const linkAction = `${config.routes.destination}/${slug}`;
     return (
         <article
             className={cx('destination-item')}
@@ -20,14 +65,14 @@ function ItemDestination({ data }) {
                     <div className={cx('rating-start')}>
                         <span style={{ width: '100%' }}></span>
                     </div>
-                </div> 
+                </div>
                 {area && (
                     <span className={cx('cat-link')}>
-                        <Link to="#">{area}</Link>
+                        <Link to="#">{renderArea(area)}</Link>
                     </span>
                 )}
                 <h3>
-                    <Link to={`${config.routes.destination}/${slug}`}>{location_name}</Link>
+                    <Link to={linkAction}>{location_name}</Link>
                 </h3>
                 {description && <p className={cx('description')}>{description}</p>}
             </div>

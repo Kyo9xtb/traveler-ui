@@ -7,6 +7,8 @@ import {
     UPDATE_TO_CART,
     DELETE_TO_CART,
     CLEAR_TO_CART,
+    SET_VALUE_CART,
+    ADD_VALUE_CART,
 } from './constants';
 
 const setInfoUser = (payload) => ({
@@ -25,6 +27,8 @@ const setShowSearch = (payload) => ({
     type: SET_SHOW_SEARCH,
     payload,
 });
+const setValueCart = (payload) => ({ type: SET_VALUE_CART, payload });
+const addValueCart = (payload) => ({ type: ADD_VALUE_CART, payload });
 const addToCart = (payload) => ({ type: ADD_TO_CART, payload });
 const updateToCart = (payload) => ({ type: UPDATE_TO_CART, payload });
 const deleteToCart = (payload) => ({ type: DELETE_TO_CART, payload });
@@ -35,8 +39,10 @@ export {
     setOffCanvasMenu,
     setSearchTour,
     setShowSearch,
+    setValueCart,
     addToCart,
     updateToCart,
     deleteToCart,
     clearToCart,
+    addValueCart,
 };

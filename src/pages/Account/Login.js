@@ -8,14 +8,14 @@ import styles from './Account.module.scss';
 import BannerPage from '~/components/BannerPage';
 import config from '~/config';
 import { AuthorService } from '~/services';
-import { actions, useStore } from '~/store';
+import { actions, SnakeCaseVariable, useStore } from '~/store';
 
 const cx = classNames.bind(styles);
 function Login() {
     const navigate = useNavigate();
     const [fields, setFields] = useState({
-        Email: 'phamvanthien307@gmail.com',
-        Password: 'Thien@1234',
+        email: 'phamvanthien307@gmail.com',
+        password: 'Thien@1234',
     });
     const [, dispatch] = useStore();
     const [errorMessage, setErrorMessage] = useState();
@@ -23,15 +23,13 @@ function Login() {
     const setFieldValue = ({ target: { name, value } }) => {
         setFields((prev) => ({
             ...prev,
-            [name]: value,
+            [`${SnakeCaseVariable(name)}`]: value,
         }));
     };
 
     useEffect(() => {
         AuthorService.getLogin()
             .then((res) => {
-                console.log('res', res);
-                
                 dispatch(actions.setInfoUser(res));
                 navigate(config.routes.home);
             })
@@ -45,8 +43,8 @@ function Login() {
         e.preventDefault();
         AuthorService.postLogin(fields)
             .then((res) => {
-                navigate(config.routes.home);
                 dispatch(actions.setInfoUser(res));
+                navigate(config.routes.home);
             })
             .catch((err) => {
                 const { status } = err;
@@ -111,7 +109,7 @@ function Login() {
                                                         autoComplete="off"
                                                         pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                                                         name="Email"
-                                                        value={fields.Email}
+                                                        value={fields.email}
                                                         required
                                                         onChange={setFieldValue}
                                                     />
@@ -126,7 +124,7 @@ function Login() {
                                                         placeholder="Nhập mật khẩu"
                                                         autoComplete="off"
                                                         name="Password"
-                                                        value={fields.Password}
+                                                        value={fields.password}
                                                         required
                                                         onChange={setFieldValue}
                                                     />
