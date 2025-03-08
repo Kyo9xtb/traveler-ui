@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const httpRequest = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL,
+    baseURL: "https://67b5942707ba6e59083d71c4.mockapi.io/api/v1/travler/",
 });
 
 export const get = async (path, options = {}, config = {}) => {

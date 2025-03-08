@@ -45,7 +45,7 @@ function GetData({ children }) {
             await Promise.all([fetchTours(), fetchDestinations(), fetchNews()]);
         };
         fetchAllData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
