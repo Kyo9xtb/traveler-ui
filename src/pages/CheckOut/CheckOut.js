@@ -63,6 +63,8 @@ function CheckOut() {
     const { cart, user } = store;
     const [showBoxSuccess, setShowBoxSuccess] = useState(false);
     const [showBoxError, setShowBoxError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState();
+
     //Data form
     const [totalPriceCart, setTotalPriceCart] = useState(0);
     const [totalQuantityCart, setTotalQuantityCart] = useState(0);
@@ -240,6 +242,7 @@ function CheckOut() {
                     }, 1000);
                 } else {
                     setShowBoxError(true);
+                    setErrorMessage('Bạn đặt tour không thành công vui lòng kiểm tra lại thông tin');
                     setTimeout(() => {
                         setShowBoxError(false);
                     }, 1000);
@@ -247,6 +250,11 @@ function CheckOut() {
             })
             .catch((err) => {
                 console.log(err);
+                setShowBoxError(true);
+                setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
+                setTimeout(() => {
+                    setShowBoxError(false);
+                }, 1000);
             });
     };
 
@@ -530,7 +538,7 @@ function CheckOut() {
             )}
             {showBoxError && (
                 <BoxError>
-                    <p>Bạn đặt tour không thành công vui lòng kiểm tra lại thông tin</p>
+                    <p>{errorMessage}</p>
                 </BoxError>
             )}
         </Fragment>

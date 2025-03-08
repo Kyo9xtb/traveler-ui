@@ -14,8 +14,8 @@ const cx = classNames.bind(styles);
 function Login() {
     const navigate = useNavigate();
     const [fields, setFields] = useState({
-        email: 'phamvanthien307@gmail.com',
-        password: 'Thien@1234',
+        email: '',
+        password: '',
     });
     const [, dispatch] = useStore();
     const [errorMessage, setErrorMessage] = useState();

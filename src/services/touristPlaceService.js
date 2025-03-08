@@ -3,7 +3,9 @@ import { HttpRequest } from '~/utils';
 const getTouristPlace = async () => {
     try {
         const res = await HttpRequest.get('/tourist-place');
-        return res.data.result;
+        console.log('=>>>>>>>>>>>>>>>>>>', res);
+
+        return res.data.result || res.data.data ? res.data.result : res.data;
     } catch (error) {
         throw error;
     }
@@ -11,7 +13,7 @@ const getTouristPlace = async () => {
 const getTouristPlaceDetails = async (slug) => {
     try {
         const res = await HttpRequest.get(`/tourist-place/${slug}`);
-        return res.data.result;
+        return res.data.result || res.data.data ? res.data.result : res.data;
     } catch (error) {
         throw error;
     }

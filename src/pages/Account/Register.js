@@ -15,6 +15,7 @@ function Register() {
     const navigate = useNavigate();
     const [, dispatch] = useStore();
     const [isEmail, setIsEmail] = useState(false);
+    const [errorMessage, setErrorMessage] = useState();
     const [fields, setFields] = useState({
         full_name: '',
         phone_number: '',
@@ -59,7 +60,7 @@ function Register() {
                 }
             })
             .catch((err) => {
-                alert(err);
+                setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
             });
     };
 
@@ -187,6 +188,7 @@ function Register() {
                                                         onChange={setFieldValue}
                                                     />
                                                 </fieldset>
+                                                {errorMessage && <p className={cx('text-danger')}>{errorMessage}</p>}
                                                 <div className={cx('btn-submit', 'text-center')}>
                                                     <button type="submit" className={cx('round-btn')}>
                                                         Tạo tài khoản

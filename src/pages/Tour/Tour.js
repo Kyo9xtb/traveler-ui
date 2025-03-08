@@ -7,29 +7,30 @@ import BannerPage from '~/components/BannerPage';
 import images from '~/assets/images';
 import SortCate from '~/components/SortCate/SortCate';
 import ItemTour from '~/components/ItemTour';
-import * as tourServices from '~/services/tourService';
 import CustomDatePicker from '~/components/CustomDatePicker';
 import Paginate from '~/components/Paginate';
 import config from '~/config';
 import AlterDismissible from '~/components/CustomAlert';
+import { useStore } from '~/store';
 
 const cx = classNames.bind(styles);
 
 function Tour() {
     let location = useLocation();
     const navigate = useNavigate();
+    const [store] = useStore();
     const [changePath, setChangePath] = useState('');
     const [listTours, setListTours] = useState([]);
     const [titlePage, setTitlePage] = useState('');
-
     // Get data
     if (location.pathname !== changePath) {
         setChangePath(location.pathname);
     }
+
     useEffect(() => {
         const fetchTours = async () => {
             try {
-                const res = await tourServices.getTour();
+                const res = store.listData.listTours ? store.listData.listTours : [];
                 switch (location.pathname) {
                     case config.routes.tour:
                         setListTours(res);
@@ -59,7 +60,7 @@ function Tour() {
             }
         };
         fetchTours();
-    }, [location.pathname]);
+    }, [location.pathname, store]);
 
     //Change title
     useEffect(() => {
@@ -169,7 +170,7 @@ function Tour() {
                                                     return data.map((tour) => {
                                                         return (
                                                             <div
-                                                                key={tour.tour_id}
+                                                                key={tour.tour_id ? tour.tour_id : tour.id}
                                                                 className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}
                                                             >
                                                                 <ItemTour data={tour} />
@@ -184,7 +185,7 @@ function Tour() {
                                                     return data.map((tour) => {
                                                         return (
                                                             <div
-                                                                key={tour.tour_id}
+                                                                key={tour.tour_id ? tour.tour_id : tour.id}
                                                                 className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}
                                                             >
                                                                 <ItemTour data={tour} />

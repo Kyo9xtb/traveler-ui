@@ -13,6 +13,7 @@ const Wrapper = ({ children }) => {
     return children;
 };
 function App() {
+    // GetData();
     return (
         <Router>
             <Wrapper>

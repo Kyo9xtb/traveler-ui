@@ -37,14 +37,19 @@ function TourDetail() {
         TourPromotional: [],
     });
     const [booking, setBooking] = useState([]);
+    console.log('===> Slug', slug);
 
     //Set price
     useEffect(() => {
-        tourServices
-            .getTourDetail(slug)
-            .then((res) => {
+        const fetchTour = async () => {
+            try {
+                const res = await tourServices.getTourDetail(slug);
                 setTour(res);
-                res.guest_type &&
+                // tourServices
+                //     .getTourDetail(slug)
+                //     .then((res) => {
+
+                !!res.guest_type &&
                     res.guest_type.map((item, index) => {
                         switch (item.customer_type) {
                             case 'children':
@@ -55,26 +60,16 @@ function TourDetail() {
                                 return setPriceAdult(item.price);
                         }
                     });
-            })
-            .catch((err) => {
-                console.error('Error fetching tour:', err);
-            });
-
+                // })
+                // .catch((err) => {
+                //     console.error('Error fetching tour:', err);
+                // });
+            } catch (error) {}
+        };
+        fetchTour();
         dispatch(actions.setShowSearch(false));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [slug]);
-
-    // Calculate total price
-    useEffect(() => {
-        setTotal(priceAdult * adult + priceChild * child + priceBaby * baby);
-    }, [priceAdult, adult, priceChild, child, priceBaby, baby]);
-
-    // useEffect(() => {
-    //     const listElementSVG = document.querySelectorAll('svg');
-    //     listElementSVG.forEach((svg) => {
-    //         svg.style.pointerEvents = 'none';
-    //     });
-    // }, []);
 
     // Filter tour
     useEffect(() => {
@@ -94,6 +89,8 @@ function TourDetail() {
     }, [tour]);
 
     useEffect(() => {
+        setTotal(priceAdult * adult + priceChild * child + priceBaby * baby);
+
         const updateBooking = (type, price, quantity) => {
             setBooking((prev) => {
                 const filteredBooking = prev.filter((item) => item.customer_type !== type);
@@ -312,9 +309,10 @@ function TourDetail() {
             },
         ],
     };
+
     return (
         <Fragment>
-            <BannerPage image={tour.thumbnail_url} title={tour.tour_name} />
+            <BannerPage image={tour.thumbnail_url ? tour.thumbnail_url : images.defaultBanner} title={tour.tour_name} />
             <div className={cx('details-tour-wrap', 'grey-bg')}>
                 <div className={cx('container')}>
                     <div className={cx('row', 'details-tour')}>
@@ -483,7 +481,7 @@ function TourDetail() {
                                         )}
                                     </div>
                                     <Link
-                                        to={`/in-tour/${tour.slug}`}
+                                        to={`/in-tour/${tour.id}`}
                                         target="_blank"
                                         title=""
                                         className={cx('btn-print', 'round-btn')}
@@ -701,17 +699,6 @@ function TourDetail() {
                                         })}
                                     </MultipleItems>
                                 )}
-                                {/* {listTourClassification.TourDomestic.length > 0 && (
-                                    <MultipleItems setting={settingTourSlider}>
-                                        {listTourClassification.TourDomestic.slice(0, 4).map((item, index) => {
-                                            return (
-                                                <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                                    <ItemTour data={item} />
-                                                </div>
-                                            );
-                                        })}
-                                    </MultipleItems>
-                                )} */}
                             </div>
                         </div>
                     </div>

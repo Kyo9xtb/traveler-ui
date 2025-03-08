@@ -7,8 +7,8 @@ import config from '~/config';
 const cx = classNames.bind(styles);
 
 function ItemNews({ data }) {
-    const { thumbnail_url, title, description, slug } = data;
-    const linkAction = `${config.routes.news}/${slug}`;
+    const { thumbnail_url, title, description, id } = data;
+    const linkAction = `${config.routes.news}/${id}`;
     return (
         <article className={cx('news-item')}>
             <div className={cx('news-content')}>

@@ -9,6 +9,7 @@ import {
     CLEAR_TO_CART,
     SET_VALUE_CART,
     ADD_VALUE_CART,
+    ADD_DATA,
 } from './constants';
 
 const initState = {
@@ -18,11 +19,17 @@ const initState = {
     user: {},
     search: {},
     cart: [],
+    listData: {},
 };
 const storageCarts = JSON.parse(localStorage.getItem('SaoVietTravler-Carts'));
 initState.cart = storageCarts || [];
 function reducer(state, action) {
     switch (action.type) {
+        case ADD_DATA:
+            return {
+                ...state,
+                listData: action.payload,
+            };
         case SET_INFO_USER:
             return {
                 ...state,

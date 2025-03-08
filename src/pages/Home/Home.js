@@ -10,9 +10,10 @@ import ItemDestination from '~/components/ItemDestination';
 import ItemNews from '~/components/ItemNews';
 import SimpleSliderBanner, { MultipleItems } from '~/components/Slider';
 import CustomDatePicker from '~/components/CustomDatePicker';
+
 // Service
 import config from '~/config';
-import { NewsService, TouristPlaceService, TourService } from '~/services';
+import { useStore } from '~/store';
 
 const cx = classNames.bind(styles);
 
@@ -38,6 +39,9 @@ const policy = [
 ];
 
 function Home() {
+    // const { tour: tourStaticData, 'tourist-place': touristPlaceStaticData, news: newsStaticData } = StaticData;
+
+    const [store] = useStore();
     const navigate = useNavigate();
     const [listTours, setListTours] = useState([]);
     const [listNews, setListNews] = useState([]);
@@ -61,34 +65,54 @@ function Home() {
             [name]: value,
         }));
     };
-    // [GET data]
-    useEffect(() => {
-        //Tour
-        TourService.getTour()
-            .then((res) => {
-                setListTours(res);
-            })
-            .catch((err) => {
-                setListTours([]);
-            });
-        //News
-        NewsService.getNews()
-            .then((res) => {
-                setListNews(res);
-            })
-            .catch((err) => {
-                setListNews([]);
-            });
 
-        //Place
-        TouristPlaceService.getTouristPlace()
-            .then((res) => {
-                setListDestinations(res);
-            })
-            .catch((err) => {
-                setListDestinations([]);
-            });
-    }, []);
+    useEffect(() => {
+        const { listData } = store;
+        const { listTours = [], listNews = [], listDestinations = [] } = listData || {};
+        setListTours(listTours);
+        setListNews(listNews);
+        setListDestinations(listDestinations);
+    }, [store]);
+
+    // [GET data]
+    // useEffect(() => {
+    //     const fetchAllData = async () => {
+    //         const fetchTours = async () => {
+    //             try {
+    //                 const res = await TourService.getTour();
+    //                 setListTours(res);
+    //             } catch (err) {
+    //                 // console.error('==> Failed to fetch tours:', err);
+    //                 setListTours(tourStaticData);
+    //             }
+    //         };
+
+    //         const fetchNews = async () => {
+    //             try {
+    //                 const res = await NewsService.getNews();
+    //                 setListNews(res);
+    //             } catch (err) {
+    //                 // console.error('==> Failed to fetch news:', err);
+    //                 setListNews(newsStaticData);
+    //             }
+    //         };
+
+    //         const fetchDestinations = async () => {
+    //             try {
+    //                 const res = await TouristPlaceService.getTouristPlace();
+    //                 setListDestinations(res);
+    //             } catch (err) {
+    //                 // console.error('==> Failed to fetch destinations:', err);
+    //                 setListDestinations(touristPlaceStaticData);
+    //             }
+    //         };
+
+    //         await Promise.all([fetchTours(), fetchNews(), fetchDestinations()]).catch((err) => {
+    //         });
+    //     };
+    //     fetchAllData();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     useEffect(() => {
         setFields((prev) => ({
@@ -418,7 +442,7 @@ function Home() {
                             <MultipleItems setting={settingTourSlider}>
                                 {listDestinations.slice(0, 4).map((destination) => (
                                     <div
-                                        key={destination.location_id}
+                                        key={destination.location_id ? destination.location_id : destination.id}
                                         className={cx('col-12 col-sm-6 col-md-6 col-lg-3')}
                                     >
                                         <ItemDestination data={destination} />
@@ -446,7 +470,10 @@ function Home() {
                             <MultipleItems setting={settingTourSlider}>
                                 {listNews.slice(0, 6).map((news) => {
                                     return (
-                                        <div key={news.news_id} className={cx('col-12 col-sm-6 col-md-4 col-lg-4')}>
+                                        <div
+                                            key={news.news_id ? news.news_id : news.id}
+                                            className={cx('col-12 col-sm-6 col-md-4 col-lg-4')}
+                                        >
                                             <ItemNews data={news} />
                                         </div>
                                     );

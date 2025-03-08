@@ -3,7 +3,7 @@ import { HttpRequest } from '~/utils';
 const getTour = async () => {
     try {
         const res = await HttpRequest.get('/tour', {});
-        return res.data.result;
+        return res.data.result || res.data.data ? res.data.result : res.data;
     } catch (error) {
         throw error;
     }
@@ -11,7 +11,7 @@ const getTour = async () => {
 const getTourDetail = async (slug) => {
     try {
         const res = await HttpRequest.get(`/tour/${slug}`, {});
-        return res.data.result;
+        return res.data.result || res.data.data ? res.data.result : res.data;
     } catch (error) {
         throw error;
     }

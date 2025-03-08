@@ -321,13 +321,13 @@ function Header() {
     let location = useLocation();
 
     const [changePath, setChangePath] = useState();
+    const [showMenuMobile, setShowMenuMobile] = useState(false);
     if (location.pathname !== changePath) {
         setChangePath(location.pathname);
     }
     useEffect(() => {
         setShowMenuMobile(false);
     }, [changePath]);
-    const [showMenuMobile, setShowMenuMobile] = useState(false);
     useEffect(() => {
         const navElement = document.querySelector(`.${cx('nav-level1')}`);
         $(`.${cx('menu-item-has-children')}`).hover(function () {

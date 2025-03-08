@@ -3,7 +3,7 @@ import { HttpRequest } from '~/utils';
 const getNews = async () => {
     try {
         const res = await HttpRequest.get('/news', {});
-        return res.data.result;
+        return res.data.result || res.data.data ? res.data.result : res.data;
     } catch (error) {
         throw error;
     }
@@ -11,7 +11,7 @@ const getNews = async () => {
 const getNewsDetail = async (slug) => {
     try {
         const res = await HttpRequest.get(`/news/${slug}`, {});
-        return res.data.result;
+        return res.data.result || res.data.data ? res.data.result : res.data;
     } catch (error) {
         throw error;
     }

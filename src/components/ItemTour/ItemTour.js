@@ -8,8 +8,8 @@ import { FormatPrice } from '~/store';
 
 const cx = classNames.bind(styles);
 function ItemTour({ data }) {
-    let { tour_name, slug, thumbnail_url, price, sale, promotion_price, time, departure_schedule, vehicle } = data;
-    const linkAction = `${config.routes.tour}/${slug}`;
+    let { tour_name, thumbnail_url, price, sale, promotion_price, time, departure_schedule, vehicle, id } = data;
+    const linkAction = `${config.routes.tour}/${id}`;
     return (
         <div className={cx('tour-item')}>
             <div className={cx('img-tour')}>
@@ -79,7 +79,7 @@ function ItemTour({ data }) {
                 <div className={cx('action-box')}>
                     <div className={cx('price-box')}>{FormatPrice(promotion_price)}</div>
                     <div className={cx('booking-box')}>
-                        <Link className={cx('round-btn')} to={`${config.routes.tour}/${slug}`} title={tour_name}>
+                        <Link className={cx('round-btn')} to={linkAction} title={tour_name}>
                             Đặt tour
                         </Link>
                     </div>

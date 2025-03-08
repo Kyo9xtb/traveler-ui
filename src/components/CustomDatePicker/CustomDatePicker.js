@@ -14,8 +14,9 @@ registerLocale('vi', vi);
 
 const cx = classNames.bind(styles);
 function CustomDatePicker({ Depart, setDate }) {
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState();
     const years = range(getYear(new Date()), getYear(new Date()) + 2, 1);
+
     const months = [
         'Tháng 1',
         'Tháng 2',

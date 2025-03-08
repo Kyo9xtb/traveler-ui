@@ -111,10 +111,10 @@ const MENU = [
     },
 ];
 function ItemBlog({ data }) {
-    const { news_id, title, slug, thumbnail_url } = data;
-    const linkAction = `${config.routes.news}/${slug}`;
+    const { news_id, title, thumbnail_url, id } = data;
+    const linkAction = `${config.routes.news}/${id}`;
     return (
-        <article key={news_id} className={cx('item')}>
+        <article key={news_id ? news_id : id} className={cx('item')}>
             <Link to={linkAction} className={cx('thumb')}>
                 <img src={thumbnail_url} alt={title} />
             </Link>
@@ -251,7 +251,7 @@ function SideBar() {
                 </div>
                 {listNews.length &&
                     listNews.slice(0, 4).map((item) => {
-                        return <ItemBlog key={item.news_id} data={item} />;
+                        return <ItemBlog key={item.news_id ? item.news_id : item.id} data={item} />;
                     })}
             </aside>
             <aside className={cx('aside-item', 'blog-banner')}>

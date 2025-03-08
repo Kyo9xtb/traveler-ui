@@ -9,6 +9,7 @@ import {
     CLEAR_TO_CART,
     SET_VALUE_CART,
     ADD_VALUE_CART,
+    ADD_DATA,
 } from './constants';
 
 const setInfoUser = (payload) => ({
@@ -33,7 +34,7 @@ const addToCart = (payload) => ({ type: ADD_TO_CART, payload });
 const updateToCart = (payload) => ({ type: UPDATE_TO_CART, payload });
 const deleteToCart = (payload) => ({ type: DELETE_TO_CART, payload });
 const clearToCart = (payload) => ({ type: CLEAR_TO_CART, payload });
-
+const addData = (payload) => ({ type: ADD_DATA, payload });
 export {
     setInfoUser,
     setOffCanvasMenu,
@@ -45,4 +46,5 @@ export {
     deleteToCart,
     clearToCart,
     addValueCart,
+    addData,
 };
