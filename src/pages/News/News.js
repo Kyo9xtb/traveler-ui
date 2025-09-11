@@ -36,7 +36,7 @@ function News() {
     return (
         <div className={cx('list-blog-wrapper')}>
             <h1 className={cx('title-head', 'd-none')}>Tất cả tin tức</h1>
-            <Paginate data={listNews} itemsPerPage={14}>
+            <Paginate data={listNews ? listNews : []} itemsPerPage={14}>
                 {(data) => {
                     return (
                         <section className={cx('list-blogs', 'blog-main')}>

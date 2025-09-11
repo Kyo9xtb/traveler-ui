@@ -140,6 +140,7 @@
             .footer-contact-info {
                 list-style: none;
                 padding: 0;
+                margin-bottom: 15px;
 
                 li {
                     color: #888;
@@ -166,6 +167,7 @@
 
         .not-gray-footer {
             margin-top: 15px;
+            align-content: center;
 
             ul {
                 padding: 0;
@@ -254,26 +256,5 @@
                 }
             }
         }
-    }
-}
-.btn-go-to-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 999;
-    background-color: transparent;
-    font-size: 25px;
-    color: #3a78c9;
-    border: 0;
-    &:hover {
-        color: #174b90;
-    }
-    svg {
-        background-color: #fff;
-        border-radius: 50%;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        -ms-border-radius: 50%;
-        -o-border-radius: 50%;
     }
 }

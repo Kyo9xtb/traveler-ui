@@ -1,36 +1,37 @@
+import { Fragment } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram, faTiktok, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Footer.module.scss';
 import images from '~/assets/images';
-import { faCircleArrowUp, faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { Fragment, useEffect, useState } from 'react';
 import config from '~/config';
+import { companyInfo } from '~/data';
 
 const cx = classNames.bind(styles);
 
 const listSocial = [
     {
-        path: '',
+        path: companyInfo.social.facebook,
         icon: <FontAwesomeIcon icon={faFacebookF} />,
-        title: 'SaoViet Travler',
+        title: companyInfo.name.default,
     },
     {
-        path: '',
+        path: companyInfo.social.tiktok,
         icon: <FontAwesomeIcon icon={faTiktok} />,
-        title: 'SaoViet Travler',
+        title: companyInfo.name.default,
     },
     {
-        path: '',
+        path: companyInfo.social.instagram,
         icon: <FontAwesomeIcon icon={faInstagram} />,
-        title: 'SaoViet Travler',
+        title: companyInfo.name.default,
     },
     {
-        path: '',
+        path: companyInfo.social.twitter,
         icon: <FontAwesomeIcon icon={faTwitter} />,
-        title: 'SaoViet Travler',
+        title: companyInfo.name.default,
     },
 ];
 
@@ -153,16 +154,6 @@ const listMenuFooter = [
     },
 ];
 function Footer() {
-    const [showGoToTop, setShowGoToTop] = useState(false);
-    useEffect(() => {
-        const handleScroll = () => {
-            setShowGoToTop(window.scrollY >= 200);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
     return (
         <Fragment>
             <footer className={cx('footer')}>
@@ -224,19 +215,19 @@ function Footer() {
                                         <span>
                                             <FontAwesomeIcon icon={faLocationDot} />
                                         </span>
-                                        Số 143, Đường Trần Thái Tông, TP Thái Bình
+                                        {companyInfo.contact.address}
                                     </li>
                                     <li>
                                         <span>
                                             <FontAwesomeIcon icon={faPhone} />
                                         </span>
-                                        0902.146.186
+                                        {companyInfo.contact.phone}
                                     </li>
                                     <li>
                                         <span>
                                             <FontAwesomeIcon icon={faEnvelope} />
                                         </span>
-                                        dulichsaoviet.tb@gmail.com
+                                        {companyInfo.contact.email}
                                     </li>
                                 </ul>
                                 <div className={cx('footer-payment')}>
@@ -272,7 +263,7 @@ function Footer() {
                                         <div className={cx('copyright', 'text-center')}>
                                             <span>
                                                 © Bản quyền thuộc về &nbsp;
-                                                <b>SaoViet Travel</b>
+                                                <b>{companyInfo.name.default}</b>
                                             </span>
                                         </div>
                                     </div>
@@ -282,19 +273,6 @@ function Footer() {
                     </div>
                 </div>
             </footer>
-            {showGoToTop ? (
-                <button
-                    className={cx('btn-go-to-top')}
-                    onClick={() => {
-                        document.documentElement.scrollTop = 0;
-                    }}
-                    title="Lên đầu trang"
-                >
-                    <FontAwesomeIcon icon={faCircleArrowUp} />
-                </button>
-            ) : (
-                <Fragment />
-            )}
         </Fragment>
     );
 }

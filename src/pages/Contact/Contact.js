@@ -12,6 +12,7 @@ import BannerPage from '~/components/BannerPage';
 import images from '~/assets/images';
 import { ContactService } from '~/services';
 import { SnakeCaseVariable } from '~/store';
+import { companyInfo } from '~/data';
 
 const cx = classNames.bind(styles);
 
@@ -60,7 +61,7 @@ function Contact() {
                                                 <FontAwesomeIcon icon={faLocationDot} />
                                             </div>
                                             <div className={cx('content')}>
-                                                <p>Số 143, Đường Trần Thái Tông, TP Thái Bình</p>
+                                                <p>{companyInfo.contact.address}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -70,7 +71,7 @@ function Contact() {
                                                 <FontAwesomeIcon icon={faPhoneVolume} />
                                             </div>
                                             <div className={cx('content')}>
-                                                <Link to="">0902.146.186</Link>
+                                                <Link to="">{companyInfo.contact.phone}</Link>
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +81,7 @@ function Contact() {
                                                 <FontAwesomeIcon icon={faEnvelope} />
                                             </div>
                                             <div className={cx('content')}>
-                                                <Link to="#">dulichsaoviet.tb@gmail.com</Link>
+                                                <Link to="#">{companyInfo.contact.email}</Link>
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +179,7 @@ function Contact() {
                         <div className={cx('col-12', 'sv-map')}>
                             <iframe
                                 title="map"
-                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14953.481749135864!2d106.334024!3d20.449973!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135e5e76b4ed54b%3A0x654f73e93453a13!2zQ8OUTkcgVFkgRFUgTOG7ikNIIFThuqBJIFRIw4FJIELDjE5IIC0gU0FPVklFVCBUUkFWRUw!5e0!3m2!1svi!2sus!4v1728304739855!5m2!1svi!2sus"
+                                src={companyInfo.contact.googleMap}
                                 width="600"
                                 height="450"
                                 allowFullScreen=""

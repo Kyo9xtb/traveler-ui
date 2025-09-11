@@ -9,6 +9,7 @@ import styles from './Header.module.scss';
 import images from '~/assets/images';
 import config from '~/config';
 import { actions, useStore } from '~/store';
+import { companyInfo } from '~/data';
 
 const cx = classNames.bind(styles);
 
@@ -386,8 +387,8 @@ function Header() {
         return false;
     };
 
-    return (
-        <header className={cx('header')}>
+    const TopHeader = () => {
+        return (
             <div className={cx('top-header')}>
                 <div className="container">
                     <div className={cx('top-header-inner')}>
@@ -398,7 +399,7 @@ function Header() {
                                 </i>
                                 <div className={cx('header-contact-details', 'd-none d-sm-block')}>
                                     <span className={cx('contact-label')}>Hotline</span>
-                                    <h5>0902.146.186</h5>
+                                    <h5>{companyInfo.contact.phone}</h5>
                                 </div>
                             </Link>
                         </div>
@@ -428,6 +429,12 @@ function Header() {
                     </div>
                 </div>
             </div>
+        );
+    };
+
+    return (
+        <header className={cx('header')}>
+            <TopHeader />
             <div className={cx('bottom-header', 'd-none d-lg-block')}>
                 <div className="container">
                     <div className={cx('bottom-header-inner')}>
