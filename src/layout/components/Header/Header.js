@@ -317,6 +317,7 @@ const MENU = [
         title: 'Liên hệ',
     },
 ];
+
 function Header() {
     const [, dispatch] = useStore();
     let location = useLocation();

@@ -2,18 +2,18 @@ import classNames from 'classnames/bind';
 import { Link, useLocation } from 'react-router-dom';
 import lodash from 'lodash';
 import styles from './SortCate.module.scss';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function SortCate({ data, children }) {
-    let location = useLocation();
+    let { pathname } = useLocation();
     const [changePath, setChangePath] = useState('');
     const [resData, setResData] = useState([]);
     const [activeIndex, setActiveIndex] = useState(null); // Track active index
 
-    if (location.pathname !== changePath) {
-        setChangePath(location.pathname);
+    if (pathname !== changePath) {
+        setChangePath(pathname);
     }
     useEffect(() => {
         setResData(data);
@@ -27,28 +27,30 @@ function SortCate({ data, children }) {
         setActiveIndex(index); // Update active state
     };
 
-    const sortHandlers = [
-        {
-            label: 'Tên A - Z',
-            comparator: (data) => lodash.sortBy(data, (item) => item.slug.toLowerCase()),
-        },
-        {
-            label: 'Tên Z - A',
-            comparator: (data) => lodash.reverse(lodash.sortBy(data, (item) => item.slug.toLowerCase())),
-        },
-        {
-            label: 'Giá tăng dần',
-            comparator: (data) => lodash.sortBy(data, (item) => item.promotion_price),
-        },
-        {
-            label: 'Giá giảm dần',
-            comparator: (data) => lodash.reverse(lodash.sortBy(data, (item) => item.promotion_price)),
-        },
-        {
-            label: 'Mới nhất',
-            comparator: (data) => lodash.reverse(lodash.sortBy(data, (item) => item.create_at)),
-        },
-    ];
+    const sortHandlers = useMemo(() => {
+        return [
+            {
+                label: 'Tên A - Z',
+                comparator: (data) => lodash.sortBy(data, (item) => item.tour_name.toLowerCase()),
+            },
+            {
+                label: 'Tên Z - A',
+                comparator: (data) => lodash.reverse(lodash.sortBy(data, (item) => item.tour_name.toLowerCase())),
+            },
+            {
+                label: 'Giá tăng dần',
+                comparator: (data) => lodash.sortBy(data, (item) => item.promotion_price),
+            },
+            {
+                label: 'Giá giảm dần',
+                comparator: (data) => lodash.reverse(lodash.sortBy(data, (item) => item.promotion_price)),
+            },
+            {
+                label: 'Mới nhất',
+                comparator: (data) => lodash.reverse(lodash.sortBy(data, (item) => item.create_at)),
+            },
+        ];
+    }, []);
 
     return (
         <Fragment>

@@ -167,10 +167,10 @@ function Tour() {
                                         data.length ? (
                                             <Paginate data={data} itemsPerPage={12}>
                                                 {(data) => {
-                                                    return data.map((tour) => {
+                                                    return data.map((tour, index) => {
                                                         return (
                                                             <div
-                                                                key={tour.tour_id ? tour.tour_id : tour.id}
+                                                                key={tour.id ? tour.id : index}
                                                                 className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}
                                                             >
                                                                 <ItemTour data={tour} />
@@ -182,10 +182,10 @@ function Tour() {
                                         ) : (
                                             <Paginate data={listTours} itemsPerPage={12}>
                                                 {(data) => {
-                                                    return data.map((tour) => {
+                                                    return data.map((tour, index) => {
                                                         return (
                                                             <div
-                                                                key={tour.tour_id ? tour.tour_id : tour.id}
+                                                                key={tour.id ? tour.id : index}
                                                                 className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}
                                                             >
                                                                 <ItemTour data={tour} />
