@@ -58,6 +58,8 @@
             font-weight: 500;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.4; // chiều cao dòng
+            height: calc(1.4em * 2); // ép luôn bằng 2 dòng
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
@@ -139,7 +141,7 @@
             .price-box {
                 color: #3a78c9;
                 font-weight: 600;
-                font-size: 25px;
+                font-size: 18px;
                 display: flex;
                 align-items: center;
             }

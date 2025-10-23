@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import styles from './ItemDestination.module.scss';
 import config from '~/config';
+import images from '~/assets/images';
 
 const cx = classNames.bind(styles);
 
@@ -51,30 +52,32 @@ function renderArea(data) {
     }
 }
 function ItemDestination({ data }) {
-    const { location_name, slug, description, area, thumbnail_url } = data;
+    const { placeName, slug, description, area, thumbnailUrl } = data;
     const linkAction = `${config.routes.destination}/${slug}`;
     return (
         <article
             className={cx('destination-item')}
             style={{
-                backgroundImage: `url(${thumbnail_url})`,
+                backgroundImage: `url(${thumbnailUrl?? images.logoFooter})`,
             }}
         >
-            <div className={cx('destination-content')}>
-                <div className={cx('rating-start-wrap')}>
-                    <div className={cx('rating-start')}>
-                        <span style={{ width: '100%' }}></span>
+            <div className={cx('destination-wrapper')}>
+                <div className={cx('destination-content')}>
+                    <div className={cx('rating-start-wrap')}>
+                        <div className={cx('rating-start')}>
+                            <span style={{ width: '100%' }}></span>
+                        </div>
                     </div>
+                    {area && (
+                        <span className={cx('cat-link')}>
+                            <Link to="#">{renderArea(area)}</Link>
+                        </span>
+                    )}
+                    <h3>
+                        <Link to={linkAction}>{placeName}</Link>
+                    </h3>
+                    {description && <p className={cx('description')}>{description}</p>}
                 </div>
-                {area && (
-                    <span className={cx('cat-link')}>
-                        <Link to="#">{renderArea(area)}</Link>
-                    </span>
-                )}
-                <h3>
-                    <Link to={linkAction}>{location_name}</Link>
-                </h3>
-                {description && <p className={cx('description')}>{description}</p>}
             </div>
         </article>
     );

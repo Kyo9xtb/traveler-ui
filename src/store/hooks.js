@@ -6,6 +6,7 @@ const useStore = () => {
     return [store, dispatch];
 };
 const toNonAccentVietnamese = (data) => {
+    
     const dataFormat = data
         .trim()
         .toLowerCase()

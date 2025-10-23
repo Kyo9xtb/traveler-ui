@@ -4,16 +4,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from './components/GlobalStyles';
 import { StoreProvider } from './store';
-import GetData from './hooks';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <GlobalStyles>
             <StoreProvider>
-                <GetData>
-                    <App />
-                </GetData>
+                <App />
             </StoreProvider>
         </GlobalStyles>
     </React.StrictMode>,

@@ -1,1 +1,1 @@
-export { default, MultipleItems } from './Slider';
+export * from './Slider';

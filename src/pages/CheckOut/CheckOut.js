@@ -230,32 +230,32 @@ function CheckOut() {
 
     const handleBooking = (e) => {
         e.preventDefault();
-        TourService.postTourBookings(infoBook)
-            .then((res) => {
-                const { status } = res;
-                if (status) {
-                    dispatch(actions.clearToCart([]));
-                    setShowBoxSuccess(true);
-                    setTimeout(() => {
-                        setShowBoxSuccess(false);
-                        navigate(config.routes.home);
-                    }, 1000);
-                } else {
-                    setShowBoxError(true);
-                    setErrorMessage('Bạn đặt tour không thành công vui lòng kiểm tra lại thông tin');
-                    setTimeout(() => {
-                        setShowBoxError(false);
-                    }, 1000);
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                setShowBoxError(true);
-                setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
-                setTimeout(() => {
-                    setShowBoxError(false);
-                }, 1000);
-            });
+        // TourService.postTourBookings(infoBook)
+        //     .then((res) => {
+        //         const { status } = res;
+        //         if (status) {
+        //             dispatch(actions.clearToCart([]));
+        //             setShowBoxSuccess(true);
+        //             setTimeout(() => {
+        //                 setShowBoxSuccess(false);
+        //                 navigate(config.routes.home);
+        //             }, 1000);
+        //         } else {
+        //             setShowBoxError(true);
+        //             setErrorMessage('Bạn đặt tour không thành công vui lòng kiểm tra lại thông tin');
+        //             setTimeout(() => {
+        //                 setShowBoxError(false);
+        //             }, 1000);
+        //         }
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //         setShowBoxError(true);
+        //         setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
+        //         setTimeout(() => {
+        //             setShowBoxError(false);
+        //         }, 1000);
+        //     });
     };
 
     return (

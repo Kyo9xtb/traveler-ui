@@ -4,70 +4,64 @@ import { Link } from 'react-router-dom';
 import styles from './ItemTour.module.scss';
 import images from '~/assets/images';
 import config from '~/config';
-import { FormatPrice } from '~/store';
+import { listVehicle } from '~/data';
+import { formatPrice } from '~/utils';
 
 const cx = classNames.bind(styles);
+
 function ItemTour({ data }) {
-    let { tour_name, thumbnail_url, price, sale, promotion_price, time, departure_schedule, vehicle, id } = data;
-    const linkAction = `${config.routes.tour}/${id}`;
+    let { tourName, thumbnailUrl, price, sale, suggestedPrice, time, departureSchedule, vehicles, slug } = data;
+    const linkAction = config.routes.tourDetail.replace(':slug', slug);
+
+    const renderVehicle = () => {
+        if (!Array.isArray(vehicles) || vehicles.length === 0) return null;
+
+        return (
+            <ul className={cx('vehicle')}>
+                {vehicles.map((item) => {
+                    const vehicle = listVehicle?.find((v) => v.value === item.codeVehicle);
+                    if (!vehicle) return null;
+
+                    return (
+                        <li key={vehicle.value}>
+                            <img src={vehicle.image} alt={vehicle.label} loading="lazy" />
+                        </li>
+                    );
+                })}
+            </ul>
+        );
+    };
+
     return (
         <div className={cx('tour-item')}>
             <div className={cx('img-tour')}>
-                <Link to={linkAction} title={tour_name}>
-                    <img src={thumbnail_url} alt={tour_name} />
+                <Link to={linkAction} title={tourName}>
+                    <img
+                        src={thumbnailUrl || images.logoFooter}
+                        alt={tourName}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = images.logoFooter;
+                        }}
+                    />
                 </Link>
             </div>
             <div className={cx('info-tour')}>
                 <h3>
-                    <Link to={linkAction} title={tour_name}>
-                        {tour_name}
+                    <Link to={linkAction} title={tourName}>
+                        {tourName}
                     </Link>
                 </h3>
                 <div className={cx('vote-box')}>
-                    <div className={cx('meta-box')}>
-                        <ul className={cx('vehicle')}>
-                            {Array.isArray(vehicle) &&
-                                // eslint-disable-next-line array-callback-return
-                                vehicle.map((item, index) => {
-                                    switch (item.toLowerCase()) {
-                                        case 'car':
-                                            return (
-                                                <li key={index}>
-                                                    <img src={images.tagCar} alt="Ô tô" />
-                                                </li>
-                                            );
-                                        case 'plane':
-                                            return (
-                                                <li key={index}>
-                                                    <img src={images.tagPlane} alt="Máy bay" />
-                                                </li>
-                                            );
-                                        case 'ship':
-                                            return (
-                                                <li key={index}>
-                                                    <img src={images.tagShip} alt="Tàu thủy" />
-                                                </li>
-                                            );
-                                        case 'train':
-                                            return (
-                                                <li key={index}>
-                                                    <img src={images.tagTrain} alt="Tàu hỏa" />
-                                                </li>
-                                            );
-                                        default:
-                                            break;
-                                    }
-                                })}
-                        </ul>
-                    </div>
-                    {sale && <div className={cx('sale-off')}>{FormatPrice(price)}</div>}
+                    <div className={cx('meta-box')}>{renderVehicle()}</div>
+                    <div className={cx('sale-off')}>{sale > 0 ? formatPrice(price) : ' '}</div>
                 </div>
                 <div className={cx('date-go')}>
                     <ul className={cx('schedule')}>
                         <li>
                             <img src={images.tagDateTime} alt="" />
                             Lịch khởi hành: &nbsp;
-                            <span>{departure_schedule}</span>
+                            <span>{departureSchedule}</span>
                         </li>
                         <li>
                             <img src={images.tagDate} alt="" />
@@ -77,9 +71,9 @@ function ItemTour({ data }) {
                     </ul>
                 </div>
                 <div className={cx('action-box')}>
-                    <div className={cx('price-box')}>{FormatPrice(promotion_price)}</div>
+                    <div className={cx('price-box')}>{formatPrice(suggestedPrice)}</div>
                     <div className={cx('booking-box')}>
-                        <Link className={cx('round-btn')} to={linkAction} title={tour_name}>
+                        <Link className={cx('round-btn')} to={linkAction} title={tourName}>
                             Đặt tour
                         </Link>
                     </div>

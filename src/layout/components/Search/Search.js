@@ -5,9 +5,11 @@ import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 
 import styles from './Search.module.scss';
-import { actions, toNonAccentVietnamese, useStore } from '~/store';
-import { TourService } from '~/services';
+import { actions, useStore } from '~/store';
 import config from '~/config';
+import { getCategorizedToursData } from '~/data';
+import { toNonAccentVietnamese } from '~/utils';
+import images from '~/assets/images';
 
 const cx = classNames.bind(styles);
 function Search() {
@@ -15,6 +17,7 @@ function Search() {
     const [store, dispatch] = useStore();
     const { setShowSearch } = store;
     const [searchValue, setSearchValue] = useState('');
+    const [tours, setTours] = useState([]);
     const [searchResult, setSearchResult] = useState([]);
     const inputRef = useRef();
 
@@ -22,14 +25,33 @@ function Search() {
         setSearchValue('');
         setSearchResult([]);
     }, [setShowSearch]);
+
     useEffect(() => {
-        TourService.getTour().then((res) => {
-            if (searchValue) {
-                const dataFilter = res.filter((tour) => tour.slug.includes(toNonAccentVietnamese(searchValue)));
-                setSearchResult(dataFilter);
-            }
-        });
-    }, [searchValue]);
+        if (!searchValue?.trim()) {
+            setSearchResult([]);
+            return;
+        }
+
+        const handler = setTimeout(() => {
+            const normalizedSearch = toNonAccentVietnamese(searchValue).toLowerCase();
+
+            const dataFilter = tours.filter((tour) =>
+                toNonAccentVietnamese(tour.tourName).toLowerCase().includes(normalizedSearch),
+            );
+
+            setSearchResult(dataFilter);
+        }, 300);
+
+        return () => clearTimeout(handler);
+    }, [searchValue, tours]);
+
+    useEffect(() => {
+        (async () => {
+            const { listTours } = await getCategorizedToursData();
+            setTours(listTours);
+        })();
+    }, []);
+
     const handleSearchClose = (e) => {
         e.preventDefault();
         dispatch(actions.setShowSearch(false));
@@ -52,6 +74,51 @@ function Search() {
         e.preventDefault();
         dispatch(actions.setShowSearch(false));
         navigate(`${config.routes.search}?destination=${searchValue}`);
+    };
+
+    const renderResSearch = (data = []) => {
+        if (!Array.isArray(data) || data.length === 0) {
+            if (searchValue) {
+                return (
+                    <div className={cx('search-content', 'empty', 'text-center', 'fst-italic', 'fw-bolder')}>
+                        <p>Không tìm thấy tour phù hợp.</p>
+                    </div>
+                );
+            }
+            return null;
+        }
+
+        return (
+            <div className={cx('search-content')}>
+                {data.map((tour) => {
+                    const { tourCode, slug, thumbnailUrl, tourName } = tour;
+                    const tourLink = config.routes.tour.replace(':slug', slug);
+
+                    return (
+                        <div key={tourCode} className={cx('tour-item')}>
+                            <div className={cx('tour-img')}>
+                                <Link to={tourLink}>
+                                    <img
+                                        src={thumbnailUrl || images.logoFooter}
+                                        alt={tourName}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = images.logoFooter;
+                                        }}
+                                    />
+                                </Link>
+                            </div>
+
+                            <div className={cx('tour-content')}>
+                                <h4 className={cx('tour-name')}>
+                                    <Link to={tourLink}>{tourName || 'Chưa có tên tour'}</Link>
+                                </h4>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
     };
 
     return (
@@ -88,25 +155,7 @@ function Search() {
                             </button>
                         </span>
                     </div>
-                    <div className={cx('search-content')}>
-                        {searchResult &&
-                            searchResult.map((tour) => {
-                                return (
-                                    <div key={tour.tour_id} className={cx('tour-item')}>
-                                        <div className={cx('tour-img')}>
-                                            <Link to={`${config.routes.tour}/${tour.slug}`}>
-                                                <img src={tour.thumbnail_url} alt={tour.tour_name} />
-                                            </Link>
-                                        </div>
-                                        <div className={cx('tour-content')}>
-                                            <h4 className={cx('tour-name')}>
-                                                <Link to={`${config.routes.tour}/${tour.slug}`}>{tour.tour_name}</Link>
-                                            </h4>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                    </div>
+                    {renderResSearch(searchResult)}
                 </div>
                 <Link className={cx('search-close')} onClick={handleSearchClose}>
                     <i>

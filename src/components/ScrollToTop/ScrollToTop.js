@@ -1,20 +1,42 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 function ScrollToTop({ children }) {
     const { pathname } = useLocation();
+    const [visible, setVisible] = useState(false);
 
-    // Cuộn về đầu trang khi thay đổi route
     useLayoutEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
+        if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }, [pathname]);
 
-    // Cuộn về đầu trang khi tải lại trang
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-    }, []);
+        const handleScroll = () => {
+            setVisible(window.scrollY > 200);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    });
 
-    return children;
+    const handleGoToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    return (
+        <>
+            {children}
+            {visible && (
+                <button className={'btn-go-to-top'} onClick={handleGoToTop} title="Lên đầu trang">
+                    <FontAwesomeIcon icon={faCircleArrowUp} />
+                </button>
+            )}
+        </>
+    );
 }
 
 export default ScrollToTop;

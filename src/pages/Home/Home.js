@@ -8,12 +8,14 @@ import images from '~/assets/images';
 import ItemTour from '~/components/ItemTour';
 import ItemDestination from '~/components/ItemDestination';
 import ItemNews from '~/components/ItemNews';
-import SimpleSliderBanner, { MultipleItems } from '~/components/Slider';
+import { SimpleSliderBanner, MultipleItems } from '~/components/Slider';
 import CustomDatePicker from '~/components/CustomDatePicker';
 
 // Service
 import config from '~/config';
 import { useStore } from '~/store';
+import { getCategorizedToursData, getNewsData, getTouristPlacesData } from '~/data';
+import { useSlidesToShow } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
@@ -38,19 +40,146 @@ const policy = [
     },
 ];
 
-function Home() {
-    // const { tour: tourStaticData, 'tourist-place': touristPlaceStaticData, news: newsStaticData } = StaticData;
+const settingTourSlider = {
+    arrows: false,
+    accessibility: false,
+    draggable: false,
+    autoplaySpeed: 0,
+    responsive: [
+        {
+            breakpoint: 992,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                accessibility: true,
+                infinite: false,
+                arrows: true,
+            },
+        },
+        {
+            breakpoint: 768,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+                accessibility: true,
+                arrows: true,
+                infinite: false,
+            },
+        },
+        {
+            breakpoint: 576,
+            settings: {
+                slidesToShow: 1.5,
+                slidesToScroll: 1,
+                accessibility: true,
+                arrows: true,
+                infinite: false,
+            },
+        },
+    ],
+};
 
-    const [store] = useStore();
+const BaseSection = ({
+    title = '',
+    subTitle = '',
+    path,
+    classNameSection,
+    children,
+    showMore = false,
+    showMoreTitle = 'Xem thêm',
+}) => {
+    return (
+        <section className={cx(classNameSection)}>
+            <div className={cx('container')}>
+                <div className={cx('section-heading', 'text-center')}>
+                    <h2 className={cx('section-title')}>
+                        <Link to={path}>{title}</Link>
+                    </h2>
+                    {subTitle && <p>{subTitle}</p>}
+                </div>
+                {children}
+                {showMore && (
+                    <div className={cx('text-center')}>
+                        <Link to={path} className={cx('round-btn')}>
+                            {showMoreTitle}
+                        </Link>
+                    </div>
+                )}
+            </div>
+        </section>
+    );
+};
+
+const itemComponents = {
+    tour: ItemTour,
+    news: ItemNews,
+    destination: ItemDestination,
+};
+
+const ContentSection = ({
+    title,
+    type = 'tour',
+    subTitle,
+    path,
+    classNameSection,
+    showMore = false,
+    options = [],
+    showMoreTitle = 'Xem thêm tour',
+}) => {
+    const hasTours = Array.isArray(options) && options.length > 0;
+    const { shouldUseSlider } = useSlidesToShow(options.length);
+
+    const ItemComponent = itemComponents[type] || ItemTour;
+
+    return (
+        <BaseSection
+            title={title}
+            subTitle={subTitle}
+            path={path}
+            classNameSection={classNameSection}
+            showMore={showMore}
+            showMoreTitle={showMoreTitle}
+        >
+            {hasTours ? (
+                shouldUseSlider ? (
+                    <MultipleItems setting={settingTourSlider}>
+                        {options.map((option) => {
+                            return <ItemComponent key={option.id} data={option} />;
+                        })}
+                    </MultipleItems>
+                ) : (
+                    <div className={cx('row', { 'sv-scroll': type === 'destination' })}>
+                        {options.map((option) => {
+                            return (
+                                <div
+                                    key={option.id}
+                                    className={cx(
+                                        'col-12 col-sm-6 col-md-4',
+                                        type === 'news' ? 'col-lg-4' : 'col-lg-3',
+                                    )}
+                                >
+                                    <ItemComponent data={option} />
+                                </div>
+                            );
+                        })}
+                    </div>
+                )
+            ) : (
+                <div className={cx('no-data', 'text-center')}>
+                    <p>Hiện chưa có tour nào trong danh mục này.</p>
+                </div>
+            )}
+        </BaseSection>
+    );
+};
+
+function Home() {
     const navigate = useNavigate();
-    const [listTours, setListTours] = useState([]);
-    const [listNews, setListNews] = useState([]);
-    const [listDestinations, setListDestinations] = useState([]);
-    const [listTourClassification, setListTourClassification] = useState({
-        TourDomestic: [],
-        TourInternational: [],
-        TourPromotional: [],
-        MostPromotionalTour: [],
+    const [tour, setTour] = useState({
+        domesticTours: [],
+        internationalTours: [],
+        promotionalTours: [],
+        mostPromotionalTours: [],
     });
     const [departureDate, setDepartureDate] = useState('');
     const [fields, setFields] = useState({
@@ -67,52 +196,25 @@ function Home() {
     };
 
     useEffect(() => {
-        const { listData } = store;
-        const { listTours = [], listNews = [], listDestinations = [] } = listData || {};
-        setListTours(listTours);
-        setListNews(listNews);
-        setListDestinations(listDestinations);
-    }, [store]);
+        (async () => {
+            const { domesticTours, internationalTours, promotionalTours } = await getCategorizedToursData();
+            const news = await getNewsData();
+            const touristPlaces = await getTouristPlacesData();
 
-    // [GET data]
-    // useEffect(() => {
-    //     const fetchAllData = async () => {
-    //         const fetchTours = async () => {
-    //             try {
-    //                 const res = await TourService.getTour();
-    //                 setListTours(res);
-    //             } catch (err) {
-    //                 // console.error('==> Failed to fetch tours:', err);
-    //                 setListTours(tourStaticData);
-    //             }
-    //         };
-
-    //         const fetchNews = async () => {
-    //             try {
-    //                 const res = await NewsService.getNews();
-    //                 setListNews(res);
-    //             } catch (err) {
-    //                 // console.error('==> Failed to fetch news:', err);
-    //                 setListNews(newsStaticData);
-    //             }
-    //         };
-
-    //         const fetchDestinations = async () => {
-    //             try {
-    //                 const res = await TouristPlaceService.getTouristPlace();
-    //                 setListDestinations(res);
-    //             } catch (err) {
-    //                 // console.error('==> Failed to fetch destinations:', err);
-    //                 setListDestinations(touristPlaceStaticData);
-    //             }
-    //         };
-
-    //         await Promise.all([fetchTours(), fetchNews(), fetchDestinations()]).catch((err) => {
-    //         });
-    //     };
-    //     fetchAllData();
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+            const limitTours = (list) => list.slice(0, 4);
+            const mostPromotionalTours = lodash
+                .reverse(lodash.sortBy(promotionalTours, (item) => item.sale))
+                ?.slice(0, 5);
+            setTour({
+                domesticTours: limitTours(domesticTours),
+                internationalTours: limitTours(internationalTours),
+                promotionalTours: limitTours(promotionalTours),
+                mostPromotionalTours,
+                news: news.slice(0, 6),
+                touristPlaces: touristPlaces.slice(0, 6),
+            });
+        })();
+    }, []);
 
     useEffect(() => {
         setFields((prev) => ({
@@ -120,30 +222,6 @@ function Home() {
             departureDate,
         }));
     }, [departureDate]);
-    // [Classify data tour]
-    useEffect(() => {
-        const tourDomestic = listTours.filter((tour) => tour.tour_group === 'Domestic');
-        setListTourClassification((prev) => {
-            return { ...prev, TourDomestic: tourDomestic };
-        });
-        const tourInternational = listTours.filter((tour) => tour.tour_group === 'International');
-        setListTourClassification((prev) => {
-            return { ...prev, TourInternational: tourInternational };
-        });
-        const tourPromotional = listTours.filter((tour) => tour.sale > 0);
-        setListTourClassification((prev) => {
-            return { ...prev, TourPromotional: tourPromotional };
-        });
-        let mostPromotionalTour = lodash.sortBy(tourPromotional, (item) => {
-            if (item.sale) {
-                return item.sale;
-            }
-        });
-        mostPromotionalTour = lodash.reverse(mostPromotionalTour);
-        setListTourClassification((prev) => {
-            return { ...prev, MostPromotionalTour: mostPromotionalTour };
-        });
-    }, [listTours]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -152,57 +230,19 @@ function Home() {
         );
     };
 
-    const settingTourSlider = {
-        arrows: false,
-        accessibility: false,
-        draggable: false,
-        autoplaySpeed: 0,
-        responsive: [
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    accessibility: true,
-                    infinite: false,
-                    arrows: true,
-                },
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
-                    accessibility: true,
-                    arrows: true,
-                    infinite: false,
-                },
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 1.5,
-                    slidesToScroll: 1,
-                    accessibility: true,
-                    arrows: true,
-                    infinite: false,
-                },
-            },
-        ],
-    };
     return (
         <Fragment>
             {/* home-banner-section */}
             <section className={cx('home-banner-section')}>
-                {listTourClassification.MostPromotionalTour.length > 0 && (
+                {tour.mostPromotionalTours.length > 0 && (
                     <SimpleSliderBanner>
-                        {listTourClassification.MostPromotionalTour.slice(0, 6).map((tour, index) => {
+                        {tour.mostPromotionalTours?.map((tour, index) => {
                             return (
                                 <div key={index}>
                                     <div
                                         className={cx('home-banner', 'd-flex align-items-center')}
                                         style={{
-                                            backgroundImage: `url(${tour.thumbnail_url})`,
+                                            backgroundImage: `url(${tour.thumbnailUrl})`,
                                         }}
                                     >
                                         <div className="overlay"></div>
@@ -211,9 +251,12 @@ function Home() {
                                                 <div className={cx('row')}>
                                                     <div className={cx('col-lg-8 offset-lg-2')}>
                                                         {/* <h4 className={cx('banner-sub-title')}>Du Lịch Dubai</h4> */}
-                                                        <h2 className={cx('banner-title')}>{tour.tour_name}</h2>
+                                                        <h2 className={cx('banner-title')}>{tour.tourName}</h2>
                                                         <Link
-                                                            to={`${config.routes.tour}/${tour.slug}`}
+                                                            to={`${config.routes.tourDetail.replace(
+                                                                ':slug',
+                                                                tour.slug,
+                                                            )}`}
                                                             className={cx('round-btn')}
                                                         >
                                                             Xem thêm
@@ -320,35 +363,15 @@ function Home() {
                     </div>
                 </div>
             </section>
-            {/* home-promotional-tour-section */}
-            <section className={cx('home-promotional-tour-section', 'home-index-tour')}>
-                <div className={cx('container')}>
-                    <div className={cx('section-heading', 'text-center')}>
-                        <h2 className={cx('section-title')}>
-                            <Link to={config.routes.promotionalTours}>
-                                <span>Tour giờ chót</span>
-                                &nbsp; giá tốt
-                            </Link>
-                        </h2>
-                        <p>
-                            Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!
-                        </p>
-                    </div>
-                    <div className={cx('row')}>
-                        {listTourClassification.TourPromotional.length > 0 && (
-                            <MultipleItems setting={settingTourSlider}>
-                                {listTourClassification.TourPromotional.slice(0, 4).map((item, index) => {
-                                    return (
-                                        <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                            <ItemTour data={item} />
-                                        </div>
-                                    );
-                                })}
-                            </MultipleItems>
-                        )}
-                    </div>
-                </div>
-            </section>
+            <ContentSection
+                title={`Tour giờ chót giá tốt`}
+                subTitle={
+                    'Cùng SaoViet Travler điểm qua một vài địa điểm du lịch trong nước thu hút du khách nhất nhé!'
+                }
+                path={config.routes.promotionalTours}
+                classNameSection={'home-promotional-tour-section'}
+                options={tour.promotionalTours}
+            />
             {/* banner-section */}
             <section className={cx('banner-section')}>
                 <div className={cx('container')}>
@@ -367,127 +390,45 @@ function Home() {
                 </div>
             </section>
             {/* domestic-tour */}
-            <section className={cx('domestic-tour', 'home-index-tour')}>
-                <div className={cx('container')}>
-                    <div className={cx('section-heading', 'text-center')}>
-                        <h2 className={cx('section-title')}>
-                            <Link to={config.routes.domesticTour}>Tour trong nước</Link>
-                        </h2>
-                        <p>
-                            Tour du lịch Trong nước tại SaoViet Travler. Hành hương đầu xuân - Tận hưởng bản sắc Việt.
-                        </p>
-                    </div>
-                    <div className={cx('row')}>
-                        {listTourClassification.TourDomestic.length > 0 && (
-                            <MultipleItems setting={settingTourSlider}>
-                                {listTourClassification.TourDomestic.slice(0, 4).map((item, index) => {
-                                    return (
-                                        <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                            <ItemTour data={item} />
-                                        </div>
-                                    );
-                                })}
-                            </MultipleItems>
-                        )}
-                    </div>
-                    <div className={cx('text-center')}>
-                        <Link to={config.routes.domesticTour} className={cx('round-btn')}>
-                            Xem thêm tour
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <ContentSection
+                title={`Tour trong nước`}
+                subTitle={'Tour du lịch Trong nước tại SaoViet Travler. Hành hương đầu xuân - Tận hưởng bản sắc Việt.'}
+                path={config.routes.domesticTour}
+                classNameSection={'domestic-tour'}
+                options={tour.promotionalTours}
+                showMore
+            />
             {/* overseas-tour */}
-            <section className={cx('overseas-tour', 'home-index-tour')}>
-                <div className={cx('container')}>
-                    <div className={cx('section-heading', 'text-center')}>
-                        <h2 className={cx('section-title')}>
-                            <Link to={config.routes.internationalTour}>Tour nước ngoài</Link>
-                        </h2>
-                        <p>
-                            Tour du lịch Nước ngoài tại SaoViet Travler. Du lịch 5 châu - Trải nghiệm sắc xuân thế giới
-                        </p>
-                    </div>
-                    <div className={cx('row')}>
-                        {listTourClassification.TourInternational.length > 0 && (
-                            <MultipleItems setting={settingTourSlider}>
-                                {listTourClassification.TourInternational.slice(0, 4).map((item, index) => {
-                                    return (
-                                        <div key={index} className={cx('col-12 col-sm-6 col-md-4 col-lg-3')}>
-                                            <ItemTour data={item} />
-                                        </div>
-                                    );
-                                })}
-                            </MultipleItems>
-                        )}
-                    </div>
-                    <div className={cx('text-center')}>
-                        <Link to={config.routes.internationalTour} className={cx('round-btn')}>
-                            Xem thêm tour
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <ContentSection
+                title={`Tour nước ngoài`}
+                subTitle={'Tour du lịch Nước ngoài tại SaoViet Travler. Du lịch 5 châu - Trải nghiệm sắc xuân thế giới'}
+                path={config.routes.internationalTour}
+                classNameSection={'overseas-tour'}
+                options={tour.internationalTours}
+                showMore
+            />
             {/* home-destination */}
-            <section className={cx('home-destination')}>
-                <div className={cx('container')}>
-                    <div className={cx('section-heading', 'text-center')}>
-                        <h2 className={cx('section-title')}>
-                            <Link to={config.routes.destination}>Điểm đến yêu thích</Link>
-                        </h2>
-                        <p>Các điểm đến du lịch trong nước và nước ngoài</p>
-                    </div>
-                    <div className={cx('row', 'sv-scroll')}>
-                        {listDestinations.length > 0 && (
-                            <MultipleItems setting={settingTourSlider}>
-                                {listDestinations.slice(0, 4).map((destination) => (
-                                    <div
-                                        key={destination.location_id ? destination.location_id : destination.id}
-                                        className={cx('col-12 col-sm-6 col-md-6 col-lg-3')}
-                                    >
-                                        <ItemDestination data={destination} />
-                                    </div>
-                                ))}
-                            </MultipleItems>
-                        )}
-                    </div>
-                </div>
-            </section>
+            <ContentSection
+                title={'Điểm đến yêu thích'}
+                type="destination"
+                subTitle={'Các điểm đến du lịch trong nước và nước ngoài'}
+                path={config.routes.destination}
+                classNameSection={'home-destination'}
+                options={tour.touristPlaces}
+            />
             {/* travel-inspiration */}
-            <section className={cx('travel-inspiration', 'home-index-tour')}>
-                <div className={cx('container')}>
-                    <div className={cx('section-heading', 'text-center')}>
-                        <h2 className={cx('section-title')}>
-                            <Link to={config.routes.news}>Cảm hứng du lịch</Link>
-                        </h2>
-                        <p>
-                            Thông tin về du lịch, văn hóa, ẩm thực, các sự kiện và lễ hội tại các điểm đến Việt nam,
-                            Đông Nam Á và Thế Giới
-                        </p>
-                    </div>
-                    <div className={cx('row')}>
-                        {listNews.length > 0 && (
-                            <MultipleItems setting={settingTourSlider}>
-                                {listNews.slice(0, 6).map((news) => {
-                                    return (
-                                        <div
-                                            key={news.news_id ? news.news_id : news.id}
-                                            className={cx('col-12 col-sm-6 col-md-4 col-lg-4')}
-                                        >
-                                            <ItemNews data={news} />
-                                        </div>
-                                    );
-                                })}
-                            </MultipleItems>
-                        )}
-                    </div>
-                    <div className={cx('text-center', 'more-btn')}>
-                        <Link to={config.routes.news} className={cx('outline-btn outline-btn-white')}>
-                            Xem tất cả tin tức
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <ContentSection
+                title={'Cảm hứng du lịch'}
+                type="news"
+                subTitle={
+                    'Thông tin về du lịch, văn hóa, ẩm thực, các sự kiện và lễ hội tại các điểm đến Việt nam, Đông Nam Á và Thế Giới'
+                }
+                path={config.routes.news}
+                classNameSection={'travel-inspiration'}
+                options={tour.news}
+                showMore
+                showMoreTitle="Xem tất cả tin tức"
+            />
         </Fragment>
     );
 }
