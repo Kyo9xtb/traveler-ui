@@ -1,72 +1,61 @@
 import { HttpRequest } from '~/utils';
 
-const getLogin = async () => {
+export const getAuth = async () => {
     try {
         const options = {
             withCredentials: true,
         };
-        const res = await HttpRequest.get('/user/me', options);
+        const res = await HttpRequest.get('/customer/auth/me', options);
         return res.data;
     } catch (error) {
         throw error;
     }
 };
 
-const postAuthor = async (data) => {
+export const postAuthor = async (data) => {
     try {
-        const res = await HttpRequest.post(`/user`, data);
+        const res = await HttpRequest.post(`/customer/auth/me`, data);
         return res.data;
     } catch (error) {
         throw error;
     }
 };
 
-const postLogin = async (data) => {
+export const login = async (data) => {
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            withCredentials: true,
         };
         const body = JSON.stringify(data);
-        const res = await HttpRequest.post(`/user/login`, body, config);
-        return res.data;
+        const res = await HttpRequest.post(`/customer/auth/login`, body, config);
+        return res.data.original;
     } catch (error) {
         throw error;
     }
 };
 
-const postCheckEmail = async (data) => {
+export const logout = async () => {
+    try {
+        const res = await HttpRequest.post(`/customer/auth/logout`);
+        return res.data.original;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const register = async (data) => {
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            withCredentials: true,
         };
         const body = JSON.stringify(data);
-        const res = await HttpRequest.post(`/user/email`, body, config);
+        const res = await HttpRequest.post(`/customer/auth/register`, body, config);
         return res.data;
     } catch (error) {
         throw error;
     }
 };
-
-const postLogout = async () => {
-    try {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        };
-        const body = JSON.stringify();
-        const res = await HttpRequest.post(`/user/logout`, body, config);
-        return res.data;
-    } catch (error) {
-        throw error;
-    }
-};
-
-export { postAuthor, postLogin, postLogout, postCheckEmail, getLogin };

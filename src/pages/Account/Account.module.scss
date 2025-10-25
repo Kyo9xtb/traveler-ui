@@ -221,3 +221,24 @@
         -o-border-radius: 15px;
     }
 }
+
+.loading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        animation: spin 1s linear infinite;
+        transform-origin: center;
+    }
+}
+
+// Animation keyframes
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

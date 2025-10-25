@@ -12,17 +12,6 @@ import {
     ADD_DATA,
 } from './constants';
 
-const initState = {
-    setOffCanvasMenu: false,
-    setShowSearch: false,
-    setValueCart: false,
-    user: {},
-    search: {},
-    cart: [],
-    listData: {},
-};
-const storageCarts = JSON.parse(localStorage.getItem('SaoVietTravler-Carts'));
-initState.cart = storageCarts || [];
 function reducer(state, action) {
     switch (action.type) {
         case ADD_DATA:
@@ -137,4 +126,3 @@ function reducer(state, action) {
 }
 
 export default reducer;
-export { initState };

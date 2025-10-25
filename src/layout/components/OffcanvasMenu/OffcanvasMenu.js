@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useCallback, useEffect, useLayoutEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,41 +17,44 @@ import styles from './OffcanvasMenu.module.scss';
 import { actions, useStore } from '~/store';
 import config from '~/config';
 import { AuthorService } from '~/services';
+import images from '~/assets/images';
+import { removeFromStorage, STORAGE_KEYS } from '~/utils';
 
 const cx = classNames.bind(styles);
 function OffcanvasMenu() {
     const [action, dispatch] = useStore();
     const { setOffCanvasMenu, user } = action;
-
-    const handleOffcanvasMenuClose = (e) => {
-        e.preventDefault();
-        dispatch(actions.setOffCanvasMenu(false));
-    };
     const location = useLocation();
+
+    const handleOffcanvasMenuClose = useCallback(
+        (e) => {
+            e.preventDefault();
+            dispatch(actions.setOffCanvasMenu(false));
+        },
+        [dispatch],
+    );
+
     useLayoutEffect(() => {
         dispatch(actions.setOffCanvasMenu(false));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname]);
-    useEffect(() => {
-        AuthorService.getLogin()
-            .then((res) => {
-                dispatch(actions.setInfoUser(res));
-            })
-            .catch((err) => {
-                // console.log("error", err);
-            });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    const handleLogOut = (e) => {
+
+    const handleLogOut = async (e) => {
         e.preventDefault();
-        AuthorService.postLogout()
-            .then((res) => {
+        try {
+            const { status, error_code } = await AuthorService.logout();
+            if (status === 'success' && error_code === 0) {
+                removeFromStorage(STORAGE_KEYS.TOKEN);
+                removeFromStorage(STORAGE_KEYS.USER);
                 dispatch(actions.setInfoUser({}));
                 dispatch(actions.clearToCart([]));
                 dispatch(actions.setValueCart(false));
-            })
-            .catch(() => {});
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
+
     return (
         <div className={setOffCanvasMenu ? cx('offcanvas-container', 'offcanvas-show') : cx('offcanvas-container')}>
             <div className={cx('offcanvas-inner')}>
@@ -62,7 +65,14 @@ function OffcanvasMenu() {
                             <div className={cx('widget-content', 'text-center')}>
                                 <div className={cx('profile')}>
                                     <figure className={cx('avatar')}>
-                                        <img src={user.avatar_url} alt="avatar" />
+                                        <img
+                                            src={user.avatarUrl || images.avatarDefault}
+                                            alt="avatar"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = images.avatarDefault;
+                                            }}
+                                        />
                                     </figure>
                                     <div className={cx('text-content')}>
                                         <div className={cx('name-title')}>

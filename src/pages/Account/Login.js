@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,53 +8,66 @@ import styles from './Account.module.scss';
 import BannerPage from '~/components/BannerPage';
 import config from '~/config';
 import { AuthorService } from '~/services';
-import { actions, SnakeCaseVariable, useStore } from '~/store';
+import { actions, useStore } from '~/store';
+import { keysToCamelCase, saveToStorage, STORAGE_KEYS, toSnakeCase } from '~/utils';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
+
 function Login() {
     const navigate = useNavigate();
-    const [fields, setFields] = useState({
-        email: '',
-        password: '',
-    });
-    const [, dispatch] = useStore();
-    const [errorMessage, setErrorMessage] = useState();
+    const [store, dispatch] = useStore();
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const setFieldValue = ({ target: { name, value } }) => {
+    const [fields, setFields] = useState({
+        email: 'dev@gmail.com',
+        password: '123456',
+    });
+
+    const handleFieldChange = useCallback(({ target: { name, value } }) => {
         setFields((prev) => ({
             ...prev,
-            [`${SnakeCaseVariable(name)}`]: value,
+            [toSnakeCase(name)]: value,
         }));
-    };
-
-    useEffect(() => {
-        AuthorService.getLogin()
-            .then((res) => {
-                dispatch(actions.setInfoUser(res));
-                navigate(config.routes.home);
-            })
-            .catch((err) => {
-                // console.log("error", err);
-            });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        AuthorService.postLogin(fields)
-            .then((res) => {
-                dispatch(actions.setInfoUser(res));
-                navigate(config.routes.home);
-            })
-            .catch((err) => {
-                const { status } = err;
-                if (status === 401) {
-                    setErrorMessage('Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại !');
-                } else {
-                    setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
+    useEffect(() => {
+        if (store?.user?.id) {
+            navigate(config.routes.home);
+        }
+    }, [store.user, navigate]);
+
+    const handleSubmit = useCallback(
+        async (e) => {
+            e.preventDefault();
+            setErrorMessage('');
+            setLoading(true);
+            try {
+                const { status, error_code, data } = await AuthorService.login(fields);
+                if (status === 'success' && error_code === 0) {
+                    saveToStorage(STORAGE_KEYS.TOKEN, data['auth-token']);
+                    const userData = keysToCamelCase(data['user']);
+                    saveToStorage(STORAGE_KEYS.USER, userData);
+                    dispatch(actions.setInfoUser(userData));
+                    navigate(config.routes.home);
+                    return;
                 }
-            });
-    };
+
+                const messageMap = {
+                    401: 'Sai thông tin đăng nhập. Vui lòng thử lại!',
+                    404: 'Tài khoản không tồn tại.',
+                };
+                setErrorMessage(messageMap[error_code] || 'Email hoặc mật khẩu không đúng. Vui lòng thử lại!');
+            } catch (error) {
+                console.error('Login error:', error);
+                setErrorMessage('Đã có lỗi xảy ra. Vui lòng thử lại sau!');
+            } finally {
+                setLoading(false);
+            }
+        },
+        [fields, dispatch, navigate, setLoading],
+    );
 
     return (
         <Fragment>
@@ -111,7 +124,7 @@ function Login() {
                                                         name="Email"
                                                         value={fields.email}
                                                         required
-                                                        onChange={setFieldValue}
+                                                        onChange={handleFieldChange}
                                                     />
                                                 </fieldset>
                                                 <fieldset className={cx('form-group')}>
@@ -126,7 +139,7 @@ function Login() {
                                                         name="Password"
                                                         value={fields.password}
                                                         required
-                                                        onChange={setFieldValue}
+                                                        onChange={handleFieldChange}
                                                     />
                                                 </fieldset>
                                                 {errorMessage && <p className={cx('text-danger')}>{errorMessage}</p>}
@@ -134,8 +147,15 @@ function Login() {
                                                     <Link title="Quên mật khẩu">Quên mật khẩu</Link>
                                                 </p>
                                                 <div className={cx('btn-submit', 'text-center')}>
-                                                    <button type="submit" className={cx('round-btn')}>
-                                                        Đăng nhập
+                                                    <button type="submit" className={cx('round-btn', 'loading')}>
+                                                        {loading ? (
+                                                            <>
+                                                                <FontAwesomeIcon icon={faSpinner} /> &nbsp; Đang đăng
+                                                                nhập
+                                                            </>
+                                                        ) : (
+                                                            'Đăng nhập'
+                                                        )}
                                                     </button>
                                                 </div>
                                                 <p className={cx('login--notes')}>

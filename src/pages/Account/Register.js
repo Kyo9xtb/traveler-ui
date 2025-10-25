@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,74 +8,73 @@ import styles from './Account.module.scss';
 import BannerPage from '~/components/BannerPage';
 import config from '~/config';
 import { AuthorService } from '~/services';
-import { actions, SnakeCaseVariable, useStore } from '~/store';
+import { keysToSnakeCase, toCamelCase } from '~/utils';
+import { useStore } from '~/store';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { use } from 'react';
 
 const cx = classNames.bind(styles);
+
 function Register() {
     const navigate = useNavigate();
-    const [, dispatch] = useStore();
-    const [isEmail, setIsEmail] = useState(false);
-    const [errorMessage, setErrorMessage] = useState();
+    const [store] = useStore();
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const [fields, setFields] = useState({
-        full_name: '',
-        phone_number: '',
+        fullName: '',
+        phone: '',
         email: '',
         password: '',
     });
 
     useEffect(() => {
-        AuthorService.getLogin()
-            .then((res) => {
-                dispatch(actions.setInfoUser(res));
-                navigate(config.routes.home);
-            })
-            .catch((err) => {
-                // console.log("error", err);
-            });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (store?.user?.id) {
+            navigate(config.routes.home);
+        }
     }, []);
 
-    const setFieldValue = ({ target: { name, value } }) => {
+    const setFieldValue = useCallback(({ target: { name, value } }) => {
         setFields((prev) => ({
             ...prev,
-            [`${SnakeCaseVariable(name)}`]: value,
+            [toCamelCase(name)]: value,
         }));
-    };
+    }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        AuthorService.postAuthor(fields)
-            .then((res) => {
-                if (res.status) {
+    const handleSubmit = useCallback(
+        async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            setErrorMessage('');
+            try {
+                const { status, error_code } = await AuthorService.register(keysToSnakeCase(fields));
+                if (status === 'success' && error_code === 0) {
                     setFields({
-                        FullName: '',
-                        PhoneNumber: '',
-                        Email: '',
-                        Password: '',
+                        fullName: '',
+                        phone: '',
+                        email: '',
+                        password: '',
                     });
                     navigate(config.routes.login);
-                } else {
-                    alert('Đăng ký thành viên thất bại');
+                    return;
                 }
-            })
-            .catch((err) => {
-                setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
-            });
-    };
+                const errorMessages = {
+                    409: 'Email đã được sử dụng.',
+                    400: 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.',
+                    500: 'Lỗi hệ thống. Vui lòng thử lại sau.',
+                };
 
-    const handleCheckEmail = (e) => {
-        const { value } = e.target;
-        const data = { email: value };
-        AuthorService.postCheckEmail(data)
-            .then((res) => {
-                setIsEmail(res);
-            })
-            .catch((err) => {
-                console.error('Error checking email:', err);
-                setIsEmail(false);
-            });
-    };
+                setErrorMessage(errorMessages[error_code] || 'Đăng ký thành viên thất bại.');
+            } catch (error) {
+                console.error('Register error:', error);
+                setErrorMessage('Đăng ký thành viên thất bại');
+            } finally {
+                setLoading(false);
+            }
+        },
+        [fields, navigate],
+    );
+
     return (
         <Fragment>
             <BannerPage title="Đăng ký" />
@@ -127,8 +126,8 @@ function Register() {
                                                         type="text"
                                                         placeholder="Nhập họ và tên"
                                                         autoComplete="off"
-                                                        name="FullName"
-                                                        value={fields.full_name}
+                                                        name="full-name"
+                                                        value={fields.fullName}
                                                         required
                                                         onChange={setFieldValue}
                                                     />
@@ -139,14 +138,15 @@ function Register() {
                                                         <span className={cx('required')}>*</span>
                                                     </label>
                                                     <input
-                                                        type="text"
+                                                        type="tel"
                                                         placeholder="Nhập số điện thoại"
                                                         autoComplete="off"
-                                                        pattern="/(84|0[3|5|7|8|9])+([0-9]{8})\b/g"
-                                                        name="PhoneNumber"
-                                                        value={fields.phone_number}
+                                                        pattern="(84|0(3|5|7|8|9))[0-9]{8}"
+                                                        name="phone"
+                                                        value={fields.phone}
                                                         required
                                                         onChange={setFieldValue}
+                                                        title="Vui lòng nhập số điện thoại hợp lệ (VD: 0987654321 hoặc 84987654321)"
                                                     />
                                                 </fieldset>
                                                 <fieldset className={cx('form-group')}>
@@ -159,18 +159,12 @@ function Register() {
                                                         placeholder="Nhập email"
                                                         autoComplete="off"
                                                         pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-                                                        name="Email"
+                                                        name="email"
                                                         value={fields.email}
                                                         required
                                                         onChange={setFieldValue}
-                                                        onBlur={handleCheckEmail}
+                                                        title="Vui lòng nhập địa chỉ email hợp lệ. Ví dụ: tenban@example.com"
                                                     />
-                                                    {isEmail && (
-                                                        <p className={cx('text-danger', 'mb-0')}>
-                                                            Email đã tồn tại. Vui lòng đăng nhập hoặc đăng ký với email
-                                                            khác.
-                                                        </p>
-                                                    )}
                                                 </fieldset>
                                                 <fieldset className={cx('form-group')}>
                                                     <label>
@@ -181,17 +175,24 @@ function Register() {
                                                         type="password"
                                                         placeholder="Nhập mật khẩu"
                                                         autoComplete="off"
-                                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                                        name="Password"
+                                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                                                        name="password"
                                                         value={fields.password}
                                                         required
                                                         onChange={setFieldValue}
+                                                        title="Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường và số"
                                                     />
                                                 </fieldset>
                                                 {errorMessage && <p className={cx('text-danger')}>{errorMessage}</p>}
                                                 <div className={cx('btn-submit', 'text-center')}>
-                                                    <button type="submit" className={cx('round-btn')}>
-                                                        Tạo tài khoản
+                                                    <button type="submit" className={cx('round-btn', 'loading')}>
+                                                        {loading ? (
+                                                            <>
+                                                                <FontAwesomeIcon icon={faSpinner} /> &nbsp; Đang đăng ký
+                                                            </>
+                                                        ) : (
+                                                            'Tạo tài khoản'
+                                                        )}
                                                     </button>
                                                 </div>
                                             </div>
