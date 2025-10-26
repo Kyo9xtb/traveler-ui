@@ -1,3 +1,4 @@
+import { saveToStorage, STORAGE_KEYS } from '~/utils';
 import {
     SET_INFO_USER,
     SET_OFFCANVAS_MENU,
@@ -19,11 +20,13 @@ function reducer(state, action) {
                 ...state,
                 listData: action.payload,
             };
+
         case SET_INFO_USER:
             return {
                 ...state,
                 user: action.payload,
             };
+
         case SET_OFFCANVAS_MENU:
             return {
                 ...state,
@@ -35,22 +38,27 @@ function reducer(state, action) {
                 ...state,
                 search: action.payload,
             };
+
         case SET_SHOW_SEARCH:
             return {
                 ...state,
                 setShowSearch: action.payload,
             };
+
         case SET_VALUE_CART:
             return {
                 ...state,
                 setValueCart: action.payload,
             };
+
         case ADD_VALUE_CART:
-            localStorage.setItem('SaoVietTravler-Carts', JSON.stringify(action.payload));
+            saveToStorage(STORAGE_KEYS.CART, action.payload);
+
             return {
                 ...state,
                 cart: action.payload,
             };
+
         case ADD_TO_CART:
             let newCart = [];
             if (state.cart.length > 0) {
@@ -58,7 +66,7 @@ function reducer(state, action) {
                     let found = false;
                     const updatedProduct = state.cart.reduce(
                         (acc, item) => {
-                            if (product.tour_id === item.tour_id && product.customer_type === item.customer_type) {
+                            if (product.id === item.id && product.guestCode === item.guestCode) {
                                 acc.quantity += item.quantity;
                                 found = true;
                             }
@@ -73,53 +81,54 @@ function reducer(state, action) {
                 const filterCart = state.cart.filter(
                     (item) =>
                         !action.payload.some(
-                            (product) =>
-                                product.tour_id === item.tour_id && product.customer_type === item.customer_type,
+                            (product) => product.id === item.id && product.guestCode === item.guestCode,
                         ),
                 );
 
                 newCart = [...filterCart, ...newCart];
             } else {
-                newCart = [...state.cart, ...action.payload];
+                newCart = [...state.cart, action.payload];
             }
-            localStorage.setItem('SaoVietTravler-Carts', JSON.stringify(newCart));
+            saveToStorage(STORAGE_KEYS.CART, newCart);
             return {
                 ...state,
                 cart: newCart,
             };
+
         case UPDATE_TO_CART:
             const updateCart = state.cart.map((product) => {
-                if (
-                    product.tour_id === action.payload.tour_id &&
-                    product.customer_type === action.payload.customer_type
-                ) {
+                if (product.id === action.payload.id && product.guestCode === action.payload.guestCode) {
                     return { ...product, quantity: action.payload.quantity };
                 }
                 return product;
             });
-            localStorage.setItem('SaoVietTravler-Carts', JSON.stringify(updateCart));
+            saveToStorage(STORAGE_KEYS.CART, newCart);
+
             return {
                 ...state,
                 cart: updateCart,
             };
+
         case DELETE_TO_CART:
             let deleteCart = [];
             deleteCart = state.cart.filter((product) => {
-                return !(
-                    product.tour_id === action.payload.tour_id && product.customer_type === action.payload.customer_type
-                );
+                return !(product.id === action.payload.id && product.guestCode === action.payload.guestCode);
             });
-            localStorage.setItem('SaoVietTravler-Carts', JSON.stringify(deleteCart));
+            saveToStorage(STORAGE_KEYS.CART, newCart);
+
             return {
                 ...state,
                 cart: deleteCart,
             };
+
         case CLEAR_TO_CART:
-            localStorage.setItem('SaoVietTravler-Carts', JSON.stringify([]));
+            saveToStorage(STORAGE_KEYS.CART, []);
+
             return {
                 ...state,
                 cart: action.payload,
             };
+            
         default:
             throw new Error('Invalid action type');
     }

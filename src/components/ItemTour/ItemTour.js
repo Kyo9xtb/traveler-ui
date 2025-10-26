@@ -54,7 +54,7 @@ function ItemTour({ data }) {
                 </h3>
                 <div className={cx('vote-box')}>
                     <div className={cx('meta-box')}>{renderVehicle()}</div>
-                    <div className={cx('sale-off')}>{sale > 0 ? formatPrice(price) : ' '}</div>
+                    <div className={cx('sale-off')}>{sale > 0 ? formatPrice(suggestedPrice) : ' '}</div>
                 </div>
                 <div className={cx('date-go')}>
                     <ul className={cx('schedule')}>
@@ -71,7 +71,7 @@ function ItemTour({ data }) {
                     </ul>
                 </div>
                 <div className={cx('action-box')}>
-                    <div className={cx('price-box')}>{formatPrice(suggestedPrice)}</div>
+                    <div className={cx('price-box')}>{formatPrice(price)}</div>
                     <div className={cx('booking-box')}>
                         <Link className={cx('round-btn')} to={linkAction} title={tourName}>
                             Đặt tour

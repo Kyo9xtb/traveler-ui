@@ -103,3 +103,45 @@ export const toNonAccentVietnamese = (data) => {
 export function createMarkup(data) {
     return { __html: `${data}` };
 }
+
+export const convertDaysToNumbers = (daysString) => {
+    if (!daysString) return [];
+
+    const dayMap = {
+        'chủ nhật': 0,
+        'chủ nhât': 0, // phòng lỗi gõ sai
+        'thứ 2': 1,
+        'thứ hai': 1,
+        'thứ 3': 2,
+        'thứ ba': 2,
+        'thứ 4': 3,
+        'thứ tư': 3,
+        'thứ 5': 4,
+        'thứ năm': 4,
+        'thứ 6': 5,
+        'thứ sáu': 5,
+        'thứ 7': 6,
+        'thứ bảy': 6,
+    };
+
+    const text = daysString.toLowerCase().trim();
+
+    // 🟢 Nếu là "tất cả các ngày", "hằng ngày", "mỗi ngày"
+    if (
+        text.includes('tất cả các ngày') ||
+        text.includes('hằng ngày') ||
+        text.includes('hang ngay') ||
+        text.includes('mỗi ngày') ||
+        text.includes('moi ngay')
+    ) {
+        return [0, 1, 2, 3, 4, 5, 6];
+    }
+
+    // 🔵 Xử lý thông thường (Thứ 2, Thứ 5; Chủ nhật...)
+    return text
+        .replace(/hằng tuần|hang tuan|vào|vao/g, '') // loại bỏ từ thừa
+        .split(/[,;|và&]/)
+        .map((day) => day.trim())
+        .map((day) => dayMap[day])
+        .filter((num) => num !== undefined);
+};

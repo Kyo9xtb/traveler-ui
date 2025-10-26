@@ -82,13 +82,13 @@ function CheckOut() {
             navigate(config.routes.cart);
             return;
         }
-        AuthorService.getLogin()
-            .then((res) => {
-                dispatch(actions.setInfoUser(res));
-            })
-            .catch((err) => {
-                console.log('error', err);
-            });
+        // AuthorService.getLogin()
+        //     .then((res) => {
+        //         dispatch(actions.setInfoUser(res));
+        //     })
+        //     .catch((err) => {
+        //         console.log('error', err);
+        //     });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

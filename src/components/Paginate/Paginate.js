@@ -1,17 +1,24 @@
-import { Fragment, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 
 import styles from './Paginate.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Paginate({ data, itemsPerPage, children }) {
+function Pagination({ data = [], itemsPerPage = 10, resData }) {
     const [itemOffset, setItemOffset] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
-    const endOffset = itemOffset + Number(itemsPerPage);
-    const currentItems = data.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(data.length / itemsPerPage);
+
+    const pageCount = useMemo(() => {
+        return Math.ceil(data.length / itemsPerPage);
+    }, [data.length, itemsPerPage]);
+
+    const currentItems = useMemo(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        return data.slice(itemOffset, endOffset);
+    }, [itemOffset, itemsPerPage, data]);
+
     const handlePageClick = ({ selected }) => {
         const newOffset = (selected * itemsPerPage) % data.length;
         setItemOffset(newOffset);
@@ -19,38 +26,46 @@ function Paginate({ data, itemsPerPage, children }) {
     };
 
     useEffect(() => {
-        setCurrentPage(0);
         setItemOffset(0);
-    }, [data]);
+        setCurrentPage(0);
+    }, [data, itemsPerPage]);
+
+    const paginateClasses = {
+        containerClassName: cx('pagination'),
+        pageClassName: cx('page-item'),
+        pageLinkClassName: cx('page-link'),
+        breakClassName: cx('page-item'),
+        breakLinkClassName: cx('page-link'),
+        activeClassName: cx('active'),
+        previousClassName: cx('btn-prev'),
+        nextClassName: cx('btn-next'),
+        previousLinkClassName: cx('page-link'),
+        nextLinkClassName: cx('page-link'),
+        disabledClassName: cx('disabled'),
+    };
+    useEffect(() => {
+        resData(currentItems);
+    }, [currentItems]);
 
     return (
         <Fragment>
-            {children(currentItems)}
-            <nav className={cx('text-center')}>
-                <ReactPaginate
-                    breakLabel="..."
-                    nextLabel=">>>"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    pageCount={pageCount}
-                    previousLabel="<<<"
-                    renderOnZeroPageCount={null}
-                    forcePage={currentPage}
-                    className={cx('pagination')}
-                    pageClassName={cx('page-item')}
-                    pageLinkClassName={cx('page-link')}
-                    breakClassName={cx('page-item')}
-                    breakLinkClassName={cx('page-link')}
-                    activeClassName={cx('active')}
-                    previousClassName={cx('btn-prev')}
-                    nextClassName={cx('btn-next')}
-                    previousLinkClassName={cx('page-link')}
-                    nextLinkClassName={cx('page-link')}
-                    disabledClassName={cx('disabled')}
-                />
-            </nav>
+            {pageCount > 0 && (
+                <nav className={cx('text-center')}>
+                    <ReactPaginate
+                        breakLabel="..."
+                        nextLabel=">>>"
+                        previousLabel="<<<"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        pageCount={pageCount}
+                        forcePage={Math.min(currentPage, Math.max(pageCount - 1, 0))}
+                        renderOnZeroPageCount={null}
+                        {...paginateClasses}
+                    />
+                </nav>
+            )}
         </Fragment>
     );
 }
 
-export default Paginate;
+export default Pagination;

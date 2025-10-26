@@ -1,97 +1,50 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
-// import getDay from 'date-fns/getDay';
-import getMonth from 'date-fns/getMonth';
-import getYear from 'date-fns/getYear';
-import range from 'lodash/range';
 import { vi } from 'date-fns/locale/vi';
+import { parseISO, getDay, isAfter, startOfDay } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
-// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import classNames from 'classnames/bind';
-
 import styles from './CustomDatePicker.module.scss';
+
 registerLocale('vi', vi);
 
 const cx = classNames.bind(styles);
-function CustomDatePicker({ Depart, setDate }) {
-    const [startDate, setStartDate] = useState();
-    const years = range(getYear(new Date()), getYear(new Date()) + 2, 1);
 
-    const months = [
-        'Tháng 1',
-        'Tháng 2',
-        'Tháng 3',
-        'Tháng 4',
-        'Tháng 5',
-        'Tháng 6',
-        'Tháng 7',
-        'Tháng 8',
-        'Tháng 9',
-        'Tháng 10',
-        'Tháng 11',
-        'Tháng 12',
-    ];
+/**
+ * @param {Array<number>} departDays - Mảng các thứ trong tuần cho phép (VD: [3,6] => Thứ 4 & Thứ 7)
+ * @param {Array<string>} departDates - Danh sách ngày cụ thể được phép (VD: ["2025-11-05", "2025-11-08"])
+ */
+function CustomDatePicker({ departDays = [], departDates = [], setDate }) {
+    const [startDate, setStartDate] = useState(null);
+
+    const validDepartDates = departDates.map((d) => parseISO(d)).filter((d) => d instanceof Date && !isNaN(d));
+
+    const filterDate = useCallback(
+        (date) => {
+            const isFuture = isAfter(startOfDay(date), startOfDay(new Date()));
+
+            const inSpecificDates = validDepartDates.some(
+                (d) => startOfDay(d).getTime() === startOfDay(date).getTime(),
+            );
+
+            const inWeeklyDays = departDays.includes(getDay(date));
+
+            return isFuture && (inSpecificDates || inWeeklyDays);
+        },
+        [departDays, validDepartDates],
+    );
 
     return (
         <DatePicker
             locale="vi"
-            renderCustomHeader={({
-                date,
-                changeYear,
-                changeMonth,
-                decreaseMonth,
-                increaseMonth,
-                prevMonthButtonDisabled,
-                nextMonthButtonDisabled,
-            }) => (
-                <div className={cx('datepicker-header')}>
-                    <button
-                        className={cx('datepicker-prew', 'datepicker-btn')}
-                        onClick={decreaseMonth}
-                        disabled={prevMonthButtonDisabled}
-                    >
-                        {'<'}
-                    </button>
-                    <div className={cx('datepicker-title')}>
-                        <select
-                            className={cx('datepicker-month')}
-                            value={months[getMonth(date)]}
-                            onChange={({ target: { value } }) => changeMonth(months.indexOf(value))}
-                        >
-                            {months.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-
-                        <select
-                            className={cx('datepicker-year')}
-                            value={getYear(date)}
-                            onChange={({ target: { value } }) => changeYear(value)}
-                        >
-                            {years.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <button
-                        className={cx('datepicker-next', 'datepicker-btn')}
-                        onClick={increaseMonth}
-                        disabled={nextMonthButtonDisabled}
-                    >
-                        {'>'}
-                    </button>
-                </div>
-            )}
             dateFormat="dd/MM/yyyy"
             selected={startDate}
             onChange={(date) => {
-                date < new Date() ? setStartDate(new Date()) : setStartDate(date);
-                !!setDate && setDate(date);
+                setStartDate(date);
+                setDate?.(date);
             }}
+            filterDate={filterDate}
+            placeholderText="Chọn ngày khởi hành"
             minDate={new Date()}
         />
     );
