@@ -2,7 +2,7 @@ import { HttpRequest } from '~/utils';
 
 export const getNews = async () => {
     try {
-        const res = await HttpRequest.get('/news', {});
+        const res = await HttpRequest.get('/news');
         return res.data;
     } catch (error) {
         throw error;
@@ -17,4 +17,3 @@ export const getNewsDetail = async (slug) => {
         throw error;
     }
 };
-
