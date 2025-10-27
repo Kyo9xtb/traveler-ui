@@ -5,3 +5,4 @@ export * from './listVehicle';
 export * from './toursData'
 export * from './newsData'
 export * from './touristPlacesData'
+export * from './listPaymentMethod'

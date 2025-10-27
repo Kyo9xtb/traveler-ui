@@ -6,7 +6,7 @@ import { DefaultLayout } from './layout';
 import ScrollToTop from './components/ScrollToTop';
 import { actions, useStore } from './store';
 import { AuthorService } from './services';
-import { removeFromStorage, STORAGE_KEYS } from './utils';
+import { keysToCamelCase, removeFromStorage, STORAGE_KEYS } from './utils';
 
 function App() {
     const [, dispatch] = useStore();
@@ -17,7 +17,7 @@ function App() {
                 const { status, error_code, data } = await AuthorService.getAuth();
 
                 if (status === 'success' && error_code === 0) {
-                    dispatch(actions.setInfoUser(data));
+                    dispatch(actions.setInfoUser(keysToCamelCase(data)));
                     return;
                 }
                 removeFromStorage(STORAGE_KEYS.TOKEN);
