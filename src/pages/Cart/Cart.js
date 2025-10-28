@@ -110,9 +110,9 @@ function Cart() {
         if (!Array.isArray(cart) || cart.length === 0) return 0;
         return cart?.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
     }, [cart]);
-    console.log('totalPrice', totalPrice);
 
     useEffect(() => {
+        if (!user?.id) return;
         const dataReq = {
             id: infoCart.id,
             user_id: infoCart.userId,

@@ -9,7 +9,7 @@ import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import './Slider.scss';
 // import ItemProduct from '../ItemProduct';
 
-const SlickArrowLeft = ({ currentSlide, ...props }) => (
+const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
     <button
         {...props}
         className={`slick-prev slick-arrow ${currentSlide === 0 ? 'slick-disabled' : ''}`}

@@ -11,6 +11,7 @@ import { AuthorService } from '~/services';
 import { actions, useStore } from '~/store';
 import { keysToCamelCase, saveToStorage, STORAGE_KEYS, toSnakeCase } from '~/utils';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { useAuthInit } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +25,6 @@ function Login() {
         email: 'dev@gmail.com',
         password: '123456',
     });
-
     const handleFieldChange = useCallback(({ target: { name, value } }) => {
         setFields((prev) => ({
             ...prev,
@@ -48,7 +48,8 @@ function Login() {
                 if (status === 'success' && error_code === 0) {
                     saveToStorage(STORAGE_KEYS.TOKEN, data['auth-token']);
                     const userData = keysToCamelCase(data['user']);
-                    saveToStorage(STORAGE_KEYS.USER, userData);
+                    const { id, ...infoUSer } = userData;
+                    saveToStorage(STORAGE_KEYS.USER, infoUSer);
                     dispatch(actions.setInfoUser(userData));
                     navigate(config.routes.home);
                     return;

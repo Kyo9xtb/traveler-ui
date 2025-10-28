@@ -70,7 +70,7 @@ function reducer(state, action) {
             const mergedCartMap = new Map();
 
             [...state.cart, ...action.payload].forEach((item) => {
-                const key = `${item.tourId}_${item.guestId}`;
+                const key = `${item.tourId}_${item.guestId}_${item.departureDate}`;
                 if (!mergedCartMap.has(key)) {
                     mergedCartMap.set(key, { ...item });
                 } else {

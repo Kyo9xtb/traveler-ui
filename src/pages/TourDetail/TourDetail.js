@@ -90,12 +90,14 @@ const BookingTour = ({ tour, guestPrice, total, date, handleQuantityChange, hand
                                                 <FontAwesomeIcon icon={faAngleUp} />
                                             </button>
                                             <input
-                                                className={cx('qty')}
+                                                className={cx('qty', { active: guest?.quantity })}
                                                 type="number"
+                                                name="quantity"
                                                 min="1"
-                                                value={guest.quantity}
+                                                value={guest?.quantity ?? 1}
                                                 disabled
                                             />
+
                                             <button
                                                 type="button"
                                                 className={cx('minus')}
@@ -132,7 +134,7 @@ const BookingTour = ({ tour, guestPrice, total, date, handleQuantityChange, hand
                 <div className={cx('row', 'contact_btn_group')}>
                     <div className={cx('col-md-6 col-sm-7 col-12')}>
                         <div className={cx('date-booking')}>
-                            <div className={cx('input-group')}>
+                            <div className={cx('input-group', { 'active': tour?.departureSchedule })}>
                                 <div className={cx('input-group-text')}>
                                     <img src={images.tagDate} alt="" />
                                 </div>
