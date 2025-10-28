@@ -6,41 +6,39 @@ import BannerPage from '~/components/BannerPage';
 import ItemDestination from '~/components/ItemDestination';
 import Paginate from '~/components/Paginate';
 import { TouristPlaceService } from '~/services';
+import { getTouristPlacesData } from '~/data';
 
 const cx = classNames.bind(styles);
 
 function Destination() {
     const [listTouristPlaces, setListTouristPlaces] = useState([]);
+    const [paginationData, setPaginationData] = useState([]);
     useEffect(() => {
-        TouristPlaceService
-            .getTouristPlace()
-            .then((res) => {
-                setListTouristPlaces(res);
-            })
-            .catch((err) => {
-                throw new Error(err);
-            });
+        (async () => {
+            (async () => {
+                const places = await getTouristPlacesData();
+                setListTouristPlaces(places);
+            })();
+        })();
     }, []);
-    console.log(listTouristPlaces);
 
     return (
         <Fragment>
             <BannerPage title="Điểm đến yêu thích" />
             <div className={cx('container')}>
                 <div className={cx('destination-warp')}>
-                    <Paginate data={listTouristPlaces} itemsPerPage={9}>
-                        {(resData) => (
-                            <div className={cx('row')}>
-                                {resData.map((item, index) => {
-                                    return (
-                                        <div key={index} className={cx('col-lg-4 col-md-6')}>
-                                            <ItemDestination data={item} />
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </Paginate>
+                    {
+                        <div className={cx('row')}>
+                            {paginationData?.map((item) => {
+                                return (
+                                    <div key={item.id} className={cx('col-lg-4 col-md-6')}>
+                                        <ItemDestination data={item} />
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    }
+                    <Paginate data={listTouristPlaces} itemsPerPage={9} resData={setPaginationData} />
                 </div>
             </div>
         </Fragment>
