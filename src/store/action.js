@@ -10,6 +10,7 @@ import {
     SET_VALUE_CART,
     ADD_VALUE_CART,
     ADD_DATA,
+    SET_INFO_CART,
 } from './constants';
 
 const setInfoUser = (payload) => ({
@@ -35,6 +36,8 @@ const updateToCart = (payload) => ({ type: UPDATE_TO_CART, payload });
 const deleteToCart = (payload) => ({ type: DELETE_TO_CART, payload });
 const clearToCart = (payload) => ({ type: CLEAR_TO_CART, payload });
 const addData = (payload) => ({ type: ADD_DATA, payload });
+export const addInfoCart = (payload) => ({ type: SET_INFO_CART, payload });
+
 export {
     setInfoUser,
     setOffCanvasMenu,

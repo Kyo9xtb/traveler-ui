@@ -6,6 +6,7 @@ export const initState = {
     showCart: false,
     user: loadFromStorage(STORAGE_KEYS.USER, {}),
     cart: loadFromStorage(STORAGE_KEYS.CART, []),
+    infoCart: loadFromStorage(STORAGE_KEYS.INFO_CART, {}),
     search: {},
     listData: {},
 };

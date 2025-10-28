@@ -5,6 +5,8 @@ export const STORAGE_KEYS = {
     TOURS: 'SaoVietTraveler:tours',
     NEWS: 'SaoVietTraveler:news',
     PLACES: 'SaoVietTraveler:places',
+    INFO_CART: 'SaoVietTraveler:info_cart',
+
 };
 
 export const loadFromStorage = (key, fallback = null) => {

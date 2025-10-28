@@ -1,6 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames/bind';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAddressCard, faCheck, faChevronDown, faCreditCard } from '@fortawesome/free-solid-svg-icons';
@@ -108,11 +107,11 @@ function CheckOut() {
 
         const formatDetails = cart.map((item) => {
             return {
-                tour_id: item.tour_id,
-                guest_id: item.guestCode,
-                price: item.price,
+                tour_id: item.tourId,
+                guest_id: item.guestId,
+                price: item.unitPrice,
                 quantity: item.quantity,
-                departure_date: new Date(item.date).toISOString().split('T')[0],
+                departure_date: new Date(item.departureDate).toISOString().split('T')[0],
             };
         });
 
@@ -141,7 +140,7 @@ function CheckOut() {
         if (cart.length === 0) return 0;
 
         const total = cart.reduce((acc, item) => {
-            return acc + item.price * item.quantity;
+            return acc + (item.unitPrice * item.quantity);
         }, 0);
 
         setInfoBook((prev) => ({ ...prev, totalPrice: total }));
@@ -179,32 +178,6 @@ function CheckOut() {
         } catch (error) {
             console.log('Error booking tour:', error);
         }
-        // TourService.postTourBookings(infoBook)
-        //     .then((res) => {
-        //         const { status } = res;
-        //         if (status) {
-        //             dispatch(actions.clearToCart([]));
-        //             setShowBoxSuccess(true);
-        //             setTimeout(() => {
-        //                 setShowBoxSuccess(false);
-        //                 navigate(config.routes.home);
-        //             }, 1000);
-        //         } else {
-        //             setShowBoxError(true);
-        //             setErrorMessage('Bạn đặt tour không thành công vui lòng kiểm tra lại thông tin');
-        //             setTimeout(() => {
-        //                 setShowBoxError(false);
-        //             }, 1000);
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //         setShowBoxError(true);
-        //         setErrorMessage('Đã xảy ra lỗi, vui lòng thử lại sau.');
-        //         setTimeout(() => {
-        //             setShowBoxError(false);
-        //         }, 1000);
-        //     });
     };
 
     return (
@@ -344,7 +317,14 @@ function CheckOut() {
                                     {/* order-summary-product */}
                                     <div className={cx('order-summary-sections', 'order-summary-product')}>
                                         {cart?.map((item, index) => {
-                                            const { label, date, totalPrice, quantity, thumbnailUrl, tourName } = item;
+                                            const {
+                                                label,
+                                                departureDate,
+                                                unitPrice,
+                                                quantity,
+                                                thumbnailUrl,
+                                                tourName,
+                                            } = item;
                                             return (
                                                 <div key={index} className={cx('product-item')}>
                                                     <div className={cx('product-image')}>
@@ -363,11 +343,11 @@ function CheckOut() {
                                                             {label}
                                                         </span>
                                                         <span className={cx('product-description-property')}>
-                                                            Ngày đi:&nbsp; {formatDate(date)}
+                                                            Ngày đi:&nbsp; {formatDate(departureDate)}
                                                         </span>
                                                     </div>
                                                     <div className={cx('product-total-price')}>
-                                                        {formatPrice(totalPrice)}
+                                                        {formatPrice(unitPrice)}
                                                     </div>
                                                 </div>
                                             );

@@ -11,9 +11,15 @@ import {
     SET_VALUE_CART,
     ADD_VALUE_CART,
     ADD_DATA,
+    SET_INFO_CART,
 } from './constants';
 
 function reducer(state, action) {
+    const persistCart = (cart) => {
+        saveToStorage(STORAGE_KEYS.CART, cart);
+        return { ...state, cart };
+    };
+
     switch (action.type) {
         case ADD_DATA:
             return {
@@ -52,83 +58,64 @@ function reducer(state, action) {
             };
 
         case ADD_VALUE_CART:
-            saveToStorage(STORAGE_KEYS.CART, action.payload);
+            return persistCart(action.payload);
 
+        case SET_INFO_CART:
             return {
                 ...state,
-                cart: action.payload,
+                infoCart: action.payload,
             };
+        case ADD_TO_CART: {
+            // Gộp cart cũ và mới theo id + guestCode
+            const mergedCartMap = new Map();
 
-        case ADD_TO_CART:
-            let newCart = [];
-            if (state.cart.length > 0) {
-                newCart = action.payload.map((product) => {
-                    let found = false;
-                    const updatedProduct = state.cart.reduce(
-                        (acc, item) => {
-                            if (product.id === item.id && product.guestCode === item.guestCode) {
-                                acc.quantity += item.quantity;
-                                found = true;
-                            }
-                            return acc;
-                        },
-                        { ...product },
-                    );
+            [...state.cart, ...action.payload].forEach((item) => {
+                const key = `${item.tourId}_${item.guestId}`;
+                if (!mergedCartMap.has(key)) {
+                    mergedCartMap.set(key, { ...item });
+                } else {
+                    const exist = mergedCartMap.get(key);
+                    mergedCartMap.set(key, {
+                        ...exist,
+                        quantity: (exist.quantity || 0) + (item.quantity || 0),
+                    });
+                }
+            });
 
-                    return found ? updatedProduct : product;
-                });
-
-                const filterCart = state.cart.filter(
-                    (item) =>
-                        !action.payload.some(
-                            (product) => product.id === item.id && product.guestCode === item.guestCode,
-                        ),
-                );
-
-                newCart = [...filterCart, ...newCart];
-            } else {
-                newCart = [...state.cart, action.payload];
-            }
-            saveToStorage(STORAGE_KEYS.CART, newCart);
-            return {
-                ...state,
-                cart: newCart,
-            };
+            const newCart = Array.from(mergedCartMap.values());
+            return persistCart(newCart);
+        }
 
         case UPDATE_TO_CART:
             const updateCart = state.cart.map((product) => {
-                if (product.id === action.payload.id && product.guestCode === action.payload.guestCode) {
-                    return { ...product, quantity: action.payload.quantity };
+                if (
+                    product.tourId === action.payload.tourId &&
+                    product.guestId === action.payload.guestId &&
+                    product.departureDate === action.payload.departureDate
+                ) {
+                    return {
+                        ...product,
+                        quantity: action.payload.quantity,
+                        totalPrice: action.payload.quantity * product.price,
+                    };
                 }
                 return product;
             });
-            saveToStorage(STORAGE_KEYS.CART, newCart);
-
-            return {
-                ...state,
-                cart: updateCart,
-            };
+            return persistCart(updateCart);
 
         case DELETE_TO_CART:
-            let deleteCart = [];
-            deleteCart = state.cart.filter((product) => {
-                return !(product.id === action.payload.id && product.guestCode === action.payload.guestCode);
+            const filteredCart = state.cart.filter((product) => {
+                return !(
+                    product.id === action.payload.id &&
+                    product.guestCode === action.payload.guestCode &&
+                    product.departureDate === action.payload.departureDate
+                );
             });
-            saveToStorage(STORAGE_KEYS.CART, newCart);
 
-            return {
-                ...state,
-                cart: deleteCart,
-            };
+            return persistCart(filteredCart);
 
         case CLEAR_TO_CART:
-            saveToStorage(STORAGE_KEYS.CART, []);
-
-            return {
-                ...state,
-                cart: action.payload,
-            };
-            
+            return persistCart([]);
         default:
             throw new Error('Invalid action type');
     }

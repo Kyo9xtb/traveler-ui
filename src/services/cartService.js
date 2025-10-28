@@ -1,14 +1,15 @@
 import { HttpRequest } from '~/utils';
 
-const getCartAuthor = async (id) => {
+export const getCart = async (queryParams) => {
     try {
-        const res = await HttpRequest.get(`/cart/author/${id}`, {});
-        return res;
+        const res = await HttpRequest.get(`/cart`, { params: queryParams });
+        return res.data;
     } catch (error) {
         throw error;
     }
 };
-const postCart = async (data) => {
+
+export const postCart = async (data) => {
     try {
         const config = {
             headers: {
@@ -18,12 +19,13 @@ const postCart = async (data) => {
         };
         const body = JSON.stringify(data);
         const res = await HttpRequest.post(`/cart`, body, config);
-        return res;
+        return res.data;
     } catch (error) {
         throw error;
     }
 };
-const putCart = async (id, data) => {
+
+export const putCart = async ( data) => {
     try {
         const config = {
             headers: {
@@ -32,32 +34,9 @@ const putCart = async (id, data) => {
             withCredentials: true,
         };
         const body = JSON.stringify(data);
-        const res = await HttpRequest.put(`/cart/${id}`, body, config);
-        return res;
+        const res = await HttpRequest.put(`/cart`, body, config);
+        return res.data;
     } catch (error) {
         throw error;
     }
 };
-// const getTourDetail = async (slug) => {
-//     try {
-//         const res = await HttpRequest.get(`/tour/${slug}`, {});
-//         return res.result;
-//     } catch (error) {
-//         throw error;
-//     }
-// };
-
-// const postTourBookings = async (data) => {
-//     try {
-//         const config = {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         };
-//         const res = await HttpRequest.post(`/book-tour`, data, config);
-//         return res;
-//     } catch (error) {
-//         throw error;
-//     }
-// };
-export { getCartAuthor, postCart, putCart };

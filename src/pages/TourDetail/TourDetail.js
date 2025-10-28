@@ -175,7 +175,7 @@ const ExtendedTour = ({ label = '', path = '#', tours = [], settingTourSlider })
                         {shouldUseSlider ? (
                             <MultipleItems setting={settingTourSlider}>
                                 {tours?.map((tour) => {
-                                    return <ItemTour data={tour} />;
+                                    return <ItemTour key={tour.tourCode} data={tour} />;
                                 })}
                             </MultipleItems>
                         ) : (
@@ -346,14 +346,16 @@ function TourDetail() {
             const filterBooking = guestPrice
                 .filter((guest) => guest.quantity > 0)
                 .map((guest) => ({
-                    ...guest,
-                    tour_id: tour.id,
+                    // ...guest,
+                    quantity: guest.quantity,
+                    guestId: guest.guestCode,
+                    tourId: tour.id,
+                    slug: tour.slug,
                     tourName: tour.tourName,
                     tourCode: tour.tourCode,
-                    basePrice: tour.price,
+                    unitPrice: tour.price,
                     thumbnailUrl: tour.thumbnailUrl,
-                    date,
-                    totalPrice: guest.totalPrice ?? guest.price * guest.quantity,
+                    departureDate: new Date(date).toLocaleDateString('en-CA'),
                 }));
 
             if (filterBooking.length === 0) {
