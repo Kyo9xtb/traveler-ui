@@ -496,7 +496,7 @@ function TourDetail() {
                                         )}
                                     </div>
                                     <Link
-                                        to={`/in-tour/${tour?.id}`}
+                                        to={config.routes.printTour.replace(':slug', tour?.slug)}
                                         target="_blank"
                                         title=""
                                         className={cx('btn-print', 'round-btn')}

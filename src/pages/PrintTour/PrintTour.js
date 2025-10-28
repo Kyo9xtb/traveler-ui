@@ -3,47 +3,57 @@ import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
 import styles from './PrintTour.module.scss';
-import * as tourServices from '~/services/tourService';
-import ErrorPage from '../Error';
-import { createMarkup } from '~/store';
+import { TourService } from '~/services';
+import { createMarkup, keysToCamelCase } from '~/utils';
+import AlterDismissible from '~/components/CustomAlert';
 
 const cx = classNames.bind(styles);
+
 function PrintTour() {
     const [tour, setTour] = useState();
+    const [loading, setLoading] = useState(false);
     let { slug } = useParams();
-    useEffect(() => {
-        tourServices
-            .getTourDetail(slug)
-            .then((res) => {
-                setTour(res);
-            })
-            .catch((err) => {
-                console.error('Error fetching tour:', err);
-            });
-    }, [slug]);
-    useEffect(() => {
-        if (tour) {
-            window.print(); // Print the page when the component mounts
-        }
-    }, [tour]);
 
-    if (!tour) {
-        return <ErrorPage />;
+    useEffect(() => {
+        if (!slug) return;
+        (async () => {
+            try {
+                const { status, error_code, data } = await TourService.getTourDetail(slug);
+                if (status === 'success' && error_code === 0) {
+                    setTour(keysToCamelCase(data));
+                    setTimeout(() => {
+                        window.print();
+                    }, 2000);
+                }
+                setLoading(true);
+            } catch (error) {
+                console.error('Error fetching tour', error);
+            }
+        })();
+    }, [slug]);
+
+    if (!tour && loading) {
+        return (
+            <AlterDismissible className={'alert-danger'}>
+                <h4>Lỗi in tour du lịch</h4>
+                <p>Lỗi khi in Tour. Quý khách vui lòng chọn đúng Tour du lịch để in nội dung.</p>
+            </AlterDismissible>
+        );
     }
 
     return (
         <Fragment>
             <div className={cx('content-wrapper')}>
                 <div className={cx('image-header')}>
-                    <img src={tour.thumbnail_url} alt={tour.tour_name} />
-                    <h1 className={cx('tour-title')}>{tour.tour_name}</h1>
+                    <img src={tour?.thumbnailUrl} alt={tour?.tourName} />
+                    <h1 className={cx('tour-title')}>{tour?.tourName}</h1>
                     <div className={cx('tour-description')}>
                         <p>
-                            Lịch khởi hành: <strong>{tour.departure_schedule}</strong>
+                            Lịch khởi hành: <strong>{tour?.departureSchedule}</strong>
                         </p>
 
-                        {tour.vehicle &&
-                            tour.vehicle.map((item, index) => {
+                        {tour?.vehicle &&
+                            tour?.vehicle.map((item, index) => {
                                 switch (item.toLowerCase()) {
                                     case 'car':
                                         return (
@@ -78,25 +88,34 @@ function PrintTour() {
                                 }
                             })}
                         <p>
-                            Thời gian: <strong>{tour.time}</strong>
+                            Thời gian: <strong>{tour?.time}</strong>
                         </p>
                     </div>
                 </div>
-                {tour.tour_program && (
+                {tour?.tourProgram && (
                     <Fragment>
-                        <div
-                            className={cx('tour-content')}
-                            dangerouslySetInnerHTML={createMarkup(tour.tour_program)}
-                        ></div>
+                        <div className={cx('tour-content')}>
+                            <h4 className={cx('fst-italic', 'fw-bold')}>Chương trình tour</h4>
+                            <div dangerouslySetInnerHTML={createMarkup(tour?.tourProgram)} />
+                        </div>
                     </Fragment>
                 )}
 
-                {tour.tour_policy && (
+                {tour?.tourPolicy && (
                     <Fragment>
-                        <div
-                            className={cx('tour-content')}
-                            dangerouslySetInnerHTML={createMarkup(tour.tour_policy)}
-                        ></div>
+                        <div className={cx('tour-content')}>
+                            <h4 className={cx('fst-italic', 'fw-bold')}>Chính sách tour</h4>
+                            <div dangerouslySetInnerHTML={createMarkup(tour?.tourPolicy)} />
+                        </div>
+                    </Fragment>
+                )}
+
+                {tour?.termsConditions && (
+                    <Fragment>
+                        <div className={cx('tour-content')}>
+                            <h4 className={cx('fst-italic', 'fw-bold')}>Điều khoản && Quy định</h4>
+                            <div dangerouslySetInnerHTML={createMarkup(tour?.termsConditions)} />
+                        </div>
                     </Fragment>
                 )}
             </div>
