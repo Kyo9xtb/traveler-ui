@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
  * @param {Array<number>} departDays - Mảng các thứ trong tuần cho phép (VD: [3,6] => Thứ 4 & Thứ 7)
  * @param {Array<string>} departDates - Danh sách ngày cụ thể được phép (VD: ["2025-11-05", "2025-11-08"])
  */
-function CustomDatePicker({ departDays = [], departDates = [], setDate }) {
+function CustomDatePicker({ departDays = [0,1,2,3,4,5,6], departDates = [], setDate }) {
     const [startDate, setStartDate] = useState(null);
 
     const validDepartDates = departDates.map((d) => parseISO(d)).filter((d) => d instanceof Date && !isNaN(d));

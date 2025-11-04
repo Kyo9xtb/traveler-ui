@@ -13,6 +13,7 @@ import config from '~/config';
 import AlterDismissible from '~/components/CustomAlert';
 import { useStore } from '~/store';
 import { getCategorizedToursData } from '~/data';
+import { toCamelCase } from '~/utils';
 
 const cx = classNames.bind(styles);
 
@@ -108,7 +109,7 @@ function Tour() {
     const handleFieldChange = useCallback(({ target: { name, value } }) => {
         setFields((prev) => ({
             ...prev,
-            [name]: value,
+            [toCamelCase(name)]: value,
         }));
     }, []);
 
@@ -120,13 +121,24 @@ function Tour() {
     }, [departureDate]);
 
     const handleSearch = useCallback(() => {
-        const query = new URLSearchParams({
+        const params = {
             destination: fields.destination,
-            departuredate: fields.departureDate,
-            departurepoint: fields.departurePoint,
-        }).toString();
+            'departure-date': fields.departureDate,
+            'departure-point': fields.departurePoint,
+        };
 
-        navigate(`${config.routes.search}?${query}`);
+        const filteredParams = Object.fromEntries(
+            Object.entries(params).filter(([_, v]) => v && v.toString().trim() !== ''),
+        );
+
+        const queryString = new URLSearchParams(filteredParams).toString();
+
+        if (!queryString) {
+            navigate(config.routes.search);
+            return;
+        }
+
+        navigate(`${config.routes.search}?${queryString}`);
     }, [fields, navigate]);
 
     const SearchBar = useMemo(() => {
@@ -142,7 +154,7 @@ function Tour() {
                                     type="text"
                                     placeholder="Bạn muốn đi đâu?"
                                     autoComplete="off"
-                                    name="Destination"
+                                    name="destination"
                                     onChange={handleFieldChange}
                                 />
                             </div>
@@ -168,7 +180,7 @@ function Tour() {
                                     <input
                                         type="text"
                                         placeholder="Địa điểm khởi hành"
-                                        name="DeparturePoint"
+                                        name="departure-point"
                                         autoComplete="off"
                                         onChange={handleFieldChange}
                                     />

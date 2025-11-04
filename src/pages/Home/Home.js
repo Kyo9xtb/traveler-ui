@@ -225,9 +225,19 @@ function Home() {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        navigate(
-            `${config.routes.search}?destination=${fields.Destination}&departuredate=${fields.departureDate}&departurepoint=${fields.DeparturePoint}`,
+        const params = {
+            destination: fields.Destination,
+            'departure-date': fields.departureDate,
+            'departure-point': fields.DeparturePoint,
+        };
+
+        const filteredParams = Object.fromEntries(
+            Object.entries(params).filter(([_, v]) => v && v.toString().trim() !== ''),
         );
+
+        const queryString = new URLSearchParams(filteredParams).toString();
+
+        navigate(`${config.routes.search}?${queryString}`);
     };
 
     return (
