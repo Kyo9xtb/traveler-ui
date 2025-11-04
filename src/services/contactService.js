@@ -1,8 +1,8 @@
 import { HttpRequest } from '~/utils';
 
-const postContact = async (data) => {
+export const postContact = async (data) => {
     try {
-        const res = await HttpRequest.post(`/contact`, data);
+        const res = await HttpRequest.post(`/contact-customer`, data);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -10,4 +10,3 @@ const postContact = async (data) => {
     }
 };
 
-export { postContact };

@@ -13,37 +13,42 @@ import images from '~/assets/images';
 import { ContactService } from '~/services';
 import { SnakeCaseVariable } from '~/store';
 import { companyInfo } from '~/data';
+import { keysToSnakeCase, toCamelCase } from '~/utils';
 
 const cx = classNames.bind(styles);
 
 function Contact() {
-    const [fields, setFields] = useState({
-        full_name: '',
-        phone_number: '',
+    const initContact = {
+        fullName: '',
+        phone: '',
         email: '',
-        content: '',
-    });
+        title: '',
+        contactContent: '',
+    };
+
+    const [fields, setFields] = useState(initContact);
     const setFieldValue = ({ target: { name, value } }) => {
+        console.log(toCamelCase(name));
+
         setFields((prev) => ({
             ...prev,
-            [`${SnakeCaseVariable(name)}`]: value,
+            [toCamelCase(name)]: value,
         }));
     };
-    const handleSubmit = (e) => {
+    
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        ContactService.postContact(fields)
-            .then((res) => {
+        console.log('fields', keysToSnakeCase(fields));
+        (async () => {
+            const { status, error_code, message } = await ContactService.postContact(keysToSnakeCase(fields));
+            const isSuccess = status === 'success' && error_code === 0;
+            if (isSuccess) {
                 alert('Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi sớm nhất có thể.');
-                setFields({
-                    FullName: '',
-                    PhoneNumber: '',
-                    Email: '',
-                    Content: '',
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+                setFields(initContact);
+                return;
+            }
+            alert(message);
+        })();
     };
     return (
         <Fragment>
@@ -91,10 +96,10 @@ function Contact() {
                         <div className={cx('col-lg-4 col-md-12')}>
                             <div className={cx('leave-your-message')}>
                                 <p>
-                                    Evo Tour được các du khách trong nước và quốc tế biết đến là một Công ty tin cậy về
-                                    chất lượng cũng như dịch vụ hoàn hảo. Chúng tôi chuyên tổ chức các tour du lịch quốc
-                                    tế, nội địa, cũng như tổ chức cho các cơ quan đoàn thể đi tham quan, học tập, nghiên
-                                    cứu, khảo sát thị trường, hội nghị, hội thảo trong nước và ngoài nước.
+                                    SaoViet Travel được các du khách trong nước và quốc tế biết đến là một Công ty tin
+                                    cậy về chất lượng cũng như dịch vụ hoàn hảo. Chúng tôi chuyên tổ chức các tour du
+                                    lịch quốc tế, nội địa, cũng như tổ chức cho các cơ quan đoàn thể đi tham quan, học
+                                    tập, nghiên cứu, khảo sát thị trường, hội nghị, hội thảo trong nước và ngoài nước.
                                 </p>
                             </div>
                         </div>
@@ -107,12 +112,12 @@ function Contact() {
                                                 Họ và tên<span className="required">*</span>
                                             </label>
                                             <input
-                                                name="FullName"
+                                                name="full-name"
                                                 className={cx('form-control form-control-lg')}
                                                 type="text"
                                                 placeholder="Họ và tên"
                                                 required
-                                                value={fields.FullName}
+                                                value={fields.fullName}
                                                 onChange={setFieldValue}
                                             />
                                         </fieldset>
@@ -123,13 +128,15 @@ function Contact() {
                                                 Email<span className="required">*</span>
                                             </label>
                                             <input
-                                                name="Email"
-                                                className={cx('form-control form-control-lg')}
                                                 type="email"
-                                                placeholder="Email của bạn"
+                                                placeholder="Nhập email"
+                                                autoComplete="off"
+                                                pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                                                name="email"
+                                                value={fields.email}
                                                 required
-                                                value={fields.Email}
                                                 onChange={setFieldValue}
+                                                title="Vui lòng nhập địa chỉ email hợp lệ. Ví dụ: tenban@example.com"
                                             />
                                         </fieldset>
                                     </div>
@@ -139,12 +146,30 @@ function Contact() {
                                                 Số điện thoại<span className="required">*</span>
                                             </label>
                                             <input
-                                                name="PhoneNumber"
+                                                type="tel"
+                                                placeholder="Nhập số điện thoại"
+                                                autoComplete="off"
+                                                pattern="(84|0(3|5|7|8|9))[0-9]{8}"
+                                                name="phone"
+                                                value={fields.phone}
+                                                required
+                                                onChange={setFieldValue}
+                                                title="Vui lòng nhập số điện thoại hợp lệ (VD: 0987654321 hoặc 84987654321)"
+                                            />
+                                        </fieldset>
+                                    </div>
+                                    <div className={cx('col-sm-12 col-xs-12')}>
+                                        <fieldset className={cx('form-group')}>
+                                            <label>
+                                                Tiêu đề:<span className="required">*</span>
+                                            </label>
+                                            <input
+                                                name="Title"
                                                 className={cx('form-control form-control-lg')}
                                                 type="text"
-                                                placeholder="Số điện thoại"
+                                                placeholder="Tiêu đề"
                                                 required
-                                                value={fields.PhoneNumber}
+                                                value={fields.title}
                                                 onChange={setFieldValue}
                                             />
                                         </fieldset>
@@ -155,12 +180,12 @@ function Contact() {
                                                 Nội dung:<span className="required">*</span>
                                             </label>
                                             <textarea
-                                                name="Content"
+                                                name="contact-content"
                                                 className={cx('form-control form-control-lg')}
                                                 placeholder="Nội dung liên hệ"
                                                 required
                                                 rows="5"
-                                                value={fields.Content}
+                                                value={fields.contactContent}
                                                 onChange={setFieldValue}
                                             />
                                         </fieldset>
