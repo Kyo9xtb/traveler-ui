@@ -15,10 +15,8 @@ function Destination() {
     const [paginationData, setPaginationData] = useState([]);
     useEffect(() => {
         (async () => {
-            (async () => {
-                const places = await getTouristPlacesData();
-                setListTouristPlaces(places);
-            })();
+            const places = await getTouristPlacesData();
+            setListTouristPlaces(places);
         })();
     }, []);
 

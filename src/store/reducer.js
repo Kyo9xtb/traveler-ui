@@ -12,6 +12,7 @@ import {
     ADD_VALUE_CART,
     ADD_DATA,
     SET_INFO_CART,
+    SET_AUTHEN,
 } from './constants';
 
 function reducer(state, action) {
@@ -25,6 +26,12 @@ function reducer(state, action) {
             return {
                 ...state,
                 listData: action.payload,
+            };
+
+        case SET_AUTHEN:
+            return {
+                ...state,
+                isAuthen: action.payload,
             };
 
         case SET_INFO_USER:

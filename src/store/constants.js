@@ -10,3 +10,4 @@ export const DELETE_TO_CART = 'delete_to_cart';
 export const CLEAR_TO_CART = 'clear_to_cart';
 export const ADD_DATA = 'add_data';
 export const SET_INFO_CART = 'set_info_cart';
+export const SET_AUTHEN= 'set_authen';

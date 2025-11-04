@@ -6,9 +6,13 @@ import { keysToCamelCase, removeFromStorage, saveToStorage, STORAGE_KEYS } from 
 
 export function useAuthInit() {
     const [store, dispatch] = useStore();
-    const { user } = store;
+    const { isAuthen } = store;
+
     useEffect(() => {
+        // if (!isAuthen) return;
         const fetchUser = async () => {
+            console.log('Render ');
+
             try {
                 const { status, error_code, data } = await AuthorService.getAuth();
 
@@ -39,5 +43,5 @@ export function useAuthInit() {
             }
         };
         fetchUser();
-    }, [dispatch, user?.id]);
+    }, [isAuthen]);
 }
